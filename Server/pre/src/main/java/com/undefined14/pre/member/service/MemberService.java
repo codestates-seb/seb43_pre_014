@@ -20,7 +20,6 @@ public class MemberService {
     public Member updateMember(Member member) {
 
         Member findMember = findVerifiedMember(member.getMemberId());
-        // TODO: 2023-04-18 내용 수정 로직 필요
         Optional.ofNullable(member.getName())
                 .ifPresent(name -> findMember.setName(name));
         Optional.ofNullable(member.getEmail())
@@ -46,7 +45,6 @@ public class MemberService {
     }
 
     private Member findVerifiedMember(long memberId) {
-        // TODO: 2023-04-18  DB에서 멤버 id로 멤버 찾아와야 합니다.
         Optional<Member> optionalMember = memberRepository.findById(memberId);
         Member findMember =
                 optionalMember.orElseThrow(() ->
