@@ -7,7 +7,6 @@ import com.undefined14.pre.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -41,7 +40,7 @@ public class MemberService {
             throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         }
 
-        return findVerifiedMember(memberId);
+        return findMember;
     }
 
     public void deleteMember(long memberId) {
@@ -55,9 +54,7 @@ public class MemberService {
     public Member findVerifiedMember(long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
-        Member findMember =
-                optionalMember.orElseThrow(() ->
+        return optionalMember.orElseThrow(() ->
                         new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
-        return findMember;
     }
 }
