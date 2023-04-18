@@ -1,5 +1,5 @@
 package com.undefined14.pre.member.repository;
 
-public class MemberRepository {
-
+public interface MemberRepository extends JpaRepository<Member, Long> {
+    Optional<Member> findByEmail(String email);
 }
