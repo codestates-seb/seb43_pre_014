@@ -2,10 +2,20 @@ package com.undefined14.pre.member.dto;
 
 import lombok.Getter;
 
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+
 @Getter
 public class MemberPostDto {
-    // TODO: 2023-04-18 유효성 검증은 협의 필요  
+
     private String name;
+
+    @Email
+    @NotNull
     private String email;
+
+    @NotNull
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")
     private String password;
 }

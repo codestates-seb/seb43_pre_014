@@ -70,6 +70,5 @@ public class MemberController {
         log.info(memberId);
 
         service.deleteMember(memberId);
-
     }
 }
