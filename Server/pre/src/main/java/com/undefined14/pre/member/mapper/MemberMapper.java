@@ -9,4 +9,7 @@ public class MemberMapper {
     Member memberPostDtoToMember(MemberDto.post requestBody);
     Member memberPatchDtoToMember(MemberDto.Patch requestBody);
 
+    MemberResponseDto memberToMemberResponseDto(Member member);
+    List<MemberResponseDto> membersToMemberResponseDtos(List<Member> members);
+
 }
