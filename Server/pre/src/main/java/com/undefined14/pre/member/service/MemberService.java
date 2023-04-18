@@ -1,5 +1,7 @@
 package com.undefined14.pre.member.service;
 
+import com.undefined14.pre.exception.BusinessLogicException;
+import com.undefined14.pre.exception.ExceptionCode;
 import com.undefined14.pre.member.entity.Member;
 import com.undefined14.pre.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;
@@ -26,29 +28,36 @@ public class MemberService {
                 .ifPresent(email -> findMember.setEmail(email));
         Optional.ofNullable(member.getPassword())
                 .ifPresent(password -> findMember.setPassword(password));
-        Optional.ofNullable(member.getMemberStatus())
-                .ifPresent(memberStatus -> findMember.setMemberStatus(memberStatus));
 
-        findMember.setModifiedAt(LocalDateTime.now());
+        //findMember.setModifiedAt(LocalDateTime.now()); 수정날짜 표기
 
         return memberRepository.save(findMember);
     }
 
     public Member findMember(long memberId) {
+        Member findMember = findVerifiedMember(memberId);
+
+        if(findMember.getMemberStatus().equals(Member.MemberStatus.MEMBER_QUIT)) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+
         return findVerifiedMember(memberId);
     }
 
     public void deleteMember(long memberId) {
         Member findMember = findVerifiedMember(memberId);
 
-        memberRepository.delete(findMember);
+        findMember.setMemberStatus(Member.MemberStatus.MEMBER_QUIT);
+
+        memberRepository.save(findMember);
     }
 
-    private Member findVerifiedMember(long memberId) {
-        Optional<Member> optionalMember = memberRepository.findById(memberId);
+    public Member findVerifiedMember(long memberId) {
+        Optional<Member> optionalMember =
+                memberRepository.findById(memberId);
         Member findMember =
                 optionalMember.orElseThrow(() ->
-                        new BuninessLogicException(Exception.MEMBER_NOT_FOUND));
+                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
         return findMember;
     }
 }
