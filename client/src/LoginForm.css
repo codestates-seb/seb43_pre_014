@@ -1,0 +1,141 @@
+.container{
+  background-color: #F1F2F3;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  height: 100vh;
+}
+.googleLogin{
+  background-color: #ffffff;
+  height: 40px;
+  width: 337px;
+  margin: 5px;
+  padding: 11px;
+  color: black;
+  display: flex;
+  font-size: 15px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(176, 173, 173);
+  border-radius: 5px;
+  cursor: pointer;
+}
+.githubLogin{
+  background-color: #151515;
+  height: 40px;
+  width: 337px;
+  margin: 5px;
+  padding: 11px;
+  color: rgb(247, 243, 243);
+  display: flex;
+  font-size: 15px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(176, 173, 173);
+  border-radius: 5px;
+  cursor: pointer;
+}
+.facebookLogin{
+  background-color: #3b5998;
+  height: 40px;
+  width: 337px;
+  margin: 5px;
+  padding: 11px;
+  color: rgb(247, 243, 243);
+  display: flex;
+  font-size: 15px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgb(176, 173, 173);
+  border-radius: 5px;
+  cursor: pointer;
+}
+.login-form {
+    display: flex;
+    flex-direction: column;
+    width: 270px;
+    margin: 23px;
+    padding: 2rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .login-form input {
+    padding: 10px;
+    margin-bottom: 1rem;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .login-form button {
+    padding: 10px;
+    background-color: #0A95FF;
+    color: white;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .login-form button:hover {
+    background-color: #005a9c;
+  }
+  .googleLogin:hover {
+    background-color: #f2f3f4;
+  }
+  
+  .githubLogin:hover {
+    background-color: #000000c8;
+  }
+
+  .facebookLogin:hover {
+    background-color: #2a4074;
+  }
+  .error-message {
+    color: red;
+    margin-bottom: 1rem;
+  }
+  .googleLogo{
+    display: flex;
+    width: 18px;
+    height: 18px;
+  }
+  .githubLogo{
+    display: flex;
+    width: 18px;
+    height: 18px;
+  }
+  .facebookLogo{
+    display: flex;
+    width: 18px;
+    height: 18px;
+  }
+  .title1{
+    text-align:left;
+    font-weight: bold;
+  }
+  .passwordAndForgot{
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .title2{
+    font-weight: bold;
+  }
+
+  .forgotpwd{
+    text-decoration-line: none;
+    font-size: small;
+  }
+  
+
+  .mainLogo{
+    width: 50px;
+    height: 57px;
+    cursor: pointer;
+  }
