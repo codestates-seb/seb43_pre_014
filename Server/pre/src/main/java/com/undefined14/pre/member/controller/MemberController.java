@@ -23,6 +23,7 @@ import java.net.URI;
 @Slf4j // 통신 로그 위함
 public class MemberController {
 
+    private final static String MEMBER_DEFAULT_URL = "/members";
     private final MemberMapper mapper;
     private final MemberService service;
 
