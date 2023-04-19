@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class Auditable {
     @CreatedDate
     @Column(name = "created_at", updatable = false)
-    private LocalDateTime createAt;
+    private LocalDateTime createAt = LocalDateTime.now(); // 등록시 현재 시각 표시
 
     // 현재는 created_at 만 추가했는데,
     // 추후 수정시간 등을 추가하고 싶다면
