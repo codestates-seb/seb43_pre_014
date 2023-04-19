@@ -19,23 +19,21 @@ repositories {
 }
 
 dependencies {
+	// JPA 적용
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	implementation 'org.springframework.boot:spring-boot-starter-validation'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	compileOnly 'org.projectlombok:lombok'
-	runtimeOnly 'com.h2database:h2'
+	// mysql
+	implementation 'com.mysql:mysql-connector-j'
 	annotationProcessor 'org.projectlombok:lombok'
-	implementation 'org.mapstruct:mapstruct:1.5.2.Final'
-	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
-	implementation 'org.springframework.boot:spring-boot-starter-mail'
-	implementation 'com.google.code.gson:gson'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-	implementation 'org.springframework.boot:spring-boot-starter-security'
+	// 맵 스트럭쳐 라이브러리
+	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
+	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
-	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
-	runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
-	runtimeOnly	'io.jsonwebtoken:jjwt-jackson:0.11.5'
+	// 유효성 검증 애너테이션 라이브러리
+	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.2'
 }
 
 tasks.named('test') {
