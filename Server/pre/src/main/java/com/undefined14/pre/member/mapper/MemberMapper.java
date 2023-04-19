@@ -15,5 +15,15 @@ public interface MemberMapper {
 
     Member memberPatchDtoToMember(MemberPatchDto memberPatchDto);
 
-    MemberResponseDto memberToMemberResponseDto(MemberResponseDto memberResponseDto);
+    // 값이 안들어가 버려서 수동 매핑함
+    default MemberResponseDto memberToMemberResponseDto(Member member) {
+        MemberResponseDto memberResponseDto = new MemberResponseDto();
+        memberResponseDto.setMemberId(member.getMemberId());
+        memberResponseDto.setName(member.getName());
+        memberResponseDto.setEmail(member.getEmail());
+        memberResponseDto.setPassword(member.getPassword());
+        memberResponseDto.setMemberStatus(member.getMemberStatus());
+
+        return memberResponseDto;
+    }
 }

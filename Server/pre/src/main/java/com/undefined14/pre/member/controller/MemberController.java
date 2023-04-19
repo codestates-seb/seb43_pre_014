@@ -4,6 +4,7 @@ import com.undefined14.pre.member.dto.MemberPatchDto;
 import com.undefined14.pre.member.dto.MemberPostDto;
 import com.undefined14.pre.member.entity.Member;
 import com.undefined14.pre.member.mapper.MemberMapper;
+import com.undefined14.pre.member.service.MemberService;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,6 @@ import javax.validation.constraints.Positive;
 @Slf4j // 통신 로그 위함
 public class MemberController {
 
-    // TODO: 2023-04-18 서비스 계층 연결 대기
-
     private final MemberMapper mapper;
     private final MemberService service;
 
@@ -29,7 +28,7 @@ public class MemberController {
     @PostMapping
     public ResponseEntity postMember(@Validated @RequestBody MemberPostDto memberPostDto) {
 
-        log.info(memberPostDto);
+        log.info(String.valueOf(memberPostDto));
 
         Member response = service.createMember(mapper.memberPostDtoToMember(memberPostDto));
 
@@ -38,12 +37,12 @@ public class MemberController {
 
     // 회원 정보 수정
     @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@RequestParam("member-id") @Positive long memberId,
+    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
                                       @Validated @RequestBody MemberPatchDto memberPatchDto) {
 
         memberPatchDto.setMemberId(memberId);
 
-        log.info(memberPatchDto);
+        log.info(String.valueOf(memberPatchDto));
 
         Member response = service.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
 
@@ -52,9 +51,9 @@ public class MemberController {
 
     // 회원 정보 조회
     @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@RequestParam("member-id") @Positive long memberId) {
+    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
 
-        log.info(memberId);
+        log.info(String.valueOf(memberId));
 
         Member response = service.findMember(memberId);
 
@@ -65,9 +64,9 @@ public class MemberController {
     // 리턴 값이 void 이기 때문에 @ResponseStatus 사용
     @DeleteMapping("/{member-id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteMember(@RequestParam("member-id") @Positive long memberId) {
+    public void deleteMember(@PathVariable("member-id") @Positive long memberId) {
 
-        log.info(memberId);
+        log.info(String.valueOf(memberId));
 
         service.deleteMember(memberId);
     }

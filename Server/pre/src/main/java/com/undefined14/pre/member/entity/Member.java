@@ -6,7 +6,7 @@ import lombok.Getter;
 import javax.persistence.*;
 
 @Entity
-public class Member extends Auditable {
+public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long memberId;
