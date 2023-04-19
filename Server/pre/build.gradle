@@ -22,7 +22,6 @@ dependencies {
 	// JPA 적용
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-	implementation 'org.springframework.boot'
 	compileOnly 'org.projectlombok:lombok'
 	// mysql
 	implementation 'com.mysql:mysql-connector-j'

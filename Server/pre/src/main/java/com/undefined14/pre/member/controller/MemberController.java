@@ -65,7 +65,6 @@ public class MemberController {
     @DeleteMapping("/{member-id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteMember(@PathVariable("member-id") @Positive long memberId) {
-
         log.info(String.valueOf(memberId));
 
         service.deleteMember(memberId);

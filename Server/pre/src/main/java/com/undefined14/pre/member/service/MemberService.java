@@ -28,8 +28,6 @@ public class MemberService {
         Optional.ofNullable(member.getPassword())
                 .ifPresent(password -> findMember.setPassword(password));
 
-        //findMember.setModifiedAt(LocalDateTime.now()); 수정날짜 표기
-
         return memberRepository.save(findMember);
     }
 
@@ -37,7 +35,7 @@ public class MemberService {
         Member findMember = findVerifiedMember(memberId);
 
         if(findMember.getMemberStatus().equals(Member.MemberStatus.MEMBER_QUIT)) {
-            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+            throw new BusinessLogicException(ExceptionCode.MEMBER_DELETED);
         }
 
         return findMember;
