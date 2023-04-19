@@ -1,7 +1,7 @@
 package com.undefined14.pre.auth.filter;
 
 
-import com.undefined14.pre.auth.authDto.LoginDto;
+import com.undefined14.pre.auth.Dto.LoginDto;
 import com.undefined14.pre.auth.jwt.JwtTokenizer;
 import com.undefined14.pre.member.entity.Member;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -9,14 +9,11 @@ import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.*;
 
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {  // (1)
