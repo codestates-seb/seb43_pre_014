@@ -1,6 +1,7 @@
 package com.undefined14.pre.member.dto;
 
 import com.undefined14.pre.member.entity.Member;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
