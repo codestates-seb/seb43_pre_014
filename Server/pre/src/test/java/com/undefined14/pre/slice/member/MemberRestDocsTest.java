@@ -22,8 +22,6 @@ import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.util.List;
-
 import static org.hamcrest.Matchers.is;
 import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
@@ -127,7 +125,6 @@ public class MemberRestDocsTest {
                 .andExpect(status().isOk())
                 .andExpect(header().string("location", is(startsWith("/members/"))));
 //                .andExpect(jsonPath("$.data.name").value(patchDto.getName()));
-
     }
 
     @Test
