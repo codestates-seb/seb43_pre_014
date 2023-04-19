@@ -13,7 +13,7 @@ import javax.persistence.*;
 @Entity
 public class Member {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long memberId;
 
     @Column(nullable = false, unique = true, length = 25)
@@ -26,7 +26,7 @@ public class Member {
     private String password;
 
     // 회원 상태 값 (기본 활동 중)
-    @Column(nullable = false, length = 10)
+    @Enumerated(EnumType.STRING)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
 
     // 회원 활통 상태
