@@ -32,9 +32,9 @@ public class MemberService {
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encryptedPassword);
 
-        // (4) 추가: DB에 User Role 저장
-        List<String> roles = authorityUtils.createRoles(member.getEmail());
-        member.setRoles(roles);
+        //TODO (4) 추가: DB에 User Role 저장
+//        List<String> roles = authorityUtils.createRoles(member.getEmail());
+//        member.setRoles(roles);
 
         return memberRepository.save(member);
     }
