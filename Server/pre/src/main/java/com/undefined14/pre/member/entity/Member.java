@@ -1,6 +1,6 @@
 package com.undefined14.pre.member.entity;
 
-import lombok.AllArgsConstructor;
+import com.undefined14.pre.audit.Auditable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,9 +11,9 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class Member {
+public class Member extends Auditable{
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long memberId;
 
     @Column(nullable = false, unique = true, length = 25)
@@ -26,7 +26,7 @@ public class Member {
     private String password;
 
     // 회원 상태 값 (기본 활동 중)
-    @Enumerated(EnumType.STRING)
+    @Enumerated(value = EnumType.STRING)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
 
     // 회원 활통 상태
