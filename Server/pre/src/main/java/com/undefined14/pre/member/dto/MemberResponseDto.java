@@ -4,6 +4,8 @@ import com.undefined14.pre.member.entity.Member;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class MemberResponseDto {
@@ -12,4 +14,5 @@ public class MemberResponseDto {
     private String email;
     private String password;
     private Member.MemberStatus memberStatus;
+    private LocalDateTime create_at;
 }

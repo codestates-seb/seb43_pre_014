@@ -23,6 +23,7 @@ public interface MemberMapper {
         memberResponseDto.setEmail(member.getEmail());
         memberResponseDto.setPassword(member.getPassword());
         memberResponseDto.setMemberStatus(member.getMemberStatus());
+        memberResponseDto.setCreate_at(member.getCreateAt());
 
         return memberResponseDto;
     }
