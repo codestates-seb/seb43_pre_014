@@ -12,6 +12,7 @@ import java.util.Optional;
 
 @Service
 @AllArgsConstructor
+@Transactional
 public class MemberService {
     private MemberRepository memberRepository;
 
@@ -58,6 +59,7 @@ public class MemberService {
         memberRepository.save(findMember);
     }
 
+    @Transactional
     public Member findVerifiedMember(long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
