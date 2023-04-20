@@ -199,7 +199,29 @@ public class MemberRestDocsTest {
                         get("/members/{member-id}", memberId)
                                 .accept(MediaType.APPLICATION_JSON)
                 )
-                .andExpect(status().isOk());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.memberId").value(responseDto.getMemberId()))
+                .andExpect(jsonPath("$.name").value(responseDto.getName()))
+                .andExpect(jsonPath("$.email").value(responseDto.getEmail()))
+                .andDo(print())
+                .andDo(document("get-member",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("member-id").description("회원 식별자")
+                        ),
+                        responseFields(
+                                List.of(
+                                        fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
+                                        fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
+                                        fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
+                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
+                                        fieldWithPath("memberStatus").type(JsonFieldType.STRING).description("회원 상태: 활동중 / 탈퇴 상태"),
+                                        fieldWithPath("news").type(JsonFieldType.BOOLEAN).description("뉴스레터"),
+                                        fieldWithPath("create_at").type(JsonFieldType.NULL).description("가입 시기")
+                                )
+                        )
+                ));
     }
 
     @Test
