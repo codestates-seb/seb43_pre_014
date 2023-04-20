@@ -6,6 +6,7 @@ import com.undefined14.pre.member.entity.Member;
 import com.undefined14.pre.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -14,6 +15,7 @@ import java.util.Optional;
 public class MemberService {
     private MemberRepository memberRepository;
 
+    @Transactional
     public Member createMember(Member member) {
         return memberRepository.save(member);
     }
@@ -22,11 +24,18 @@ public class MemberService {
 
         Member findMember = findVerifiedMember(member.getMemberId());
         Optional.ofNullable(member.getName())
-                .ifPresent(name -> findMember.setName(name));
+                .ifPresent(findMember::setName);
         Optional.ofNullable(member.getEmail())
-                .ifPresent(email -> findMember.setEmail(email));
+                .ifPresent(findMember::setEmail);
         Optional.ofNullable(member.getPassword())
-                .ifPresent(password -> findMember.setPassword(password));
+                .ifPresent(findMember::setPassword);
+
+        if (member.getNews()) {
+            findMember.setNews(true);
+        }
+        if (!member.getNews()) {
+            findMember.setNews(false);
+        }
 
         return memberRepository.save(findMember);
     }

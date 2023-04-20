@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,14 +31,12 @@ public class MemberController {
     // 회원 가입
     @PostMapping
     public ResponseEntity postMember(@Validated @RequestBody MemberPostDto memberPostDto) {
+            log.info(String.valueOf(memberPostDto));
 
-        log.info(String.valueOf(memberPostDto));
+            Member response = service.createMember(mapper.memberPostDtoToMember(memberPostDto));
 
-        Member response = service.createMember(mapper.memberPostDtoToMember(memberPostDto));
-
-
-        URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, response.getMemberId());
-        return ResponseEntity.created(location).build();
+            URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, response.getMemberId());
+            return ResponseEntity.created(location).build();
     }
 
     // 회원 정보 수정
@@ -51,7 +50,7 @@ public class MemberController {
 
         Member response = service.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(mapper.memberToMemberResponseDto(response),HttpStatus.OK);
     }
 
     // 회원 정보 조회
