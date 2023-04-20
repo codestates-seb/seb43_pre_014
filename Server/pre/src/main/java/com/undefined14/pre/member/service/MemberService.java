@@ -16,7 +16,6 @@ import java.util.Optional;
 public class MemberService {
     private MemberRepository memberRepository;
 
-    @Transactional
     public Member createMember(Member member) {
         return memberRepository.save(member);
     }
@@ -59,7 +58,6 @@ public class MemberService {
         memberRepository.save(findMember);
     }
 
-    @Transactional
     public Member findVerifiedMember(long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
