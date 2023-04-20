@@ -1,11 +1,13 @@
 package com.undefined14.pre.member.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
+@AllArgsConstructor
 @Getter
 public class MemberPostDto {
 

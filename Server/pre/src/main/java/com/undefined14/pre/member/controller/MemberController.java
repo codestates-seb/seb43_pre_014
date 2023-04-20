@@ -27,15 +27,12 @@ public class MemberController {
     // 회원 가입
     @PostMapping
     public ResponseEntity postMember(@Validated @RequestBody MemberPostDto memberPostDto) {
-        try {
-            log.info(String.valueOf(memberPostDto));
 
-            Member response = service.createMember(mapper.memberPostDtoToMember(memberPostDto));
+        log.info(String.valueOf(memberPostDto));
 
-            return new ResponseEntity<>(HttpStatus.CREATED);
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
-        }
+        Member response = service.createMember(mapper.memberPostDtoToMember(memberPostDto));
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     // 회원 정보 수정
