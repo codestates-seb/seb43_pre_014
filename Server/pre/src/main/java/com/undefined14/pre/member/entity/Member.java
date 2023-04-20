@@ -27,6 +27,9 @@ public class Member extends Auditable{
     @Column(nullable = false, length = 25)
     private String password;
 
+    @Column
+    private Boolean news;
+
     // 회원 상태 값 (기본 활동 중)
     @Enumerated(value = EnumType.STRING)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;

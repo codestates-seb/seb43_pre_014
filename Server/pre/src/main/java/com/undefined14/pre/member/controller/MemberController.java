@@ -5,6 +5,7 @@ import com.undefined14.pre.member.dto.MemberPostDto;
 import com.undefined14.pre.member.entity.Member;
 import com.undefined14.pre.member.mapper.MemberMapper;
 import com.undefined14.pre.member.service.MemberService;
+import com.undefined14.pre.util.UriCreator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -13,6 +14,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/members")
@@ -21,6 +23,7 @@ import javax.validation.constraints.Positive;
 @Slf4j // 통신 로그 위함
 public class MemberController {
 
+    private final static String MEMBER_DEFAULT_URL = "/members";
     private final MemberMapper mapper;
     private final MemberService service;
 
@@ -32,7 +35,9 @@ public class MemberController {
 
         Member response = service.createMember(mapper.memberPostDtoToMember(memberPostDto));
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+
+        URI location = UriCreator.createUri(MEMBER_DEFAULT_URL, response.getMemberId());
+        return ResponseEntity.created(location).build();
     }
 
     // 회원 정보 수정

@@ -1,7 +1,6 @@
 package com.undefined14.pre.member.dto;
 
 import com.undefined14.pre.member.entity.Member;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +14,6 @@ public class MemberResponseDto {
     private String email;
     private String password;
     private Member.MemberStatus memberStatus;
+    private Boolean news;
     private LocalDateTime create_at;
 }
