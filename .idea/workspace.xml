@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="3c83852a-48ce-4f17-8a11-4d85ffd7b5d9" name="Changes" comment="멤버십 CRUD 테스트 작업 완료 / API 문서화 완료 + 뉴스레터 기능 추가">
+      <change beforePath="$PROJECT_DIR$/Server/pre/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/Server/pre/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/pre/src/main/java/com/undefined14/pre/PreApplication.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/pre/src/main/java/com/undefined14/pre/PreApplication.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/pre/src/main/java/com/undefined14/pre/member/controller/MemberController.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/pre/src/main/java/com/undefined14/pre/member/controller/MemberController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Server/pre/src/main/java/com/undefined14/pre/member/service/MemberService.java" beforeDir="false" afterPath="$PROJECT_DIR$/Server/pre/src/main/java/com/undefined14/pre/member/service/MemberService.java" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$/Server/pre">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$/Server/pre">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="pre" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="pre" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="pre" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="build" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="feat/test" />
+      </map>
+    </option>
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2OdKFDl8Mx6pTISpSxkQ2rpzKf5" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "TODO_SCOPE": "All Places",
+    "WebServerToolWindowFactoryState": "false",
+    "codeWithMe.voiceChat.enabledByDefault": "false",
+    "last_opened_file_path": "C:/Users/keddy/Desktop/Personal Project/Side/pre",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "vcs.Perforce",
+    "spring.configuration.checksum": "efceeb17feb22aaf53725fb133e908c7",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RunManager" selected="Spring Boot.PreApplication">
+    <configuration name="MemberRestDocsTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Server/pre" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.undefined14.pre.slice.member.MemberRestDocsTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>true</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="MemberRestDocsTest.deleteMemberTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Server/pre" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.undefined14.pre.slice.member.MemberRestDocsTest.deleteMemberTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>true</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="MemberRestDocsTest.postMemberTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Server/pre" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;com.undefined14.pre.slice.member.MemberRestDocsTest.postMemberTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>true</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="pre [bootWar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$/Server/pre" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="bootWar" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="PreApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" temporary="true" nameIsGenerated="true">
+      <envs>
+        <env name="MYSQL_SECRET_KEY" value="Taskforce@1" />
+      </envs>
+      <module name="pre.main" />
+      <option name="SPRING_BOOT_MAIN_CLASS" value="com.undefined14.pre.PreApplication" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="com.undefined14.pre.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <list>
+      <item itemvalue="Gradle.MemberRestDocsTest" />
+      <item itemvalue="Gradle.pre [bootWar]" />
+      <item itemvalue="Gradle.MemberRestDocsTest.deleteMemberTest" />
+      <item itemvalue="Gradle.MemberRestDocsTest.postMemberTest" />
+      <item itemvalue="Spring Boot.PreApplication" />
+    </list>
+    <recent_temporary>
+      <list>
+        <item itemvalue="Gradle.pre [bootWar]" />
+        <item itemvalue="Gradle.MemberRestDocsTest" />
+        <item itemvalue="Gradle.MemberRestDocsTest.postMemberTest" />
+        <item itemvalue="Spring Boot.PreApplication" />
+        <item itemvalue="Gradle.MemberRestDocsTest.deleteMemberTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="3c83852a-48ce-4f17-8a11-4d85ffd7b5d9" name="Changes" comment="" />
+      <created>1681884912751</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1681884912751</updated>
+      <workItem from="1681884914062" duration="9938000" />
+      <workItem from="1681948860365" duration="25625000" />
+    </task>
+    <task id="LOCAL-00001" summary="기존 컨트롤러에 URI CREATOR 적용 / 테스팅 작업 중">
+      <created>1681894510051</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1681894510051</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Changes by juny">
+      <created>1681894516941</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1681894516941</updated>
+    </task>
+    <task id="LOCAL-00003" summary="기존 컨트롤러에 URI CREATOR 적용 / 테스팅 작업 중">
+      <created>1681894676455</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1681894676455</updated>
+    </task>
+    <task id="LOCAL-00004" summary="멤버십 CRUD 테스트 작업 완료 / API 문서화 완료 + 뉴스레터 기능 추가">
+      <created>1681959648098</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1681959648098</updated>
+    </task>
+    <task id="LOCAL-00005" summary="Changes by juny">
+      <created>1681959732778</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1681959732778</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Changes by SYJ">
+      <created>1681959743084</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1681959743084</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="기존 컨트롤러에 URI CREATOR 적용 / 테스팅 작업 중" />
+    <MESSAGE value="멤버십 CRUD 테스트 작업 완료 / API 문서화 완료 + 뉴스레터 기능 추가" />
+    <MESSAGE value="Changes by juny" />
+    <MESSAGE value="Changes by SYJ" />
+    <option name="LAST_COMMIT_MESSAGE" value="Changes by SYJ" />
+  </component>
+</project>
