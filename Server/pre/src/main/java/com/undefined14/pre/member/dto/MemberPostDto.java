@@ -20,4 +20,6 @@ public class MemberPostDto {
     @NotNull
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")
     private String password;
+
+    private Boolean news;
 }
