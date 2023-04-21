@@ -21,7 +21,6 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
 
-    @Transactional
     public Member createMember(Member member) {
 
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
@@ -73,7 +72,6 @@ public class MemberService {
         memberRepository.save(findMember);
     }
 
-    @Transactional
     public Member findVerifiedMember(long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
