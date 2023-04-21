@@ -122,7 +122,6 @@ public class MemberRestDocsTest {
         responseDto.setMemberId(1L);
         responseDto.setEmail("asd@gmail.com");
         responseDto.setName("홍홍홍");
-        responseDto.setPassword("qwer1234");
         responseDto.setMemberStatus(Member.MemberStatus.MEMBER_ACTIVE);
         responseDto.setNews(true);
 
@@ -168,7 +167,6 @@ public class MemberRestDocsTest {
                                         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
                                         fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
-                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
                                         fieldWithPath("memberStatus").type(JsonFieldType.STRING).description("회원 상태: 활동중 / 탈퇴 상태"),
                                         fieldWithPath("news").type(JsonFieldType.BOOLEAN).description("뉴스레터"),
                                         fieldWithPath("create_at").type(JsonFieldType.NULL).description("가입 시기")
@@ -187,7 +185,6 @@ public class MemberRestDocsTest {
         responseDto.setMemberId(1L);
         responseDto.setEmail("asd@gmail.com");
         responseDto.setName("홍홍홍");
-        responseDto.setPassword("qwer1234");
         responseDto.setMemberStatus(Member.MemberStatus.MEMBER_ACTIVE);
         responseDto.setNews(true);
 
@@ -215,7 +212,6 @@ public class MemberRestDocsTest {
                                         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
                                         fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
-                                        fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
                                         fieldWithPath("memberStatus").type(JsonFieldType.STRING).description("회원 상태: 활동중 / 탈퇴 상태"),
                                         fieldWithPath("news").type(JsonFieldType.BOOLEAN).description("뉴스레터"),
                                         fieldWithPath("create_at").type(JsonFieldType.NULL).description("가입 시기")
