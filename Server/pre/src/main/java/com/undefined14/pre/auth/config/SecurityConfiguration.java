@@ -34,7 +34,7 @@ import java.util.Arrays;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
-@EnableWebSecurity(debug = false)
+@EnableWebSecurity(debug = true)
 @AllArgsConstructor
 public class SecurityConfiguration implements WebMvcConfigurer {
     private final CustomAuthorityUtils authorityUtils;
@@ -123,5 +123,11 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                     .addFilter(jwtAuthenticationFilter)
                     .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);  // (2-6)
         }
+    }
+
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new JwtParseInterceptor(jwtUtils()))
+                .addPathPatterns("/boards/**");
     }
 }

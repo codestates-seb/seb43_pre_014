@@ -24,7 +24,7 @@ public class Member extends Auditable{
     @Column(nullable = false, unique = true, length = 25)
     private String email;
 
-    @Column(nullable = false, length = 25)
+    @Column(nullable = false, length = 100)
     private String password;
 
     @Column

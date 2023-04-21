@@ -18,9 +18,18 @@ import java.util.Optional;
 @Transactional
 public class MemberService {
     private MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
 
     @Transactional
     public Member createMember(Member member) {
+
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
+
+        List<String> roles = authorityUtils.createRoles(member.getEmail());
+        member.setRoles(roles);
+
         return memberRepository.save(member);
     }
 
