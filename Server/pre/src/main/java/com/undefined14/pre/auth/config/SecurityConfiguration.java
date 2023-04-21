@@ -6,6 +6,7 @@ import com.undefined14.pre.auth.handler.MemberAccessDeniedHandler;
 import com.undefined14.pre.auth.handler.MemberAuthenticationEntryPoint;
 import com.undefined14.pre.auth.handler.MemberAuthenticationFailureHandler;
 import com.undefined14.pre.auth.handler.MemberAuthenticationSuccessHandler;
+import com.undefined14.pre.auth.intercepter.JwtParseInterceptor;
 import com.undefined14.pre.auth.jwt.JwtTokenizer;
 import com.undefined14.pre.auth.utils.CustomAuthorityUtils;
 import com.undefined14.pre.auth.utils.JwtUtils;
