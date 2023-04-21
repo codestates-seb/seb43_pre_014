@@ -21,7 +21,6 @@ public interface MemberMapper {
         memberResponseDto.setMemberId(member.getMemberId());
         memberResponseDto.setName(member.getName());
         memberResponseDto.setEmail(member.getEmail());
-        memberResponseDto.setPassword(member.getPassword());
         memberResponseDto.setMemberStatus(member.getMemberStatus());
         memberResponseDto.setNews(member.getNews());
         memberResponseDto.setCreate_at(member.getCreateAt());

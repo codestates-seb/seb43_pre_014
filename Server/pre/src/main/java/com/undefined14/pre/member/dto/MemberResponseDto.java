@@ -12,7 +12,6 @@ public class MemberResponseDto {
     private long memberId;
     private String name;
     private String email;
-    private String password;
     private Member.MemberStatus memberStatus;
     private Boolean news;
     private LocalDateTime create_at;
