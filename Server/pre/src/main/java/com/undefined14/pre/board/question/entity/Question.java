@@ -19,7 +19,7 @@ public class Question {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long questionId;
 
     @Column(nullable = false, length = 100)
     private String title;
@@ -29,32 +29,13 @@ public class Question {
     private String body;
 
     @CreationTimestamp
-    private LocalDateTime created_at;
-//
-//    @UpdateTimestamp
-//    private LocalDateTime updated_at;
+    private LocalDateTime create_at;
 
     @Enumerated(EnumType.STRING)
-    private QuestionStatus status = QuestionStatus.QUESTION_ACTIVE;
-
-    public Question(String title, String body, Member member) {
-        this.title = title;
-        this.body = body;
-        this.member = member;
-        this.created_at = LocalDateTime.now();
-    }
-
-    public void update(String title, String body) {
-        this.title = title;
-        this.body = body;
-    }
-
-    public void delete() {
-        this.status = QuestionStatus.QUESTION_DELETED;
-    }
+    private QuestionStatus questionStatus = QuestionStatus.QUESTION_ACTIVE;
 
     @ManyToOne
-    @JoinColumn(name = "memberId")
+    @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
     public enum QuestionStatus {
@@ -62,10 +43,22 @@ public class Question {
         QUESTION_DELETED("삭제 완료");
 
         @Getter
-        private String status;
+        private final String status;
 
         QuestionStatus(String status) {
             this.status = status;
         }
+
     }
+
+    public Question (String title, String body, Member member) {
+        this.title = title;
+        this.body = body;
+        this.member = member;
+    }
+    public void setMember(Member member) {
+        this.member = member;
+        member.getQuestions().add(this); // 이 부분을 추가해줍니다.
+    }
+
 }
