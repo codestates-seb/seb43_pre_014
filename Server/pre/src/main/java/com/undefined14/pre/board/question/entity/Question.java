@@ -19,7 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 @Table(name = "question")
-public class Question {
+public class Question extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,9 +31,6 @@ public class Question {
     //@Column(nullable = false, length = 255)
     @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
-
-    @CreationTimestamp
-    private LocalDateTime create_at;
 
     @Enumerated(EnumType.STRING)
     private QuestionStatus questionStatus = QuestionStatus.QUESTION_ACTIVE;
