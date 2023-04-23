@@ -1,5 +1,7 @@
 package com.undefined14.pre.board.question.entity;
 
+import com.undefined14.pre.audit.Auditable;
+import com.undefined14.pre.board.anwser.entity.Answer;
 import com.undefined14.pre.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -9,13 +11,15 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @Entity
 @Table(name = "question")
-public class Question {
+public class Question extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,9 +31,6 @@ public class Question {
     //@Column(nullable = false, length = 255)
     @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
-
-    @CreationTimestamp
-    private LocalDateTime create_at;
 
     @Enumerated(EnumType.STRING)
     private QuestionStatus questionStatus = QuestionStatus.QUESTION_ACTIVE;
@@ -57,9 +58,11 @@ public class Question {
         this.member = member;
     }
 
-    public void setMember(Member member) {
-        this.member = member;
-        member.getQuestions().add(this);
-    }
+//    public void setMember(Member member) {
+//        this.member = member;
+//        member.getQuestions().add(this);
+//    }
 
+    @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
+    private List<Answer> answer = new ArrayList<>();
 }
