@@ -25,7 +25,8 @@ public interface QuestionMapper {
         questionResponseDto.setMemberId(question.getMember().getMemberId());
         questionResponseDto.setQuestionId(question.getQuestionId());
         questionResponseDto.setTitle(question.getTitle());
-        questionResponseDto.setBody(question.getBody());
+        questionResponseDto.setProblem(question.getProblem());
+        questionResponseDto.setExpecting(question.getExpecting());
         questionResponseDto.setCreate_at(question.getCreateAt());
         questionResponseDto.setQuestionStatus(question.getQuestionStatus());
         questionResponseDto.setAnswerResponseDto(new ArrayList<>());
