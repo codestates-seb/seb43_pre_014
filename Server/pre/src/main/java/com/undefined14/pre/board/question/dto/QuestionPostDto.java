@@ -12,7 +12,8 @@ public class QuestionPostDto {
     @Positive
     private Long memberId;
     private String title;
-    private String body;
+    private String problem;
+    private String expecting;
 
     public Member getMember() {
         Member member = new Member();

@@ -15,10 +15,11 @@ public class QuestionResponseDto {
     private Long questionId;
     private Long memberId;
     private String title;
-    private String body;
+    private String problem;
+    private String expecting;
     @NotNull
     private LocalDateTime create_at;
     private Question.QuestionStatus questionStatus;
-
     List<AnswerResponseDto> answerResponseDto;
+
 }

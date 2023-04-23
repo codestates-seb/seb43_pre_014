@@ -6,11 +6,8 @@ import com.undefined14.pre.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,8 +26,11 @@ public class Question extends Auditable {
     private String title;
 
     //@Column(nullable = false, length = 255)
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String body;
+    @Column(nullable = false, length = 255)
+    private String problem;
+
+    @Column(nullable = false, length = 255)
+    private String expecting;
 
     @Enumerated(EnumType.STRING)
     private QuestionStatus questionStatus = QuestionStatus.QUESTION_ACTIVE;
@@ -52,9 +52,10 @@ public class Question extends Auditable {
 
     }
 
-    public Question (String title, String body, Member member) {
+    public Question (String title, String problem, String expecting, Member member) {
         this.title = title;
-        this.body = body;
+        this.problem = problem;
+        this.expecting = expecting;
         this.member = member;
     }
 
