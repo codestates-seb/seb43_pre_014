@@ -14,7 +14,7 @@ public class CommentDto {
     public static class Response{
         private long commentId;
         private long memberId;
-        private String content;
+        private String body;
         private LocalDateTime createdAt;
     }
 
@@ -23,7 +23,7 @@ public class CommentDto {
     @NoArgsConstructor
     public static class Post{
         @NotBlank
-        private String content;
+        private String body;
     }
 
     @Getter
@@ -34,6 +34,6 @@ public class CommentDto {
         private long commentId;
 
         @NotBlank
-        private String content;
+        private String body;
     }
 }

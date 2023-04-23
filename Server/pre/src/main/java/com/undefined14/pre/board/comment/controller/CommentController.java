@@ -28,6 +28,7 @@ public class CommentController {
     private final CommentMapper commentMapper;
     private final JwtTokenizer jwtTokenizer;
 
+    // 질문에 댓글 작성
     @PostMapping("/questions/{quest-id}/comments")
     public ResponseEntity postCommentToQuestion(@RequestHeader(name = "Authorization") String token,
                                                 @PathVariable("quest-id") @Positive long questId,
@@ -41,6 +42,7 @@ public class CommentController {
                 HttpStatus.CREATED);
     }
 
+    // 답변에 댓글 작성
     @PostMapping("/answers/{answer-id}/comments")
     public ResponseEntity postCommentToAnswer(@RequestHeader(name = "Authorization") String token,
                                               @PathVariable("answer-id") @Positive long questId,
@@ -54,6 +56,7 @@ public class CommentController {
                 HttpStatus.CREATED);
     }
 
+    // 댓글 수정
     @PatchMapping("/comments/{comment-id}")
     public ResponseEntity patchComment(@RequestHeader(name = "Authorization") String token,
                                        @PathVariable("comment-id") @Positive long commentId,
@@ -68,6 +71,7 @@ public class CommentController {
                 HttpStatus.OK);
     }
 
+    // 질문에 달린 댓글 조회
     @GetMapping("/questions/{quest-id}/comments")
     public ResponseEntity getCommentFromQuestion(@PathVariable("quest-id") @Positive long questId){
         List<Comment> comments = commentService.findCommentByQuestionId(questId);
@@ -78,6 +82,7 @@ public class CommentController {
                 HttpStatus.OK);
     }
 
+    // 답변에 달린 댓글 조회
     @GetMapping("/answers/{answer-id}/comments")
     public ResponseEntity getCommentFromAnswer(@PathVariable("answer-id") @Positive long answerId){
         List<Comment> comments = commentService.findCommentByAnswerId(answerId);
@@ -88,6 +93,7 @@ public class CommentController {
                 HttpStatus.OK);
     }
 
+    // 댓글 삭제
     @DeleteMapping("/comments/{comment-id}")
     public ResponseEntity deleteComment(@RequestHeader(name = "Authorization") String token,
                                         @PathVariable("comment-id") @Positive long commentId){

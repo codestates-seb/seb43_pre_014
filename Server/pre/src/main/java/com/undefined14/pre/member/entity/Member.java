@@ -1,7 +1,9 @@
 package com.undefined14.pre.member.entity;
 
 import com.undefined14.pre.audit.Auditable;
+import com.undefined14.pre.board.anwser.entity.Answer;
 import com.undefined14.pre.board.question.entity.Question;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -52,9 +55,15 @@ public class Member extends Auditable{
     private List<String> roles= new ArrayList<>();
 
     // TODO: 2023-04-18  JPA 엔티티 연관 관계 매핑을 이 아래부터...
-//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-//    private List<Question> questions = new ArrayList<>();
-//    public List<Question> getQuestions() {
-//        return this.questions;
-//    }
+    @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
+    private List<Answer> answerList = new ArrayList<>();
+
+    public void addAnswer(Answer answer) {
+        answerList.add(answer);
+    }
+    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
+    private List<Question> questionList = new ArrayList<>();
+    public void addQuestion(Question question) {
+        questionList.add(question);
+    }
 }
