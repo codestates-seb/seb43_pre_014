@@ -49,9 +49,9 @@ public class Member extends Auditable{
     }
 
     // TODO: 2023-04-18  JPA 엔티티 연관 관계 매핑을 이 아래부터...
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
-    private List<Question> questions = new ArrayList<>();
-    public List<Question> getQuestions() {
-        return this.questions;
-    }
+//    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+//    private List<Question> questions = new ArrayList<>();
+//    public List<Question> getQuestions() {
+//        return this.questions;
+//    }
 }
