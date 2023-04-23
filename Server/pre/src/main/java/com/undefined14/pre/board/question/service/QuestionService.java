@@ -48,7 +48,8 @@ public class QuestionService {
         Question existingQuestion = findVerifiedQuestion(question.getQuestionId());
 
         existingQuestion.setTitle(question.getTitle());
-        existingQuestion.setBody(question.getBody());
+        existingQuestion.setProblem(question.getProblem());
+        existingQuestion.setExpecting(question.getExpecting());
         return repository.save(existingQuestion);
     }
 
