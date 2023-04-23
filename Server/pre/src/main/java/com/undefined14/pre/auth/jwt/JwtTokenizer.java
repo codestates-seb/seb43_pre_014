@@ -1,6 +1,9 @@
 package com.undefined14.pre.auth.jwt;
 
+import com.undefined14.pre.exception.BusinessLogicException;
+import com.undefined14.pre.exception.ExceptionCode;
 import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
@@ -93,5 +96,27 @@ public class JwtTokenizer {
         Key key = Keys.hmacShaKeyFor(keyBytes);
 
         return key;
+    }
+
+    public Long getMemberId(String token) {
+        long memberId = parseToken(token).get("memberId", Long.class);
+        return memberId;
+    }
+
+    private Claims parseToken(String token) {
+        Key key = getKeyFromBase64EncodedKey(encodeBase64SecretKey(secretKey));
+        String jws = token.replace("Bearer ", "");
+        Claims claims;
+
+        try {
+            claims = Jwts.parserBuilder()
+                    .setSigningKey(key)
+                    .build()
+                    .parseClaimsJws(jws)
+                    .getBody();
+        }   catch (ExpiredJwtException e) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_UNAUTHORIZED);
+        }
+        return claims;
     }
 }
