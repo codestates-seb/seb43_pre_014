@@ -7,7 +7,6 @@ import com.undefined14.pre.board.question.entity.Question;
 import com.undefined14.pre.board.question.mapper.QuestionMapper;
 import com.undefined14.pre.board.question.service.QuestionService;
 import com.undefined14.pre.board.question.link.LinkService;
-import com.undefined14.pre.util.UriCreator;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,13 +22,13 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/questions")
+@RequestMapping("/board/questions")
 @AllArgsConstructor
 public class QuestionController {
     private final static String QUESTION_DEFAULT_URL = "/questions";
     private final QuestionMapper mapper;
     private final QuestionService service;
-    private final LinkService linkService;
+    private final LinkService<QuestionResponseDto> linkService;
 
     // 질문 작성
     @PostMapping
@@ -45,7 +43,7 @@ public class QuestionController {
         return ResponseEntity.created(location).body(responseDto);
     }
 
-    // 질문 전체 조회
+    // 질문 전체 조회 (QuestionStatus QUESTION_DELETED("삭제 완료")도 조회 됨)
     @GetMapping("/all")
     public ResponseEntity<List<QuestionResponseDto>> getQuestions() {
         List<Question> questions = service.findAll();
@@ -56,14 +54,12 @@ public class QuestionController {
 
     // 질문 한 건 조회
     @GetMapping("/{question-id}")
-    public ResponseEntity<Question> getQuestionById(@PathVariable ("question-id") @Positive Long questionId) {
+    public ResponseEntity<QuestionResponseDto> getQuestionById(@PathVariable ("question-id") @Positive Long questionId) {
         Question question = service.findQuestionById(questionId);
-
-        if (question == null) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.ok(question);
+        QuestionResponseDto questionResponseDto = mapper.questionToQuestionResponseDto(question);
+        return ResponseEntity.ok(questionResponseDto);
     }
+
 
     // 질문 목록 페이지네이션
     @GetMapping
@@ -84,9 +80,9 @@ public class QuestionController {
     public ResponseEntity<QuestionResponseDto> patchQuestion(
             @PathVariable("question-id") @Positive Long questionId,
             @RequestBody QuestionPatchDto questionPatchDto) {
+        questionPatchDto.setQuestionId(questionId);
         Question question = service.updateQuestion(mapper.questionPatchDtoToQuestion(questionPatchDto));
         QuestionResponseDto responseDto = mapper.questionToQuestionResponseDto(question);
-
         return ResponseEntity.ok().body(responseDto);
     }
 

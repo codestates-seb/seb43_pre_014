@@ -56,9 +56,10 @@ public class Question {
         this.body = body;
         this.member = member;
     }
+
     public void setMember(Member member) {
         this.member = member;
-        member.getQuestions().add(this); // 이 부분을 추가해줍니다.
+        member.getQuestions().add(this);
     }
 
 }

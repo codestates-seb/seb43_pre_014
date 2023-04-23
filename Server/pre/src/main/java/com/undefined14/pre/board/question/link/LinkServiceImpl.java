@@ -2,7 +2,6 @@ package com.undefined14.pre.board.question.link;
 
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
-import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -11,30 +10,38 @@ public class LinkServiceImpl<T> implements LinkService<T> {
     @Override
     public String createLinkHeader(Page<T> page, HttpServletRequest request, String baseUrl) {
         String fullUrl = baseUrl + request.getRequestURI();
-        return fullUrl;
-    }
-    @Override
-    public String createLinkHeader(Page<T> page, HttpServletRequest request) {
-        UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromUriString(request.getRequestURI());
+
         StringBuilder linkHeader = new StringBuilder();
 
-        //이전 페이지 링크
-        if (page.hasPrevious()) {
-            int previousPage = page.getNumber() - 1;
-            linkHeader.append(buildLinkHeader(uriBuilder, "prev", previousPage, page.getSize()));
+        // 전체 데이터 수
+        long totalElements = page.getTotalElements();
+
+        // 현재 페이지 번호
+        int currentPage = page.getNumber() + 1;
+
+        // 한 페이지에 보여줄 데이터 수
+        int pageSize = page.getSize();
+
+        // 총 페이지 수
+        int totalPages = page.getTotalPages();
+
+        // 첫 페이지 링크
+        linkHeader.append("<").append(fullUrl).append("?page=1&size=").append(pageSize).append(">; rel=\"first\", ");
+
+        // 이전 페이지 링크
+        if (currentPage > 1) {
+            linkHeader.append("<").append(fullUrl).append("?page=").append(currentPage - 1).append("&size=").append(pageSize).append(">; rel=\"prev\", ");
         }
-        //다음 페이지 링크
-        if (page.hasNext()) {
-            int nextPage = page.getNumber() + 1;
-            linkHeader.append(buildLinkHeader(uriBuilder, "next", nextPage, page.getSize()));
+
+        // 다음 페이지 링크
+        if (currentPage < totalPages) {
+            linkHeader.append("<").append(fullUrl).append("?page=").append(currentPage + 1).append("&size=").append(pageSize).append(">; rel=\"next\", ");
         }
+
+        // 마지막 페이지 링크
+        linkHeader.append("<").append(fullUrl).append("?page=").append(totalPages).append("&size=").append(pageSize).append(">; rel=\"last\"");
 
         return linkHeader.toString();
     }
 
-    private String buildLinkHeader(UriComponentsBuilder uriBuilder, String rel, int page, int size) {
-        return "<" + uriBuilder.replaceQueryParam("page", page)
-                .replaceQueryParam("size", size)
-                .toUriString() + ">; rel=\"" + rel + "\" ,";
-    }
 }
