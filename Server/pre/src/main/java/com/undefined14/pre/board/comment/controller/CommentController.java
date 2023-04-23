@@ -17,10 +17,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-//@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000")
 @RestController
 @Validated
-@RequestMapping
+@RequestMapping("/board")
 @AllArgsConstructor
 @Slf4j
 public class CommentController {

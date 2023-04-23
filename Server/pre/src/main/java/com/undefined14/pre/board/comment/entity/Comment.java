@@ -1,5 +1,7 @@
 package com.undefined14.pre.board.comment.entity;
 
+import com.undefined14.pre.board.anwser.entity.Answer;
+import com.undefined14.pre.board.question.entity.Question;
 import com.undefined14.pre.member.entity.Member;
 import lombok.Builder;
 import lombok.Getter;

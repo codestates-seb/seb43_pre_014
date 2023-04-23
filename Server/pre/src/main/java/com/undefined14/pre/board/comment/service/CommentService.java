@@ -1,5 +1,9 @@
 package com.undefined14.pre.board.comment.service;
 
+import com.undefined14.pre.board.anwser.entity.Answer;
+import com.undefined14.pre.board.anwser.service.AnswerService;
+import com.undefined14.pre.board.question.entity.Question;
+import com.undefined14.pre.board.question.service.QuestionService;
 import com.undefined14.pre.exception.ExceptionCode;
 import com.undefined14.pre.exception.BusinessLogicException;
 import com.undefined14.pre.member.entity.Member;
@@ -91,7 +95,4 @@ public class CommentService {
         Answer answer = answerService.findAnswer(answerId);
         return commentRepository.findByAnswer(answerId);
     }
-
-
-
 }
