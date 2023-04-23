@@ -1,6 +1,7 @@
 package com.undefined14.pre.member.entity;
 
 import com.undefined14.pre.audit.Auditable;
+import com.undefined14.pre.board.question.entity.Question;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -51,4 +52,9 @@ public class Member extends Auditable{
     private List<String> roles= new ArrayList<>();
 
     // TODO: 2023-04-18  JPA 엔티티 연관 관계 매핑을 이 아래부터...
+    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
+    private List<Question> questions = new ArrayList<>();
+    public List<Question> getQuestions() {
+        return this.questions;
+    }
 }

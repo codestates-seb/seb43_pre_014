@@ -48,11 +48,15 @@ dependencies {
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.3.Final'
 
+
 	// 유효성 검증 애너테이션 라이브러리
 	implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.2'
 
 	// 테스트용 JSON 변환
 	implementation 'com.google.code.gson:gson'
+
+	// linkService를 위한 spring HATEOAS 라이브러리
+	implementation 'org.springframework.boot:spring-boot-starter-hateoas'
 
 	//Spring Security 적용
 	implementation 'org.springframework.boot:spring-boot-starter-security'
