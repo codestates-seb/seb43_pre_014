@@ -4,6 +4,7 @@ package com.undefined14.pre.response;
 import com.undefined14.pre.exception.ExceptionCode;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.springframework.http.HttpStatus;
 
 @Getter
 @AllArgsConstructor
@@ -15,4 +16,11 @@ public class ErrorResponse {
         return new ErrorResponse(exceptionCode.getStatus(), exceptionCode.getMessage());
     }
 
+    public static ErrorResponse of(HttpStatus httpStatus) {
+        return new ErrorResponse(httpStatus.value(), httpStatus.getReasonPhrase());
+    }
+
+    public static ErrorResponse of(HttpStatus httpStatus, String message) {
+        return new ErrorResponse(httpStatus.value(), message);
+    }
 }

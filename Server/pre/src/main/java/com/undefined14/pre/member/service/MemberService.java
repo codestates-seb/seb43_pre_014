@@ -1,13 +1,16 @@
 package com.undefined14.pre.member.service;
 
+import com.undefined14.pre.auth.utils.CustomAuthorityUtils;
 import com.undefined14.pre.exception.BusinessLogicException;
 import com.undefined14.pre.exception.ExceptionCode;
 import com.undefined14.pre.member.entity.Member;
 import com.undefined14.pre.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -15,8 +18,17 @@ import java.util.Optional;
 @Transactional
 public class MemberService {
     private MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final CustomAuthorityUtils authorityUtils;
 
     public Member createMember(Member member) {
+
+        String encryptedPassword = passwordEncoder.encode(member.getPassword());
+        member.setPassword(encryptedPassword);
+
+        List<String> roles = authorityUtils.createRoles(member.getEmail());
+        member.setRoles(roles);
+
         return memberRepository.save(member);
     }
 
@@ -37,6 +49,8 @@ public class MemberService {
             findMember.setNews(false);
         }
 
+        //findMember.setModifiedAt(LocalDateTime.now()); 수정날짜 표기
+
         return memberRepository.save(findMember);
     }
 
@@ -44,7 +58,7 @@ public class MemberService {
         Member findMember = findVerifiedMember(memberId);
 
         if(findMember.getMemberStatus().equals(Member.MemberStatus.MEMBER_QUIT)) {
-            throw new BusinessLogicException(ExceptionCode.MEMBER_DELETED);
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         }
 
         return findMember;

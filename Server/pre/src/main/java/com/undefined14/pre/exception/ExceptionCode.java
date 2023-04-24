@@ -11,7 +11,10 @@ public enum ExceptionCode {
     QUESTION_DELETED(404, "Question already deleted"),
     ANSWER_NOT_FOUND(404,"Answer not found"),
     ANSWER_DELETED(404, "Answer already deleted"),
-    MEMBER_MISMATCHED(400,"Not Matched Member");
+    MEMBER_MISMATCHED(400,"Not Matched Member"),
+    MEMBER_FORBIDDEN(403,"Member Forbidden"),
+    MEMBER_UNAUTHORIZED(401,"UNAUTHORIZED"),
+    COMMENT_NOT_FOUND(404, "Comment not found");
 
     @Getter
     private int status;
