@@ -10,7 +10,6 @@ import com.undefined14.pre.member.entity.Member;
 import com.undefined14.pre.member.service.MemberService;
 import com.undefined14.pre.board.comment.entity.Comment;
 import com.undefined14.pre.board.comment.repository.CommentRepository;
-import java.util.List;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
@@ -35,7 +34,7 @@ public class CommentService {
         comment.setInheritQuestion(true);
         comment.setQuestion(question);
         comment.setAnswer(null);
-        comment.setWriter(member);
+        comment.setMember(member);
 
         return commentRepository.save(comment);
     }
@@ -47,14 +46,15 @@ public class CommentService {
         comment.setInheritQuestion(false);
         comment.setQuestion(null);
         comment.setAnswer(answer);
-        comment.setWriter(member);
+        comment.setMember(member);
 
         return commentRepository.save(comment);
     }
 
+    // Todo 익셉션 코드쪽 리팩토링
     public Comment updateComment(Comment comment,long tokenId){
         Comment findComment = findVerifiedCommentByQuery(comment.getCommentId());
-        Member findMember = findComment.getWriter();
+        Member findMember = findComment.getMember();
         if(findMember.getMemberId() != tokenId){
             throw new BusinessLogicException(ExceptionCode.MEMBER_FORBIDDEN);
         }
@@ -65,7 +65,7 @@ public class CommentService {
 
     public void deleteComment(long commentId,long tokenId){
         Comment findComment = findComment(commentId);
-        Member findMember = findComment.getWriter();
+        Member findMember = findComment.getMember();
         if(findMember.getMemberId() != tokenId){
             throw new BusinessLogicException(ExceptionCode.MEMBER_FORBIDDEN);
         }
@@ -83,13 +83,14 @@ public class CommentService {
         return findComment;
     }
 
-    public List<Comment> findCommentByQuestionId(long questId){
-        Question question = questionService.findQuestionById(questId);
-        return commentRepository.findByQuestion(questId);
-    }
-
-    public List<Comment> findCommentByAnswerId(long answerId){
-        Answer answer = answerService.findAnswer(answerId);
-        return commentRepository.findByAnswer(answerId);
-    }
+    // 조회 시 사용
+//    public List<Comment> findCommentByQuestionId(long questId){
+//        Question question = questionService.findQuestionById(questId);
+//        return commentRepository.findByQuestion(questId);
+//    }
+//
+//    public List<Comment> findCommentByAnswerId(long answerId){
+//        Answer answer = answerService.findAnswer(answerId);
+//        return commentRepository.findByAnswer(answerId);
+//    }
 }

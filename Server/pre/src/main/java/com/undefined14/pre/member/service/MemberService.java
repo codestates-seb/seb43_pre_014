@@ -72,7 +72,7 @@ public class MemberService {
         memberRepository.save(findMember);
     }
 
-    public Member findVerifiedMember(long memberId) {
+    private Member findVerifiedMember(long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
         return optionalMember.orElseThrow(() ->

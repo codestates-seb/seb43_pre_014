@@ -34,7 +34,7 @@ public class AnswerService {
         return repository.save(findAnswer);
     }
 
-    // 답변 조회
+    // 있는지 조회
     public Answer findAnswer(long answerId) {
         Answer findAnswer = findVerfiedAnswer(answerId);
 

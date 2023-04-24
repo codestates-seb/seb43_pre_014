@@ -71,28 +71,6 @@ public class CommentController {
                 HttpStatus.OK);
     }
 
-    // 질문에 달린 댓글 조회
-    @GetMapping("/questions/{quest-id}/comments")
-    public ResponseEntity getCommentFromQuestion(@PathVariable("quest-id") @Positive long questId){
-        List<Comment> comments = commentService.findCommentByQuestionId(questId);
-
-        List<CommentDto.Response> responses = commentMapper.comments_to_CommentResponseDtos(comments);
-
-        return new ResponseEntity<>(responses,
-                HttpStatus.OK);
-    }
-
-    // 답변에 달린 댓글 조회
-    @GetMapping("/answers/{answer-id}/comments")
-    public ResponseEntity getCommentFromAnswer(@PathVariable("answer-id") @Positive long answerId){
-        List<Comment> comments = commentService.findCommentByAnswerId(answerId);
-
-        List<CommentDto.Response> responses = commentMapper.comments_to_CommentResponseDtos(comments);
-
-        return new ResponseEntity<>(responses,
-                HttpStatus.OK);
-    }
-
     // 댓글 삭제
     @DeleteMapping("/comments/{comment-id}")
     public ResponseEntity deleteComment(@RequestHeader(name = "Authorization") String token,
@@ -100,5 +78,28 @@ public class CommentController {
         commentService.deleteComment(commentId,jwtTokenizer.getMemberId(token));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-}
 
+    // 질문에 달린 댓글 조회
+//    @GetMapping("/questions/{quest-id}/comments")
+//    public ResponseEntity getCommentFromQuestion(@PathVariable("quest-id") @Positive long questId){
+//        List<Comment> comments = commentService.findCommentByQuestionId(questId);
+//
+//        List<CommentDto.Response> responses = commentMapper.comments_to_CommentResponseDtos(comments);
+//
+//        return new ResponseEntity<>(responses,
+//                HttpStatus.OK);
+//    }
+//
+//    // 답변에 달린 댓글 조회
+//    @GetMapping("/answers/{answer-id}/comments")
+//    public ResponseEntity getCommentFromAnswer(@PathVariable("answer-id") @Positive long answerId){
+//        List<Comment> comments = commentService.findCommentByAnswerId(answerId);
+//
+//        List<CommentDto.Response> responses = commentMapper.comments_to_CommentResponseDtos(comments);
+//
+//        return new ResponseEntity<>(responses,
+//                HttpStatus.OK);
+//    }
+
+
+}
