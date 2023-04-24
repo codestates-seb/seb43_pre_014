@@ -17,30 +17,29 @@ import java.time.LocalDateTime;
 @Table(name = "COMMENT")
 @NoArgsConstructor
 public class Comment {
+    // 댓글 ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
-    // 형식을 TEXT로 -> 훨씬 긺
+    // 댓글 본문
     @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
 
+    // 댓글 상태
     @Enumerated(EnumType.STRING)
     private CommentStatus commentStatus = CommentStatus.COMMENT_POSTED;
 
+    // 작성 시간
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
 
-    // default-> 질문에 달린 댓글
-    // postType 대용
+    // 댓글 달린 위치 [QUESTION, ANSWER]
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private boolean isInheritQuestion;
+    private PostType postType;
 
-//    @Enumerated(EnumType.STRING)
-//    @Column(nullable = false, name = "post_type")
-//    private PostType postType;
 
-    // 댓글입장에서 Many???
     @ManyToOne
     @JoinColumn(nullable = false)
     private Member member;
@@ -53,17 +52,17 @@ public class Comment {
     @JoinColumn(nullable = true)
     private Answer answer;
 
-//    public enum PostType {
-//        QUESTION,
-//        ANSWER
-//    }
-
+    @AllArgsConstructor
+    public enum PostType {
+        QUESTION,
+        ANSWER
+    }
     @AllArgsConstructor
     public enum CommentStatus {
         COMMENT_POSTED("등록된 댓글"),
         COMMENT_DELETED("삭제된 댓글");
 
         @Getter
-        private String status;
+        private final String status;
     }
 }

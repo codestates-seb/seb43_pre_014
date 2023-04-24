@@ -15,7 +15,7 @@ import javax.validation.constraints.Positive;
 
 @CrossOrigin(origins = "http://localhost:3000") // CORS 정책 허용
 @RestController
-@RequestMapping("/board/answer")
+@RequestMapping("/board/answers")
 @Validated
 @AllArgsConstructor
 @Slf4j
