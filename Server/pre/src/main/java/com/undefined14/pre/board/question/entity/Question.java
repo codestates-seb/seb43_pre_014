@@ -2,6 +2,7 @@ package com.undefined14.pre.board.question.entity;
 
 import com.undefined14.pre.audit.Auditable;
 import com.undefined14.pre.board.anwser.entity.Answer;
+import com.undefined14.pre.board.comment.entity.Comment;
 import com.undefined14.pre.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -65,4 +66,7 @@ public class Question extends Auditable {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answer = new ArrayList<>();
+
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
+    private List<Comment> comment = new ArrayList<>();
 }

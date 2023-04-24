@@ -1,6 +1,8 @@
 package com.undefined14.pre.board.question.dto;
 
 import com.undefined14.pre.board.anwser.dto.AnswerResponseDto;
+import com.undefined14.pre.board.comment.dto.CommentDto;
+import com.undefined14.pre.board.comment.entity.Comment;
 import com.undefined14.pre.board.question.entity.Question;
 import lombok.Getter;
 import lombok.Setter;
@@ -20,6 +22,7 @@ public class QuestionResponseDto {
     @NotNull
     private LocalDateTime create_at;
     private Question.QuestionStatus questionStatus;
-    List<AnswerResponseDto> answerResponseDto;
+    private List<AnswerResponseDto> answerResponseDto;
+    private List<CommentDto.Response> comments;
 
 }

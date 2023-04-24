@@ -2,6 +2,8 @@ package com.undefined14.pre.board.question.mapper;
 
 import com.undefined14.pre.board.anwser.dto.AnswerResponseDto;
 import com.undefined14.pre.board.anwser.entity.Answer;
+import com.undefined14.pre.board.comment.dto.CommentDto;
+import com.undefined14.pre.board.comment.entity.Comment;
 import com.undefined14.pre.board.question.dto.QuestionPatchDto;
 import com.undefined14.pre.board.question.dto.QuestionPostDto;
 import com.undefined14.pre.board.question.dto.QuestionResponseAllDto;
