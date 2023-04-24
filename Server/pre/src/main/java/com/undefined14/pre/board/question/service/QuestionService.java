@@ -1,5 +1,6 @@
 package com.undefined14.pre.board.question.service;
 
+import com.undefined14.pre.board.question.dto.QuestionResponseAllDto;
 import com.undefined14.pre.board.question.dto.QuestionResponseDto;
 import com.undefined14.pre.board.question.entity.Question;
 import com.undefined14.pre.board.question.mapper.QuestionMapper;
@@ -32,7 +33,7 @@ public class QuestionService {
         return repository.findAll();
     }
 
-    public Page<QuestionResponseDto> findQuestions(Pageable pageable) {
+    public Page<QuestionResponseAllDto> findQuestions(Pageable pageable) {
         Page<Question> questionPage = repository.findByQuestionStatus(Question.QuestionStatus.QUESTION_ACTIVE, pageable);
         return questionPage.map(mapper::questionToQuestionResponseAllDto);
     }
