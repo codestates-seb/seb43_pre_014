@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Function;
 
 @Service
 @Transactional
@@ -33,7 +34,7 @@ public class QuestionService {
 
     public Page<QuestionResponseDto> findQuestions(Pageable pageable) {
         Page<Question> questionPage = repository.findByQuestionStatus(Question.QuestionStatus.QUESTION_ACTIVE, pageable);
-        return questionPage.map(mapper::questionToQuestionResponseDto);
+        return questionPage.map(mapper::questionToQuestionResponseAllDto);
     }
 
     public Question findQuestionById(Long questionId) {
