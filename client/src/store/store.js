@@ -1,17 +1,14 @@
-import { configureStore, createSlice } from '@reduxjs/toolkit'
+import { configureStore } from "@reduxjs/toolkit";
+import userReducer from "./userSlice";
+import commentsReducer from './commentsSlice'
+import idReducer from "./idSlice";
 
-let id = createSlice({
-  name : 'id',
-  initialState : '',
-  reducers: {
-    setId: (state, action) => action.payload,
-  },
-})
-
-export const { setId } = id.actions;
-
-export default configureStore({
+const store = configureStore({
   reducer: {
-    id : id.reducer
-  }
-}) 
+    user: userReducer,
+    comments: commentsReducer,
+    id: idReducer,
+  },
+});
+
+export default store;
