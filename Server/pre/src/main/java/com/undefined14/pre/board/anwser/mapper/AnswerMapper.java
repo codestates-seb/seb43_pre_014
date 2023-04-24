@@ -14,15 +14,10 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
 public interface AnswerMapper {
 
-    @Mapping(source = "memberId", target = "member.memberId")
     @Mapping(source = "questionId", target = "question.questionId")
     Answer answerPostDtoToAnswer(AnswerDto.Post answerPostDto);
 
-    @Mapping(source = "memberId", target = "member.memberId")
     Answer answerPatchDtoToAnswer(AnswerDto.Patch answerPatchDto);
-
-    @Mapping(source = "memberId", target = "member.memberId")
-    Answer answerDeleteDtoToAnswer(AnswerDto.Delete answerDeleteDto);
 
     default AnswerResponseDto answerToAnswerResponseDto(Answer answer) {
         AnswerResponseDto answerResponseDto = new AnswerResponseDto();

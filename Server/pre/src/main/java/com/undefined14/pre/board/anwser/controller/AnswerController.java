@@ -25,23 +25,26 @@ public class AnswerController {
 
     // 답변 등록
     @PostMapping
-    public ResponseEntity postAnswer(@Validated @RequestBody AnswerDto.Post answerPostDto) {
+    public ResponseEntity postAnswer(@RequestHeader(name = "Authorization") String token,
+                                     @Validated @RequestBody AnswerDto.Post answerPostDto) {
         log.info(String.valueOf(answerPostDto));
 
-        Answer response = service.createAnswer(mapper.answerPostDtoToAnswer(answerPostDto));
+        Answer response = service.createAnswer(
+                mapper.answerPostDtoToAnswer(answerPostDto), token);
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     // 답변 수정
     @PatchMapping("/{answer-id}")
-    public ResponseEntity patchAnswer(@PathVariable("answer-id") @Positive long answerId,
+    public ResponseEntity patchAnswer(@RequestHeader(name = "Authorization") String token,
+                                      @PathVariable("answer-id") @Positive long answerId,
                                       @Validated @RequestBody AnswerDto.Patch answerPatchDto) {
         answerPatchDto.setAnswerId(answerId);
 
         log.info(String.valueOf(answerPatchDto));
 
-        Answer response = service.updateAnswer(mapper.answerPatchDtoToAnswer(answerPatchDto));
+        Answer response = service.updateAnswer(mapper.answerPatchDtoToAnswer(answerPatchDto),token);
 
         return new ResponseEntity<>(mapper.answerToAnswerResponseDto(response),HttpStatus.OK);
     }
@@ -59,11 +62,11 @@ public class AnswerController {
 
     // 답변 삭제
     @DeleteMapping("/{answer-id}")
-    public void deleteAnswer(@PathVariable("answer-id") @Positive long answerId,
-                             @Validated @RequestBody AnswerDto.Delete delete) {
+    public void deleteAnswer(@RequestHeader(name = "Authorization") String token,
+                             @PathVariable("answer-id") @Positive long answerId) {
 
         log.info(String.valueOf(answerId));
 
-        service.deleteAnswer(mapper.answerDeleteDtoToAnswer(delete),answerId);
+        service.deleteAnswer(answerId,token);
     }
 }
