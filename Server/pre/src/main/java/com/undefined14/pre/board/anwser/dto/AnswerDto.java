@@ -9,8 +9,6 @@ public class AnswerDto {
     @Getter
     public static class Post {
         @NotNull
-        private Long memberId;
-        @NotNull
         private Long questionId;
         @NotNull
         private String body;
@@ -18,15 +16,9 @@ public class AnswerDto {
     @Getter
     public static class Patch {
         @NotNull
-        private Long memberId;
-        @NotNull
         private Long questionId;
         @Setter
         private Long answerId;
         private String body;
-    }
-    @Getter
-    public static class Delete {
-        private Long memberId;
     }
 }
