@@ -3,6 +3,7 @@ package com.undefined14.pre.board.comment.entity;
 import com.undefined14.pre.board.anwser.entity.Answer;
 import com.undefined14.pre.board.question.entity.Question;
 import com.undefined14.pre.member.entity.Member;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,8 +25,8 @@ public class Comment {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
 
-//    @Enumerated(EnumType.STRING)
-//    private CommentStatus commentStatus = CommentStatus.COMMENT_ACTIVE;
+    @Enumerated(EnumType.STRING)
+    private CommentStatus commentStatus = CommentStatus.COMMENT_POSTED;
 
     @Column(nullable = false)
     private LocalDateTime createdAt = LocalDateTime.now();
@@ -39,14 +40,17 @@ public class Comment {
 //    @Column(nullable = false, name = "post_type")
 //    private PostType postType;
 
+    // 댓글입장에서 Many???
     @ManyToOne
-    @JoinColumn(name = "WRITER_ID", nullable = false)
-    private Member writer;
+    @JoinColumn(nullable = false)
+    private Member member;
 
     @ManyToOne
+    @JoinColumn(nullable = true)
     private Question question;
 
     @ManyToOne
+    @JoinColumn(nullable = true)
     private Answer answer;
 
 //    public enum PostType {
@@ -54,12 +58,12 @@ public class Comment {
 //        ANSWER
 //    }
 
-//    @AllArgsConstructor
-//    public enum CommentStatus {
-//        COMMENT_ACTIVE("등록된 댓글"),
-//        COMMENT_DELETED("삭제된 댓글");
-//
-//        @Getter
-//        private String status;
-//    }
+    @AllArgsConstructor
+    public enum CommentStatus {
+        COMMENT_POSTED("등록된 댓글"),
+        COMMENT_DELETED("삭제된 댓글");
+
+        @Getter
+        private String status;
+    }
 }

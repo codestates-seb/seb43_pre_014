@@ -14,23 +14,22 @@ public interface CommentMapper {
     Comment commentPatchDto_to_Comment(CommentDto.Patch commentPostDto);
 
     List<CommentDto.Response> comments_to_CommentResponseDtos(List<Comment> comments);
+
     default CommentDto.Response comment_to_CommentResponseDto(Comment comment){
         CommentDto.Response commentResponseDto;
         if(comment.isInheritQuestion()) {
             commentResponseDto = new Response(
-                    comment.getQuestion().getQuestionId(),
+//                    comment.getQuestion().getQuestionId(),
                     comment.getCommentId(),
-                    comment.getWriter().getMemberId(),
-                    comment.getWriter().getName(),
+                    comment.getMember().getMemberId(),
                     comment.getBody(),
                     comment.getCreatedAt()
             );
         }else{
             commentResponseDto = new Response(
-                    comment.getAnswer().getAnswerId(),
+//                    comment.getAnswer().getAnswerId(),
                     comment.getCommentId(),
-                    comment.getWriter().getMemberId(),
-                    comment.getWriter().getName(),
+                    comment.getMember().getMemberId(),
                     comment.getBody(),
                     comment.getCreatedAt()
             );
