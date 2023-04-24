@@ -10,7 +10,6 @@ import com.undefined14.pre.member.entity.Member;
 import com.undefined14.pre.member.service.MemberService;
 import com.undefined14.pre.board.comment.entity.Comment;
 import com.undefined14.pre.board.comment.repository.CommentRepository;
-import java.util.List;
 import java.util.Optional;
 
 import lombok.AllArgsConstructor;
@@ -83,13 +82,14 @@ public class CommentService {
         return findComment;
     }
 
-    public List<Comment> findCommentByQuestionId(long questId){
-        Question question = questionService.findQuestionById(questId);
-        return commentRepository.findByQuestion(questId);
-    }
-
-    public List<Comment> findCommentByAnswerId(long answerId){
-        Answer answer = answerService.findAnswer(answerId);
-        return commentRepository.findByAnswer(answerId);
-    }
+    // 조회 시 사용
+//    public List<Comment> findCommentByQuestionId(long questId){
+//        Question question = questionService.findQuestionById(questId);
+//        return commentRepository.findByQuestion(questId);
+//    }
+//
+//    public List<Comment> findCommentByAnswerId(long answerId){
+//        Answer answer = answerService.findAnswer(answerId);
+//        return commentRepository.findByAnswer(answerId);
+//    }
 }

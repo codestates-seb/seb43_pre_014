@@ -20,7 +20,8 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long commentId;
 
-    @Column(nullable = false, columnDefinition = "TEXT", length = 255)
+    // 형식을 TEXT로 -> 훨씬 긺
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
 
 //    @Enumerated(EnumType.STRING)

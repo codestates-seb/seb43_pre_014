@@ -47,15 +47,15 @@ public class AnswerController {
     }
 
     // 답변 조회
-    @GetMapping("/{answer-id}")
-    public ResponseEntity getAnswer(@PathVariable("answer-id") @Positive long answerId) {
-
-        log.info(String.valueOf(answerId));
-
-        Answer response = service.findAnswer(answerId);
-
-        return new ResponseEntity<>(mapper.answerToAnswerResponseDto(response),HttpStatus.OK);
-    }
+//    @GetMapping("/{answer-id}")
+//    public ResponseEntity getAnswer(@PathVariable("answer-id") @Positive long answerId) {
+//
+//        log.info(String.valueOf(answerId));
+//
+//        Answer response = service.findAnswer(answerId);
+//
+//        return new ResponseEntity<>(mapper.answerToAnswerResponseDto(response),HttpStatus.OK);
+//    }
 
     // 답변 삭제
     @DeleteMapping("/{answer-id}")

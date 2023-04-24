@@ -25,11 +25,10 @@ public class Question extends Auditable {
     @Column(nullable = false, length = 100)
     private String title;
 
-    //@Column(nullable = false, length = 255)
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String problem;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String expecting;
 
     @Enumerated(EnumType.STRING)
@@ -64,6 +63,6 @@ public class Question extends Auditable {
 //        member.getQuestions().add(this);
 //    }
 
-    @OneToMany(mappedBy = "question", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answer = new ArrayList<>();
 }
