@@ -1,0 +1,61 @@
+.header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #f48024;
+    height: 60px;
+  }
+  
+  .header__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+  }
+  
+  .header__logo img {
+    height: 40px;
+  }
+  
+  .header__nav {
+    display: flex;
+    gap: 15px;
+  }
+  
+  .header__nav a {
+    color: white;
+    text-decoration: none;
+  }
+  
+  .header__search {
+    position: relative;
+  }
+  
+  .header__search input {
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: 1px solid #ccc;
+  }
+  
+  .header__auth {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .header__login,
+  .header__signup {
+    padding: 5px 10px;
+    border-radius: 3px;
+    border: none;
+    background-color: transparent;
+    color: white;
+    cursor: pointer;
+  }
+  
+  .header__signup {
+    background-color: white;
+    color: #f48024;
+  }
+  
