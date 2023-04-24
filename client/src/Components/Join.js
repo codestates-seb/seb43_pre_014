@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux"
-import { setId } from '../store/store';
+import idSlice from "../store/idSlice";
 
 const DisplayFlex = styled.div`
     background-color: #F1F2F3;
@@ -227,7 +227,7 @@ const Login = () => {
 
     function handleChange(e) {
         const id = e.target.value;
-        dispatch(setId(id));
+        dispatch(idSlice(id));
       }    
 
     return (
