@@ -2,6 +2,7 @@ package com.undefined14.pre.board.question.controller;
 
 import com.undefined14.pre.board.question.dto.QuestionPatchDto;
 import com.undefined14.pre.board.question.dto.QuestionPostDto;
+import com.undefined14.pre.board.question.dto.QuestionResponseAllDto;
 import com.undefined14.pre.board.question.dto.QuestionResponseDto;
 import com.undefined14.pre.board.question.entity.Question;
 import com.undefined14.pre.board.question.mapper.QuestionMapper;
@@ -28,7 +29,7 @@ public class QuestionController {
     private final static String QUESTION_DEFAULT_URL = "/questions";
     private final QuestionMapper mapper;
     private final QuestionService service;
-    private final LinkService<QuestionResponseDto> linkService;
+    private final LinkService<QuestionResponseAllDto> linkService;
 
     // 질문 작성
     @PostMapping
@@ -63,10 +64,10 @@ public class QuestionController {
 
     // 질문 목록 페이지네이션
     @GetMapping
-    public ResponseEntity<List<QuestionResponseDto>> getQuestionsPages(
+    public ResponseEntity<List<QuestionResponseAllDto>> getQuestionsPages(
             Pageable pageable,
             HttpServletRequest request) {
-        Page<QuestionResponseDto> questions = service.findQuestions(pageable);
+        Page<QuestionResponseAllDto> questions = service.findQuestions(pageable);
 
         String baseUrl = String.format("%s://%s:%d", request.getScheme(), request.getServerName(), request.getServerPort());
 

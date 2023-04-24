@@ -4,6 +4,7 @@ import com.undefined14.pre.board.anwser.dto.AnswerResponseDto;
 import com.undefined14.pre.board.anwser.entity.Answer;
 import com.undefined14.pre.board.question.dto.QuestionPatchDto;
 import com.undefined14.pre.board.question.dto.QuestionPostDto;
+import com.undefined14.pre.board.question.dto.QuestionResponseAllDto;
 import com.undefined14.pre.board.question.dto.QuestionResponseDto;
 import com.undefined14.pre.board.question.entity.Question;
 import org.mapstruct.Mapper;
@@ -51,4 +52,20 @@ public interface QuestionMapper {
     }
 
     List<QuestionResponseDto> questionListToResponseDtoList(List<Question> questions);
+
+    // 전체 조회 시 답변, 댓글 출력 안되게 하기 위함
+    default QuestionResponseAllDto questionToQuestionResponseAllDto(Question question) {
+        QuestionResponseAllDto questionResponseAllDto = new QuestionResponseAllDto();
+        questionResponseAllDto.setMemberId(question.getMember().getMemberId());
+        questionResponseAllDto.setQuestionId(question.getQuestionId());
+        questionResponseAllDto.setTitle(question.getTitle());
+        questionResponseAllDto.setProblem(question.getProblem());
+        questionResponseAllDto.setExpecting(question.getExpecting());
+        questionResponseAllDto.setCreate_at(question.getCreateAt());
+        questionResponseAllDto.setQuestionStatus(question.getQuestionStatus());
+
+        return questionResponseAllDto;
+    }
+
+    List<QuestionResponseAllDto> questionListToResponseAllDtoList(List<Question> questions);
 }
