@@ -4,6 +4,7 @@ import com.undefined14.pre.audit.Auditable;
 import com.undefined14.pre.board.anwser.entity.Answer;
 import com.undefined14.pre.board.comment.entity.Comment;
 import com.undefined14.pre.member.entity.Member;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -15,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "question")
 public class Question extends Auditable {

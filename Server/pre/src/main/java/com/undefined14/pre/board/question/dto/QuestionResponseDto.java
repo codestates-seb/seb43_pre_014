@@ -22,7 +22,8 @@ public class QuestionResponseDto {
     @NotNull
     private LocalDateTime create_at;
     private Question.QuestionStatus questionStatus;
-    private List<AnswerResponseDto> answerResponseDto;
     private List<CommentDto.Response> comments;
+    private List<AnswerResponseDto> answerResponseDto;
+
 
 }
