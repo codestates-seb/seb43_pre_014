@@ -1,6 +1,13 @@
 package com.undefined14.pre.slice.member;
 
 import com.google.gson.Gson;
+import com.undefined14.pre.auth.jwt.JwtTokenizer;
+import com.undefined14.pre.auth.utils.CustomAuthorityUtils;
+import com.undefined14.pre.board.anwser.service.AnswerService;
+import com.undefined14.pre.board.comment.entity.Comment;
+import com.undefined14.pre.board.comment.mapper.CommentMapper;
+import com.undefined14.pre.board.comment.service.CommentService;
+import com.undefined14.pre.board.question.service.QuestionService;
 import com.undefined14.pre.member.controller.MemberController;
 import com.undefined14.pre.member.dto.MemberPatchDto;
 import com.undefined14.pre.member.dto.MemberPostDto;
@@ -47,12 +54,26 @@ import java.util.List;
 public class MemberRestDocsTest {
     @Autowired
     private MockMvc mockMvc;
-
     @MockBean
     private MemberService memberService;
-
     @MockBean
     private MemberMapper mapper;
+    @MockBean
+    private CommentService commentService;
+    @MockBean
+    private CommentMapper commentMapper;
+    @MockBean
+    private Comment comment;
+    @MockBean
+    private JwtTokenizer jwtTokenizer;
+    @MockBean
+    private CustomAuthorityUtils customAuthorityUtils;
+    @MockBean
+    private QuestionService questionService;
+    @MockBean
+    private AnswerService answerService;
+    @MockBean
+    private Member member;
 
     @Autowired
     private Gson gson;
