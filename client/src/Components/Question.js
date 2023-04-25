@@ -58,7 +58,7 @@ const Sidemenu = styled.div`
     }
 
     @media only screen and (max-width: 1024px) {
-      display: none;
+        display: none;
     }
 `;
 
@@ -162,13 +162,13 @@ const PostFooter = styled.div`
         margin-bottom: 30px;
         
         li {
-           font-size: 8pt;
-           background-color : #D9EAF7;
-           border-radius: 3px;
-           color: #39739D;
+            font-size: 8pt;
+            background-color : #D9EAF7;
+            border-radius: 3px;
+            color: #39739D;
 
-           padding: 3px 7px;
-           margin-right: 5px;
+            padding: 3px 7px;
+            margin-right: 5px;
         }
     }
 
