@@ -9,15 +9,7 @@ import javax.validation.constraints.Positive;
 @Getter
 @Setter
 public class QuestionPostDto {
-    @Positive
-    private Long memberId;
     private String title;
     private String problem;
     private String expecting;
-
-    public Member getMember() {
-        Member member = new Member();
-        member.setMemberId(memberId);
-        return member;
-    }
 }

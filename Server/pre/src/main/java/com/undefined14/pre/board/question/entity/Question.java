@@ -59,11 +59,6 @@ public class Question extends Auditable {
         this.member = member;
     }
 
-//    public void setMember(Member member) {
-//        this.member = member;
-//        member.getQuestions().add(this);
-//    }
-
     @OneToMany(mappedBy = "question", cascade = CascadeType.ALL)
     private List<Answer> answer = new ArrayList<>();
 

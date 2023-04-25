@@ -7,7 +7,6 @@ import lombok.Setter;
 @Setter
 public class QuestionPatchDto {
     private Long questionId;
-    private Long memberId;
     private String title;
     private String problem;
     private String expecting;
