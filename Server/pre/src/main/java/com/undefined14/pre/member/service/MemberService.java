@@ -59,7 +59,10 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
-    public Member findMember(long memberId) {
+    public Member findMember(String token) {
+
+        long memberId = jwtTokenizer.getMemberId(token);
+
         Member findMember = findVerifiedMember(memberId);
 
         if(findMember.getMemberStatus().equals(Member.MemberStatus.MEMBER_QUIT)) {

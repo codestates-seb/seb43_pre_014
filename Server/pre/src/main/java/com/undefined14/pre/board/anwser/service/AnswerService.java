@@ -60,6 +60,7 @@ public class AnswerService {
 
     // 답변 삭제
     public void deleteAnswer(long answerId, String token) {
+        Long memberId = jwtTokenizer.getMemberId(token);
 
         Member member = memberService.findMember(token);
 
