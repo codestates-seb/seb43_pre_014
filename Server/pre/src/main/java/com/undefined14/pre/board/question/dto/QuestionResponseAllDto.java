@@ -1,5 +1,6 @@
 package com.undefined14.pre.board.question.dto;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.undefined14.pre.board.question.entity.Question;
 import lombok.Getter;
 import lombok.Setter;

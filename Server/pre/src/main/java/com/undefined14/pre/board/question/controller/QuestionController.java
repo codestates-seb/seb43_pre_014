@@ -69,7 +69,7 @@ public class QuestionController {
 
     // 질문 목록 페이지네이션
     @GetMapping
-    public ResponseEntity<List<QuestionResponseAllDto>> getQuestionsPages(
+    public ResponseEntity<Page<QuestionResponseAllDto>> getQuestionsPages(
             Pageable pageable,
             HttpServletRequest request) {
         Page<QuestionResponseAllDto> questions = service.findQuestions(pageable);
@@ -78,7 +78,7 @@ public class QuestionController {
 
         return ResponseEntity.ok()
                 .header(HttpHeaders.LINK, linkService.createLinkHeader(questions, request, baseUrl))
-                .body(questions.getContent());
+                .body(questions);
     }
 
     // 질문 수정

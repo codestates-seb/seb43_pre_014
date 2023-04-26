@@ -1,22 +1,17 @@
 package com.undefined14.pre.slice.quesetion;
 
 import com.google.gson.Gson;
-import com.undefined14.pre.auth.config.SecurityConfiguration;
 import com.undefined14.pre.auth.jwt.JwtTokenizer;
 import com.undefined14.pre.auth.utils.CustomAuthorityUtils;
 import com.undefined14.pre.board.question.controller.QuestionController;
 import com.undefined14.pre.board.question.dto.QuestionPatchDto;
 import com.undefined14.pre.board.question.dto.QuestionPostDto;
+import com.undefined14.pre.board.question.dto.QuestionResponseAllDto;
 import com.undefined14.pre.board.question.dto.QuestionResponseDto;
 import com.undefined14.pre.board.question.entity.Question;
-import com.undefined14.pre.board.question.link.LinkService;
 import com.undefined14.pre.board.question.link.LinkServiceImpl;
 import com.undefined14.pre.board.question.mapper.QuestionMapper;
 import com.undefined14.pre.board.question.service.QuestionService;
-import com.undefined14.pre.exception.BusinessLogicException;
-import com.undefined14.pre.exception.ExceptionCode;
-import com.undefined14.pre.member.dto.MemberPatchDto;
-import com.undefined14.pre.member.entity.Member;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -24,17 +19,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.data.domain.*;
 import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
+
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
+import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -46,13 +42,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.mockito.Mockito.doThrow;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -119,12 +113,16 @@ public class QuestionRestDocsTest {
                 .andDo(document("post-question",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("jwt-token")
+                        ),
                         requestFields(
                                 List.of(
                                         fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
                                         fieldWithPath("problem").type(JsonFieldType.STRING).description("문제"),
                                         fieldWithPath("expecting").type(JsonFieldType.STRING).description("예상한 원인")
                                 )
+
                         ),
                         responseHeaders(
                                 headerWithName(HttpHeaders.LOCATION).description("Location header. 등록된 리소스의 URI")
@@ -174,6 +172,9 @@ public class QuestionRestDocsTest {
                 .andDo(document("patch-question",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("jwt-token")
+                        ),
                         requestFields(
                                 fieldWithPath("questionId").type(JsonFieldType.NUMBER).description("질문 ID"),
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
@@ -256,15 +257,6 @@ public class QuestionRestDocsTest {
         // given
         Long questionId = 1L;
 
-//        Question question = new Question();
-//        question.setQuestionId(questionId);
-//        question.setTitle("제목");
-//        question.setProblem("문제");
-//        question.setExpecting("익스펙팅");
-//        question.setQuestionStatus(Question.QuestionStatus.QUESTION_ACTIVE);
-//        question.setMember(member);
-//        question.
-
         doNothing().when(questionService).deleteQuestionById(questionId, "Bearer " + "test-token");
 
         // when & then
@@ -275,20 +267,122 @@ public class QuestionRestDocsTest {
                                 .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isNoContent())
-//                .andExpect(header().string("Location", is(startsWith("/questions/1"))))
                 .andDo(
                         document(
-                                "delete-questions-success",
+                                "delete-questions",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
                                 parameterWithName("question-id").description("질문 ID")
                         ),
                         requestHeaders(
-                                headerWithName("Authorization").description("인증 토큰")
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("jwt-token")
                         )
                 ));
     }
+
+    @Test
+    @DisplayName("질문 목록 페이지네이션")
+    public void getQuestionsPagesTest() throws Exception {
+        // given
+        List<QuestionResponseAllDto> questionList = new ArrayList<>();
+        for (int i = 0; i < 10; i++) {
+            QuestionResponseAllDto questionResponseAllDto = new QuestionResponseAllDto();
+            questionResponseAllDto.setQuestionId((long) (i + 1));
+            questionResponseAllDto.setMemberId((long) (i + 1));
+            questionResponseAllDto.setTitle("title" + (i + 1));
+            questionResponseAllDto.setProblem("problem" + (i + 1));
+            questionResponseAllDto.setExpecting("expecting" + (i + 1));
+            questionResponseAllDto.setCreate_at(LocalDateTime.now().minusDays(i + 1));
+            questionResponseAllDto.setQuestionStatus(Question.QuestionStatus.QUESTION_ACTIVE);
+            questionList.add(questionResponseAllDto);
+        }
+        PageRequest pageRequest = PageRequest.of(0, 10, Sort.by("questionId").descending());
+        Page<QuestionResponseAllDto> questionPage = new PageImpl<>(questionList, pageRequest, questionList.size());
+
+        given(questionService.findQuestions(any(Pageable.class))).willReturn(questionPage);
+
+        // when & then
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/board/questions/")
+                                .param("page", "0")
+                                .param("size", "10")
+                                .param("sort", "questionId,desc")
+                                .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].questionId").value(1L))
+                .andExpect(jsonPath("$.content[0].memberId").value(1L))
+                .andExpect(jsonPath("$.content[0].title").value("title1"))
+                .andExpect(jsonPath("$.content[0].problem").value("problem1"))
+                .andExpect(jsonPath("$.content[0].expecting").value("expecting1"))
+                .andExpect(jsonPath("$.content[0].questionStatus").value("QUESTION_ACTIVE"))
+                .andExpect(jsonPath("$.content[9].questionId").value(10L))
+                .andExpect(jsonPath("$.content[9].memberId").value(10L))
+                .andExpect(jsonPath("$.content[9].title").value("title10"))
+                .andExpect(jsonPath("$.content[9].problem").value("problem10"))
+                .andExpect(jsonPath("$.content[9].expecting").value("expecting10"))
+                .andExpect(jsonPath("$.content[9].questionStatus").value("QUESTION_ACTIVE"))
+                .andDo(print())
+                .andDo(
+                        document(
+                                "get-questions-pages-success",
+                                preprocessRequest(prettyPrint()),
+                                preprocessResponse(prettyPrint()),
+                                requestParameters(
+                                        parameterWithName("page").description("페이지 번호"),
+                                        parameterWithName("size").description("페이지 크기"),
+                                        parameterWithName("sort").description("정렬 기준 (필드명,asc/desc)")
+                                ),
+                                responseFields(
+                                        fieldWithPath("content[].questionId").description("질문 ID"),
+                                        fieldWithPath("content[].memberId").description("멤버 ID"),
+                                        fieldWithPath("content[].title").description("질문 제목"),
+                                        fieldWithPath("content[].problem").description("질문 내용"),
+                                        fieldWithPath("content[].expecting").description("예상 원인"),
+                                        fieldWithPath("content[].create_at").description("질문 작성일"),
+                                        fieldWithPath("content[].questionStatus").description("질문 상태"),
+                                        fieldWithPath("pageable").description("페이지 정보"),
+                                        fieldWithPath("pageable.sort").description("페이지 정렬 정보"),
+                                        fieldWithPath("pageable.sort.empty").description("정렬 정보가 비어 있는지 여부"),
+                                        fieldWithPath("pageable.sort.sorted").description("정렬 정보가 정렬되어 있는지 여부"),
+                                        fieldWithPath("pageable.sort.unsorted").description("정렬 정보가 정렬되지 않았는지 여부?"),
+                                        fieldWithPath("pageable.offset").description("페이지 오프셋"),
+                                        fieldWithPath("pageable.pageNumber").description("페이지 번호"),
+                                        fieldWithPath("pageable.pageSize").description("페이지 크기"),
+                                        fieldWithPath("pageable.paged").description("페이징 가능 여부"),
+                                        fieldWithPath("pageable.unpaged").description("페이징 불가능 여부"),
+                                        fieldWithPath("last").description("마지막 페이지 여부"),
+                                        fieldWithPath("totalElements").description("전체 요소 수"),
+                                        fieldWithPath("totalPages").description("전체 페이지 수"),
+                                        fieldWithPath("size").description("페이지 크기"),
+                                        fieldWithPath("number").description("페이지 번호"),
+                                        fieldWithPath("sort").description("정렬 정보"),
+                                        fieldWithPath("sort.empty").description("정렬 정보가 비어 있는지 여부"),
+                                        fieldWithPath("sort.sorted").description("정렬 정보가 정렬되어 있는지 여부"),
+                                        fieldWithPath("sort.unsorted").description("정렬 정보가 정렬되어 있지 않은지 여부"),
+                                        fieldWithPath("first").description("첫 번째 페이지 여부"),
+                                        fieldWithPath("numberOfElements").description("현재 페이지 요소 수"),
+                                        fieldWithPath("empty").description("현재 페이지가 비어있는지 여부")
+                                ),
+                                responseHeaders(
+                                        headerWithName(HttpHeaders.LINK)
+                                                .description("페이징 링크 정보(Web Linking (RFC5988) format)")
+                                                .optional()
+                                ),
+                                links(
+                                        linkWithRel("first").description("첫 페이지 결과에 대한 링크").optional(),
+                                        linkWithRel("prev").description("이전 페이지 결과에 대한 링크").optional(),
+                                        linkWithRel("self").description("현재 페이지 결과에 대한 링크").optional(),
+                                        linkWithRel("next").description("다음 페이지 결과에 대한 링크").optional(),
+                                        linkWithRel("last").description("마지막 페이지 결과에 대한 링크").optional()
+                                )
+                        )
+                );
+    }
+
+
+
 
 
 
