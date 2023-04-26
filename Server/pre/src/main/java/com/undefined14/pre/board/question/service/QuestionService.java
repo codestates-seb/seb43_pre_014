@@ -62,6 +62,7 @@ public class QuestionService {
         existingQuestion.setTitle(question.getTitle());
         existingQuestion.setProblem(question.getProblem());
         existingQuestion.setExpecting(question.getExpecting());
+        existingQuestion.setTags(question.getTags());
         return repository.save(existingQuestion);
     }
 

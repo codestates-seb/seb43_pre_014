@@ -33,8 +33,12 @@ public class Question extends Auditable {
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
-    @ElementCollection
-    @org.hibernate.annotations.OrderBy(clause = "INDEX_COLUMN_NAME asc")
+    @ElementCollection(fetch = FetchType.LAZY)
+    @CollectionTable(name = "question_tags",
+            joinColumns = @JoinColumn(name = "question_id"))
+    @Column(name = "tag")
+    @org.hibernate.annotations.OrderBy(clause = "tag asc")
+    @OrderColumn(name = "index")
     private Set<String> tags = new LinkedHashSet<>();
 
 
