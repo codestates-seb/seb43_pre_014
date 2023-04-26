@@ -1,23 +1,14 @@
 package com.undefined14.pre.board.question.dto;
 
-import com.undefined14.pre.member.entity.Member;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Positive;
-
 @Getter
 @Setter
+@AllArgsConstructor
 public class QuestionPostDto {
-    @Positive
-    private Long memberId;
     private String title;
     private String problem;
     private String expecting;
-
-    public Member getMember() {
-        Member member = new Member();
-        member.setMemberId(memberId);
-        return member;
-    }
 }
