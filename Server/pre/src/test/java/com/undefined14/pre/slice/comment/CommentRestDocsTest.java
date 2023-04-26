@@ -32,6 +32,7 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -93,6 +94,7 @@ public class CommentRestDocsTest {
 
     @Test
     @DisplayName("질문 댓글 작성")
+    @WithMockUser
     public void postCommentToQuestionTest() throws Exception{
         long questionId = 1L;
 
@@ -153,6 +155,7 @@ public class CommentRestDocsTest {
 //
     @Test
     @DisplayName("답변 댓글 작성")
+    @WithMockUser
     public void postCommentToAnswerTest() throws Exception {
         long answerId = 1L;
 
@@ -211,6 +214,7 @@ public class CommentRestDocsTest {
 
     @Test
     @DisplayName("댓글 수정")
+    @WithMockUser
     public void patchCommentTest() throws Exception{
         long commentId = 1L;
         CommentDto.Patch patch = new Patch(commentId,"수정된 댓글내용입니다");
@@ -269,6 +273,7 @@ public class CommentRestDocsTest {
 
     @Test
     @DisplayName("댓글 삭제")
+    @WithMockUser
     public void deleteCommentTest() throws Exception {
         LocalDateTime createdAt = LocalDateTime.of(2022, 11, 11, 11, 11, 11);
 
