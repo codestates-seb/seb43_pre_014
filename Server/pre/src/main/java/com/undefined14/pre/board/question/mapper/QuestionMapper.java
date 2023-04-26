@@ -32,8 +32,9 @@ public interface QuestionMapper {
         questionResponseDto.setExpecting(question.getExpecting());
         questionResponseDto.setCreate_at(question.getCreateAt());
         questionResponseDto.setQuestionStatus(question.getQuestionStatus());
-        questionResponseDto.setAnswerResponseDto(new ArrayList<>());
         questionResponseDto.setComments(new ArrayList<>());
+        questionResponseDto.setAnswerResponseDto(new ArrayList<>());
+
 
         // 답변
         if (question.getAnswer() != null) {

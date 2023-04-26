@@ -34,8 +34,7 @@ public class CommentController {
                                                 @PathVariable("quest-id") @Positive long questId,
                                                 @Valid @RequestBody CommentDto.Post commentPostDto){
         Comment comment = commentService.createCommentToQuestion(
-                commentMapper.commentPostDto_to_Comment(commentPostDto),
-                questId,jwtTokenizer.getMemberId(token));
+                commentMapper.commentPostDto_to_Comment(commentPostDto), questId, jwtTokenizer.getMemberId(token));
         CommentDto.Response response = commentMapper.comment_to_CommentResponseDto(comment);
         return new ResponseEntity<>(
                 response,
