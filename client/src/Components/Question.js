@@ -58,7 +58,7 @@ const Sidemenu = styled.div`
     }
 
     @media only screen and (max-width: 1024px) {
-      display: none;
+        display: none;
     }
 `;
 
@@ -176,10 +176,10 @@ const PostFooter = styled.div`
         margin-bottom: 30px;
         
         li {
-           font-size: 8pt;
-           background-color : #D9EAF7;
-           border-radius: 3px;
-           color: #39739D;
+            font-size: 8pt;
+            background-color : #D9EAF7;
+            border-radius: 3px;
+            color: #39739D;
 
            padding: 3px 7px;
            margin-right: 5px;
@@ -284,21 +284,9 @@ useEffect(() => {
       })
       .catch((err) => {
         console.log(err);
-      });
-  }, []);
-  
+        });
+    }, []);
 
-
-// 코드블럭으로 바뀌는 부분.. 이걸 어떻게 처리할지 모르겠음.
-const codeString = 
-`const test = adsad
-
-<ul>
-<li>Asked <span className="black">today</span></li>
-<li>Modified <span className="black">today</span></li>
-<li>Viewed <span className="black">15 times</span></li>
-</ul>`
-    
     return (
     <>
     {question &&

@@ -10,12 +10,12 @@ import java.util.Optional;
 
 @Repository
 public interface CommentRepository extends JpaRepository<Comment, Long> {
-    @Query(value = "SELECT c FROM COMMENT c WHERE c.commentId = :commentId")
+    @Query(value = "SELECT c FROM Comment c WHERE c.commentId = :commentId")
     Optional<Comment> findByComment(long commentId);
 
-    @Query(value = "SELECT c FROM COMMENT c WHERE QUEST_QUESTION_ID = :questionId")
+    @Query(value = "SELECT c FROM Comment c WHERE c.question.questionId = :questionId")
     List<Comment> findByQuestion(long questionId);
 
-    @Query(value = "SELECT c FROM COMMENT c WHERE ANSWER_ANSWER_ID = :answerId")
+    @Query(value = "SELECT c FROM Comment c WHERE c.answer.answerId = :answerId")
     List<Comment> findByAnswer(long answerId);
 }

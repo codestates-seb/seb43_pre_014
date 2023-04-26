@@ -1,6 +1,7 @@
 package com.undefined14.pre.board.anwser.entity;
 
 import com.undefined14.pre.audit.Auditable;
+import com.undefined14.pre.board.comment.entity.Comment;
 import com.undefined14.pre.board.question.entity.Question;
 import com.undefined14.pre.member.entity.Member;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -20,7 +23,7 @@ public class Answer extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long answerId;
 
-    @Column(nullable = false, length = 255)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String body;
 
     @Enumerated(EnumType.STRING)
@@ -43,4 +46,7 @@ public class Answer extends Auditable {
     @ManyToOne
     @JoinColumn(name = "QUESTION_ID")
     private Question question;
+
+    @OneToMany(mappedBy = "answer", cascade = CascadeType.ALL)
+    private List<Comment> comment = new ArrayList<>();
 }

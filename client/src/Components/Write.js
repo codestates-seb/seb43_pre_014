@@ -475,16 +475,16 @@ const Header = () => {
     // 태그 추가, 삭제
     const addTags = (event) => {
         if(!tags.includes(event.target.value) && event.target.value !== ''){
-          setTags([...tags, event.target.value]);
-          event.target.value = '';
+            setTags([...tags, event.target.value]);
+            event.target.value = '';
         } else if(event.target.value === ''){
-          event.target.value = '';
+            event.target.value = '';
         }
     };
 
     const removeTags = (indexToRemove) => {
         setTags(tags.filter((el) => {
-          return el !== tags[indexToRemove]
+            return el !== tags[indexToRemove]
         }))
       };
     
@@ -514,7 +514,7 @@ const Header = () => {
 
     const handleEnter = (event) => {
         if (event.key === 'Enter') {
-          event.preventDefault();
+            event.preventDefault();
         }
     };
 

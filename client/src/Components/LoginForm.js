@@ -1,8 +1,9 @@
-import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { login } from "../store/userSlice";
-import axios from "axios";
+import axiosInstance from "../axiosConfig";
+import { useState } from "react";
+
 
 const Container = styled.div`
   background-color: #F1F2F3;
@@ -136,6 +137,8 @@ const Error = styled.p`
 `;
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -148,45 +151,30 @@ const LoginForm = () => {
   };
 
   const validatePassword = (password) => {
-    return password.length >= 8;
+    return passwordRegex.test(password);
   };
 
-  const loginUser = (email, password) => {
-    axios.get("  http://localhost:8080/users", 
-  //   {
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'ngrok-skip-browser-warning': '69420',
-  //   },
-  // }
-  )
-  .then((response) => {
-    const users = response.data;
-    console.log(response.data);
 
-    const user = users.find(
-      (user) => user.email === email && user.password === password
-    );
-
-    if (user) {
-      dispatch(login(user));
+const loginUser = async(email, password) => {
+  try{
+    const response = await axiosInstance.post('/login', {
+      email,
+      password,
+      //... 기타 쪼무래기들 추가할 거 있으면 추가
+    });
+    if (response.data.token) {
+      localStorage.setItem("jwt", response.data.token);
+      dispatch(login(response.data.user));
     } else {
       setError("Invalid email or password");
     }
-  })
-  .catch((error) => {
-    setError("Error fetching data");
-  });
+  } catch (error) {
+    setError("Error fetching data")
+  }
 };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // if (setEmail(email) === undefined ){
-    //   setError("Email cannot be empty.");
-    //   return null;
-    // } // 이 부분 기능 구현 안됨;
-
+  
     if (!validateEmail(email)) {
       setError("The email is not a valid email address.");
       return null;
@@ -196,12 +184,8 @@ const LoginForm = () => {
       setError("Password must be at least 8 characters");
       return null;
     }
-    // if(setPassword(password) === undefined){
-    //   setError("Password cannot be empty.")
-    //   return null; // 이 부분 기능 구현 안됨;
-    // }
 
-    loginUser(email, password);
+    await loginUser(email, password);
   };
 
   return (
