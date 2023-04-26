@@ -1,5 +1,6 @@
 package com.undefined14.pre.member.service;
 
+import com.undefined14.pre.auth.jwt.JwtTokenizer;
 import com.undefined14.pre.auth.utils.CustomAuthorityUtils;
 import com.undefined14.pre.exception.BusinessLogicException;
 import com.undefined14.pre.exception.ExceptionCode;
@@ -20,6 +21,7 @@ public class MemberService {
     private MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
+    private final JwtTokenizer jwtTokenizer;
 
     public Member createMember(Member member) {
 
@@ -32,9 +34,12 @@ public class MemberService {
         return memberRepository.save(member);
     }
 
-    public Member updateMember(Member member) {
+    public Member updateMember(Member member, String token) {
 
-        Member findMember = findVerifiedMember(member.getMemberId());
+        long memberId = jwtTokenizer.getMemberId(token);
+
+        Member findMember = findVerifiedMember(memberId);
+
         Optional.ofNullable(member.getName())
                 .ifPresent(findMember::setName);
         Optional.ofNullable(member.getEmail())
@@ -54,7 +59,10 @@ public class MemberService {
         return memberRepository.save(findMember);
     }
 
-    public Member findMember(long memberId) {
+    public Member findMember(String token) {
+
+        long memberId = jwtTokenizer.getMemberId(token);
+
         Member findMember = findVerifiedMember(memberId);
 
         if(findMember.getMemberStatus().equals(Member.MemberStatus.MEMBER_QUIT)) {
@@ -64,7 +72,10 @@ public class MemberService {
         return findMember;
     }
 
-    public void deleteMember(long memberId) {
+    public void deleteMember(String token) {
+
+        long memberId = jwtTokenizer.getMemberId(token);
+
         Member findMember = findVerifiedMember(memberId);
 
         findMember.setMemberStatus(Member.MemberStatus.MEMBER_QUIT);
