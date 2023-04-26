@@ -24,7 +24,7 @@ public class AnswerService {
     // 답변 등록
     public Answer createAnswer(Answer answer, String token) {
         // 헤더로 받아온 Authorization 으로 member 를 찾아서 삽입
-        Member member = memberService.findMember(jwtTokenizer.getMemberId(token));
+        Member member = memberService.findMember(token);
         answer.setMember(member);
 
         return repository.save(answer);
@@ -33,7 +33,7 @@ public class AnswerService {
     // 답변 수정
     public Answer updateAnswer(Answer answer, String token) {
 
-        Member member = memberService.findMember(jwtTokenizer.getMemberId(token));
+        Member member = memberService.findMember(token);
 
         answer.setMember(member);
 
@@ -48,8 +48,8 @@ public class AnswerService {
     }
 
     // 있는지 조회
-    public Answer findAnswer(long answerId) {
-        Answer findAnswer = findVerfiedAnswer(answerId);
+    public Answer findAnswer(String token) {
+        Answer findAnswer = findVerfiedAnswer(jwtTokenizer.getMemberId(token));
 
         if (findAnswer.getAnswerStatus().equals(Answer.AnswerStatus.ANSWER_DELETED)) {
             throw new BusinessLogicException(ExceptionCode.ANSWER_DELETED);
@@ -61,7 +61,7 @@ public class AnswerService {
     // 답변 삭제
     public void deleteAnswer(long answerId, String token) {
 
-        Member member = memberService.findMember(jwtTokenizer.getMemberId(token));
+        Member member = memberService.findMember(token);
 
         Answer findAnswer = findVerfiedAnswer(answerId);
 
