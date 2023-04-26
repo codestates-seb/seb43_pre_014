@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addComment, updateComment, deleteComment } from '../store/commentsSlice';
+import { addComment, updateComment, deleteComment, fetchCommentAsync } from '../store/commentsSlice';
 import styled from 'styled-components';
+import { useEffect } from 'react';
 
 const StyledComments = styled.div`
   width: 100%;
@@ -72,10 +73,18 @@ const CommentFormButton = styled.button`
   cursor: pointer;
 `;
 
-const Comments = () => {
+const Comments = ({ parentId, parentType }) => {
+  const dispatch = useDispatch();
   const comments = useSelector((state) => state.comments.items);
   const user = useSelector((state) => state.user.userInfo);
-  const dispatch = useDispatch();
+  const status = useSelector((state) => state.comments.status);
+  const error = useSelector((state) => state.comments.error);
+
+  useEffect(()=>{
+    if (status === 'idle'){
+      dispatch(fetchCommentAsync(parentId, parentType));
+    }
+  }, [dispatch, parentId, parentType, status]);
 
   const [newComment, setNewComment] = useState('');
   const [editingComment, setEditingComment] = useState(null);
@@ -120,16 +129,18 @@ const Comments = () => {
     <StyledComments>
       <h2>Comments</h2>
       <CommentsList>
-        {comments.map((comment) => (
-          <CommentItem key={comment.id}>
+        {status === 'loading'&& <p>Loading...</p>}
+        {status === 'success' && 
+        comments.map((comment) => (
+          <CommentItem key = {comment.id}>
             {editingComment === comment.id ? (
               <CommentForm onSubmit={handleUpdate}>
                 <CommentFormInput
-                type="text"
-                value={editedComment}
-                onChange={(e) => setEditedComment(e.target.value)}
+                type = "text"
+                value = {editedComment}
+                onChange = {(e) => setEditedComment(e.target.value)}
                 />
-                <CommentFormButton type="submit">Update</CommentFormButton>
+                <CommentFormButton type = "submit">Update</CommentFormButton>
           </CommentForm>
         ) : (
           <>
@@ -152,6 +163,7 @@ const Comments = () => {
         )}
       </CommentItem>
     ))}
+  {status === 'failed' && <p>Error:{error}</p>}
   </CommentsList>
   <CommentForm onSubmit={handleSubmit}>
     <CommentFormInput

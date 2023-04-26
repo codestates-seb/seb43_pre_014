@@ -1,8 +1,9 @@
-import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { login } from "../store/userSlice";
 import axiosInstance from "../axiosConfig";
+import { useState } from "react";
+
 
 const Container = styled.div`
   background-color: #F1F2F3;
@@ -174,7 +175,6 @@ const loginUser = async(email, password) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-
     if (!validateEmail(email)) {
       setError("The email is not a valid email address.");
       return null;

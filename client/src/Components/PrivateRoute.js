@@ -5,7 +5,8 @@ const PrivateRoute = ({ path, element }) => {
     const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
     const location = useLocation();
 
-    return isAuthenticated ? <Outlet /> : <Navigate to="/login" state={{ from: location }} />;
+    return isAuthenticated ? <Outlet /> 
+    : <Navigate to="/login" state={{ from: location }} />;
 };
 
 export default PrivateRoute;

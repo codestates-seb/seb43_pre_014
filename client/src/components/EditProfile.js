@@ -1,5 +1,7 @@
 import React, { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import axiosInstance from "../axiosConfig";
 
 const EditProfile = () => {
     const [profileImage, setProfileImage] = useState("");
@@ -10,6 +12,8 @@ const EditProfile = () => {
     const [websiteLink, setWebsiteLink] = useState("");
     const [githubLink, setGithubLink] = useState("");
     const [twitterLink, setTwitterLink] = useState("");
+    const [error, setError] = useState("");
+    const [success, setSuccess] = useState("");
 
     const handleCancel = () => {
         // Cancel 버튼 클릭 시, 상태 초기화
@@ -21,6 +25,35 @@ const EditProfile = () => {
         setWebsiteLink("");
         setGithubLink("");
         setTwitterLink("");
+    };
+
+    const navigate = useNavigate();
+
+    const saveProfile = async () => {
+      try {
+        const response = await axiosInstance.post("/user/profile?이 맞나?",{
+          profileImage,
+          displayName,
+          location,
+          title,
+          aboutMe,
+          websiteLink,
+          githubLink,
+          twitterLink,
+        });
+        if (response.status === 200) {
+          // 성공시 응답처리 뭘로할까
+          setSuccess("Your profile has been saved successfully.");
+          navigate("/");
+        } else {
+          //성공 못했을 때 에러 표시 -> error 관련 css check하기
+          setError
+          ("Oops! There was a problem updating your profile: Display name may only be changed once every 30 days")
+        }
+      } catch (error){
+        // error 메시지
+        setError("Fail fetching data")
+      }
     };
 
     return (
@@ -99,8 +132,10 @@ const EditProfile = () => {
                     />
                 </LinkInputContainer>
             </LinkContainer>
+            {success && <Success>{success}</Success>}
+            {error && <Error>{error}</Error>}
             <ButtonContainer>
-                <SaveButton>Save Profile</SaveButton>
+                <SaveButton onClick={saveProfile}>Save Profile</SaveButton>
                 <CancelButton onClick={handleCancel}>Cancel</CancelButton>
             </ButtonContainer>
         </Wrapper>
@@ -205,6 +240,19 @@ const CancelButton = styled.button`
   &:hover {
     background-color: #999;
   }
+`;
+const Error = styled.p`
+  color: red;
+  font-size: 12px;
+  margin-top: 3px;
+`;
+const Success = styled.p`
+  color: white;
+  background-color: #94c0de;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
 `;
 
 
