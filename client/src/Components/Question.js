@@ -58,7 +58,7 @@ const Sidemenu = styled.div`
     }
 
     @media only screen and (max-width: 1024px) {
-      display: none;
+        display: none;
     }
 `;
 
@@ -162,13 +162,13 @@ const PostFooter = styled.div`
         margin-bottom: 30px;
         
         li {
-           font-size: 8pt;
-           background-color : #D9EAF7;
-           border-radius: 3px;
-           color: #39739D;
+            font-size: 8pt;
+            background-color : #D9EAF7;
+            border-radius: 3px;
+            color: #39739D;
 
-           padding: 3px 7px;
-           margin-right: 5px;
+            padding: 3px 7px;
+            margin-right: 5px;
         }
     }
 
@@ -243,34 +243,34 @@ const [filteredContent, setFilteredContent] = useState("");
 
 useEffect(() => {
     axios
-      .get("http://localhost:3001/write/1", { withCredentials: true })
-      .then((res) => {
+        .get("http://localhost:3001/write/1", { withCredentials: true })
+        .then((res) => {
         setQuestion(res.data);
-  
+
         const test = res.data.text;
-  
+
         let extractedContent = test.match(/`([^`]+)`/)[1];
-  
+
         if (extractedContent.startsWith('</p><p>') || extractedContent.startsWith('<p>')) {
-          extractedContent = extractedContent.replace(/^<\/p><p>|^<p>/, '');
+        extractedContent = extractedContent.replace(/^<\/p><p>|^<p>/, '');
         }
-  
+
         if (extractedContent.endsWith('</p><p>') || extractedContent.endsWith('</p>')) {
-          extractedContent = extractedContent.replace(/<\/p><p>$|<\/p>$/, '');
+        extractedContent = extractedContent.replace(/<\/p><p>$|<\/p>$/, '');
         }
-  
+
         const newFilteredContent = extractedContent.replace(/<\/p><p>/g, '\n').replace(/<ul><\/p><p><\/li><\/p><p><\/li><\/p><p><\/ul>/g, '<ul>\n<li>\n</li>\n<li>\n</li>\n</ul>');
-  
+
         setFilteredContent(newFilteredContent);
-  
+
         console.log(newFilteredContent);
-  
-      })
-      .catch((err) => {
+
+    })
+    .catch((err) => {
         console.log(err);
-      });
-  }, []);
-  
+        });
+    }, []);
+
 
 
 // 코드블럭으로 바뀌는 부분.. 이걸 어떻게 처리할지 모르겠음.

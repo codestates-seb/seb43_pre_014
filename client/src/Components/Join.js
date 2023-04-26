@@ -51,7 +51,7 @@ const LoginText = styled.div`
     }
 
     @media only screen and (max-width: 824px) {
-      display: none;
+        display: none;
     }
 `;
 
