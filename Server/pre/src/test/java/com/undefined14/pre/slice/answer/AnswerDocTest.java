@@ -31,6 +31,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
@@ -113,6 +115,7 @@ public class AnswerDocTest {
         responseDto.setMemberId(1L);
         responseDto.setAnswerId(1L);
         responseDto.setBody("test-script");
+        responseDto.setCreate_at(LocalDateTime.now());
         responseDto.setAnswerStatus(Answer.AnswerStatus.ANSWER_POSTED.getStatus());
         responseDto.setComments(null);
 
@@ -152,6 +155,7 @@ public class AnswerDocTest {
                                         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
                                         fieldWithPath("answerId").type(JsonFieldType.NUMBER).description("답변 식별자"),
                                         fieldWithPath("body").type(JsonFieldType.STRING).description("답변 내용"),
+                                        fieldWithPath("create_at").type(JsonFieldType.STRING).description("작성 일자"),
                                         fieldWithPath("answerStatus").type(JsonFieldType.STRING).description("답변 삭제 유무"),
                                         fieldWithPath("comments").type(JsonFieldType.ARRAY).description("답변에 달린 댓글 리스트").optional()
                                 )
