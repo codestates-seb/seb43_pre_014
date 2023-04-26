@@ -30,15 +30,13 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
 
+import static org.hamcrest.Matchers.*;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.linkWithRel;
 import static org.springframework.restdocs.hypermedia.HypermediaDocumentation.links;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.BDDMockito.given;
@@ -76,7 +74,8 @@ public class QuestionRestDocsTest {
     @DisplayName("질문 작성")
     public void postQuestionTest() throws Exception {
         // given
-        QuestionPostDto post = new QuestionPostDto("title", "problem", "expecting");
+        QuestionPostDto post = new QuestionPostDto("title", "problem", "expecting", Arrays.asList("태그1", "태그2"));
+        // 태그 추가
         String content = gson.toJson(post);
 
         QuestionResponseDto responseDto = new QuestionResponseDto();
@@ -85,6 +84,7 @@ public class QuestionRestDocsTest {
         responseDto.setTitle("title");
         responseDto.setProblem("problem");
         responseDto.setExpecting("expecting");
+        responseDto.setTags(Arrays.asList("태그", "기능"));
         responseDto.setCreate_at(LocalDateTime.now());
         responseDto.setQuestionStatus(Question.QuestionStatus.QUESTION_ACTIVE);
         responseDto.setComments(new ArrayList<>());
@@ -122,7 +122,8 @@ public class QuestionRestDocsTest {
                                 List.of(
                                         fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
                                         fieldWithPath("problem").type(JsonFieldType.STRING).description("문제"),
-                                        fieldWithPath("expecting").type(JsonFieldType.STRING).description("예상한 원인")
+                                        fieldWithPath("expecting").type(JsonFieldType.STRING).description("예상한 원인"),
+                                        fieldWithPath("tags").type(JsonFieldType.ARRAY).description("태그 목록").optional()
                                 )
 
                         ),
@@ -137,7 +138,7 @@ public class QuestionRestDocsTest {
     @WithMockUser
     public void patchQuestionTest() throws Exception {
         // given
-        QuestionPatchDto patchDto = new QuestionPatchDto(1L, "제목", "문제", "원인");
+        QuestionPatchDto patchDto = new QuestionPatchDto(1L, "제목", "문제", "원인", Arrays.asList("태그1", "태그2"));
         String content = gson.toJson(patchDto);
 
         QuestionResponseDto responseDto = new QuestionResponseDto();
@@ -146,6 +147,7 @@ public class QuestionRestDocsTest {
         responseDto.setTitle("수정된 제목");
         responseDto.setProblem("수정된 문제");
         responseDto.setExpecting("수정된 원인");
+        responseDto.setTags(Arrays.asList("수정된 태그1", "수정된 태그2"));
         responseDto.setCreate_at(LocalDateTime.now());
         responseDto.setQuestionStatus(Question.QuestionStatus.QUESTION_ACTIVE);
         responseDto.setComments(new ArrayList<>());
@@ -171,6 +173,8 @@ public class QuestionRestDocsTest {
                 .andExpect(jsonPath("$.title").value(responseDto.getTitle()))
                 .andExpect(jsonPath("$.problem").value(responseDto.getProblem()))
                 .andExpect(jsonPath("$.expecting").value(responseDto.getExpecting()))
+                .andExpect(jsonPath("$.tags[0]").value("수정된 태그1"))
+                .andExpect(jsonPath("$.tags[1]").value("수정된 태그2"))
                 .andDo(print())
                 .andDo(document("patch-question",
                         preprocessRequest(prettyPrint()),
@@ -182,7 +186,8 @@ public class QuestionRestDocsTest {
                                 fieldWithPath("questionId").type(JsonFieldType.NUMBER).description("질문 ID"),
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
                                 fieldWithPath("problem").type(JsonFieldType.STRING).description("문제"),
-                                fieldWithPath("expecting").type(JsonFieldType.STRING).description("예상 원인")
+                                fieldWithPath("expecting").type(JsonFieldType.STRING).description("예상 원인"),
+                                fieldWithPath("tags").type(JsonFieldType.ARRAY).description("태그 목록")
                         ),
                         responseFields(
                                 fieldWithPath("questionId").type(JsonFieldType.NUMBER).description("질문 ID"),
@@ -190,6 +195,7 @@ public class QuestionRestDocsTest {
                                 fieldWithPath("title").type(JsonFieldType.STRING).description("제목"),
                                 fieldWithPath("problem").type(JsonFieldType.STRING).description("문제"),
                                 fieldWithPath("expecting").type(JsonFieldType.STRING).description("예상 원인"),
+                                fieldWithPath("tags").type(JsonFieldType.ARRAY).description("태그 목록"),
                                 fieldWithPath("create_at").type(JsonFieldType.STRING).description("작성 시기"),
                                 fieldWithPath("questionStatus").type(JsonFieldType.STRING).description("질문 상태"),
                                 fieldWithPath("comments").type(JsonFieldType.ARRAY).description("질문 댓글 목록"),
@@ -211,6 +217,7 @@ public class QuestionRestDocsTest {
         responseDto.setTitle("제목");
         responseDto.setProblem("문제");
         responseDto.setExpecting("원인");
+        responseDto.setTags(Arrays.asList("태그1", "태그2"));
         responseDto.setCreate_at(LocalDateTime.now());
         responseDto.setQuestionStatus(Question.QuestionStatus.QUESTION_ACTIVE);
         responseDto.setComments(new ArrayList<>());
@@ -236,6 +243,9 @@ public class QuestionRestDocsTest {
                 .andExpect(jsonPath("$.title").value(responseDto.getTitle()))
                 .andExpect(jsonPath("$.problem").value(responseDto.getProblem()))
                 .andExpect(jsonPath("$.expecting").value(responseDto.getExpecting()))
+                .andExpect(jsonPath("$.tags[0]").value(responseDto.getTags().get(0)))
+                .andExpect(jsonPath("$.tags[1]").value(responseDto.getTags().get(1)))
+                .andExpect(jsonPath("$.tags", hasSize(2)))
                 .andDo(document("get-question",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
@@ -248,6 +258,7 @@ public class QuestionRestDocsTest {
                                 fieldWithPath("title").description("제목"),
                                 fieldWithPath("problem").description("문제"),
                                 fieldWithPath("expecting").description("예상 원인"),
+                                fieldWithPath("tags").description("태그 목록"),
                                 fieldWithPath("create_at").description("질문 작성 시간"),
                                 fieldWithPath("questionStatus").description("질문 상태"),
                                 fieldWithPath("comments").description("질문의 댓글 목록"),
@@ -299,6 +310,7 @@ public class QuestionRestDocsTest {
             questionResponseAllDto.setTitle("title" + (i + 1));
             questionResponseAllDto.setProblem("problem" + (i + 1));
             questionResponseAllDto.setExpecting("expecting" + (i + 1));
+            questionResponseAllDto.setTags(Arrays.asList("태그" + (i + 1), "기능" + (i + 1)));
             questionResponseAllDto.setCreate_at(LocalDateTime.now().minusDays(i + 1));
             questionResponseAllDto.setQuestionStatus(Question.QuestionStatus.QUESTION_ACTIVE);
             questionList.add(questionResponseAllDto);
@@ -322,17 +334,21 @@ public class QuestionRestDocsTest {
                 .andExpect(jsonPath("$.content[0].title").value("title1"))
                 .andExpect(jsonPath("$.content[0].problem").value("problem1"))
                 .andExpect(jsonPath("$.content[0].expecting").value("expecting1"))
+                .andExpect(jsonPath("$.content[0].tags[0]").value("태그" + 1))
+                .andExpect(jsonPath("$.content[0].tags[1]").value("기능" + 1))
                 .andExpect(jsonPath("$.content[0].questionStatus").value("QUESTION_ACTIVE"))
                 .andExpect(jsonPath("$.content[9].questionId").value(10L))
                 .andExpect(jsonPath("$.content[9].memberId").value(10L))
                 .andExpect(jsonPath("$.content[9].title").value("title10"))
                 .andExpect(jsonPath("$.content[9].problem").value("problem10"))
                 .andExpect(jsonPath("$.content[9].expecting").value("expecting10"))
+                .andExpect(jsonPath("$.content[9].tags[0]").value("태그" + 10))
+                .andExpect(jsonPath("$.content[9].tags[1]").value("기능" + 10))
                 .andExpect(jsonPath("$.content[9].questionStatus").value("QUESTION_ACTIVE"))
                 .andDo(print())
                 .andDo(
                         document(
-                                "get-questions-pages-success",
+                                "get-questions-pages",
                                 preprocessRequest(prettyPrint()),
                                 preprocessResponse(prettyPrint()),
                                 requestParameters(
@@ -346,6 +362,7 @@ public class QuestionRestDocsTest {
                                         fieldWithPath("content[].title").description("질문 제목"),
                                         fieldWithPath("content[].problem").description("질문 내용"),
                                         fieldWithPath("content[].expecting").description("예상 원인"),
+                                        fieldWithPath("content[].tags[]").description("태그 정보"),
                                         fieldWithPath("content[].create_at").description("질문 작성일"),
                                         fieldWithPath("content[].questionStatus").description("질문 상태"),
                                         fieldWithPath("pageable").description("페이지 정보"),
