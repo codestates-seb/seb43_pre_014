@@ -64,10 +64,26 @@ public class SecurityConfiguration implements WebMvcConfigurer {
 
                 .authorizeHttpRequests(authorize -> authorize
                         //TODO
-                                .antMatchers(HttpMethod.POST, "/members").permitAll()
-                                .antMatchers(HttpMethod.PATCH, "/members/**").hasRole("USER")
-                                .antMatchers(HttpMethod.GET, "/members/**").hasAnyRole("USER", "ADMIN")
-                                .antMatchers(HttpMethod.DELETE, "/members/**").hasRole("USER")
+                                .antMatchers(HttpMethod.GET, "/member").permitAll()
+                                .antMatchers(HttpMethod.POST, "/member").permitAll()
+                                .antMatchers(HttpMethod.PATCH, "/member/**").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE, "/member/**").hasRole("USER")
+                                .antMatchers(HttpMethod.GET, "/logout").hasRole("USER")
+                                .antMatchers(HttpMethod.GET, "/questions").permitAll()
+                                .antMatchers(HttpMethod.POST, "/questions").hasRole("USER")
+                                .antMatchers(HttpMethod.PATCH, "/questions/**").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE, "/questions/**").hasRole("USER")
+                                .antMatchers(HttpMethod.GET,"/answers/comments").permitAll()
+                                .antMatchers(HttpMethod.GET,"/questions/comments").permitAll()
+                                .antMatchers(HttpMethod.GET,"/members/answers").permitAll()
+                                .antMatchers(HttpMethod.GET,"/questions/answers").permitAll()
+                                .antMatchers(HttpMethod.POST,"/questions/answers").hasRole("USER")
+                                .antMatchers(HttpMethod.PATCH,"/answers/**").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE,"/answers/**").hasRole("USER")
+//                                .antMatchers(HttpMethod.POST,"/questions/tags").hasRole("USER")
+                                .antMatchers(HttpMethod.POST,"/questions/comments").hasRole("USER")
+                                .antMatchers(HttpMethod.POST,"/answers/comments").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE,"/comments/**").hasRole("USER")
                 .anyRequest().permitAll()
                 );
 

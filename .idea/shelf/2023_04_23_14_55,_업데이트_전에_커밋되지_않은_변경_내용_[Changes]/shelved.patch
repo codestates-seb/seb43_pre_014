@@ -1,0 +1,461 @@
+Index: Server/pre/src/main/java/com/undefined14/pre/board/comment/entity/Comment.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.undefined14.pre.board.comment.entity;\n\nimport com.undefined14.pre.board.anwser.entity.Answer;\nimport com.undefined14.pre.board.question.entity.Question;\nimport com.undefined14.pre.member.entity.Member;\nimport lombok.Builder;\nimport lombok.Getter;\nimport lombok.NoArgsConstructor;\nimport lombok.Setter;\n\nimport javax.persistence.*;\nimport java.time.LocalDateTime;\n\n@Entity\n@Getter\n@Setter\n@Table(name = \"COMMENT\")\n@NoArgsConstructor\npublic class Comment {\n    @Id\n    @GeneratedValue(strategy = GenerationType.IDENTITY)\n    private Long commentId;\n\n    @Column(nullable = false)\n    private String content;\n\n    @Column(nullable = false)\n    private LocalDateTime createdAt = LocalDateTime.now();\n\n    // default-> 질문에 달린 댓글\n    @Column(nullable = false)\n    private boolean isInheritComment;\n\n    @ManyToOne\n    @JoinColumn\n    private Member memberId;\n\n    @ManyToOne\n    @JoinColumn\n    private Question question;\n\n    @ManyToOne\n    @JoinColumn\n    private Answer answer;\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Server/pre/src/main/java/com/undefined14/pre/board/comment/entity/Comment.java b/Server/pre/src/main/java/com/undefined14/pre/board/comment/entity/Comment.java
+--- a/Server/pre/src/main/java/com/undefined14/pre/board/comment/entity/Comment.java	(revision aa31eda2a79bb504ee375be206d1c4f70ec1d156)
++++ b/Server/pre/src/main/java/com/undefined14/pre/board/comment/entity/Comment.java	(date 1682229007293)
+@@ -3,7 +3,6 @@
+ import com.undefined14.pre.board.anwser.entity.Answer;
+ import com.undefined14.pre.board.question.entity.Question;
+ import com.undefined14.pre.member.entity.Member;
+-import lombok.Builder;
+ import lombok.Getter;
+ import lombok.NoArgsConstructor;
+ import lombok.Setter;
+@@ -21,25 +20,45 @@
+     @GeneratedValue(strategy = GenerationType.IDENTITY)
+     private Long commentId;
+ 
+-    @Column(nullable = false)
+-    private String content;
++    @Column(nullable = false, columnDefinition = "TEXT", length = 255)
++    private String body;
++
++//    @Enumerated(EnumType.STRING)
++//    private CommentStatus commentStatus = CommentStatus.COMMENT_ACTIVE;
+ 
+     @Column(nullable = false)
+     private LocalDateTime createdAt = LocalDateTime.now();
+ 
+     // default-> 질문에 달린 댓글
++    // postType 대용
+     @Column(nullable = false)
+-    private boolean isInheritComment;
++    private boolean isInheritQuestion;
++
++//    @Enumerated(EnumType.STRING)
++//    @Column(nullable = false, name = "post_type")
++//    private PostType postType;
+ 
+     @ManyToOne
+-    @JoinColumn
+-    private Member memberId;
++    @JoinColumn(name = "WRITER_ID", nullable = false)
++    private Member writer;
+ 
+     @ManyToOne
+-    @JoinColumn
+     private Question question;
+ 
+     @ManyToOne
+-    @JoinColumn
+     private Answer answer;
++
++//    public enum PostType {
++//        QUESTION,
++//        ANSWER
++//    }
++
++//    @AllArgsConstructor
++//    public enum CommentStatus {
++//        COMMENT_ACTIVE("등록된 댓글"),
++//        COMMENT_DELETED("삭제된 댓글");
++//
++//        @Getter
++//        private String status;
++//    }
+ }
+\ No newline at end of file
+Index: Server/pre/src/main/java/com/undefined14/pre/board/comment/dto/CommentDto.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.undefined14.pre.board.comment.dto;\n\nimport java.time.LocalDateTime;\nimport lombok.AllArgsConstructor;\nimport lombok.Getter;\nimport lombok.NoArgsConstructor;\nimport lombok.Setter;\n\nimport javax.validation.constraints.NotBlank;\n\npublic class CommentDto {\n    @Getter\n    @AllArgsConstructor\n    public static class Response{\n        private long commentId;\n        private long memberId;\n        private String content;\n        private LocalDateTime createdAt;\n    }\n\n    @Getter\n    @AllArgsConstructor\n    @NoArgsConstructor\n    public static class Post{\n        @NotBlank\n        private String content;\n    }\n\n    @Getter\n    @AllArgsConstructor\n    @NoArgsConstructor\n    public static class Patch{\n        @Setter\n        private long commentId;\n\n        @NotBlank\n        private String content;\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Server/pre/src/main/java/com/undefined14/pre/board/comment/dto/CommentDto.java b/Server/pre/src/main/java/com/undefined14/pre/board/comment/dto/CommentDto.java
+--- a/Server/pre/src/main/java/com/undefined14/pre/board/comment/dto/CommentDto.java	(revision aa31eda2a79bb504ee375be206d1c4f70ec1d156)
++++ b/Server/pre/src/main/java/com/undefined14/pre/board/comment/dto/CommentDto.java	(date 1682223295127)
+@@ -14,7 +14,7 @@
+     public static class Response{
+         private long commentId;
+         private long memberId;
+-        private String content;
++        private String body;
+         private LocalDateTime createdAt;
+     }
+ 
+@@ -23,7 +23,7 @@
+     @NoArgsConstructor
+     public static class Post{
+         @NotBlank
+-        private String content;
++        private String body;
+     }
+ 
+     @Getter
+@@ -34,6 +34,6 @@
+         private long commentId;
+ 
+         @NotBlank
+-        private String content;
++        private String body;
+     }
+ }
+\ No newline at end of file
+Index: Server/pre/src/main/java/com/undefined14/pre/board/comment/repository/CommentRepository.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.undefined14.pre.board.comment.repository;\n\nimport com.undefined14.pre.board.comment.entity.Comment;\nimport org.springframework.data.jpa.repository.JpaRepository;\nimport org.springframework.data.jpa.repository.Query;\nimport org.springframework.stereotype.Repository;\n\nimport java.util.List;\nimport java.util.Optional;\n\n@Repository\npublic interface CommentRepository extends JpaRepository<Comment, Long> {\n    @Query(value = \"SELECT c FROM COMMENT c WHERE c.commentId = :commentId\")\n    Optional<Comment> findByComment(long commentId);\n    @Query(value = \"SELECT c FROM COMMENT c WHERE QUEST_QUESTION_ID = :questId\")\n    List<Comment> findByQuest(long questId);\n\n    @Query(value = \"SELECT c FROM COMMENT c WHERE ANSWER_ANSWER_ID = :answerId\")\n    List<Comment> findByAnswer(long answerId);\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Server/pre/src/main/java/com/undefined14/pre/board/comment/repository/CommentRepository.java b/Server/pre/src/main/java/com/undefined14/pre/board/comment/repository/CommentRepository.java
+--- a/Server/pre/src/main/java/com/undefined14/pre/board/comment/repository/CommentRepository.java	(revision aa31eda2a79bb504ee375be206d1c4f70ec1d156)
++++ b/Server/pre/src/main/java/com/undefined14/pre/board/comment/repository/CommentRepository.java	(date 1682223295125)
+@@ -12,8 +12,9 @@
+ public interface CommentRepository extends JpaRepository<Comment, Long> {
+     @Query(value = "SELECT c FROM COMMENT c WHERE c.commentId = :commentId")
+     Optional<Comment> findByComment(long commentId);
+-    @Query(value = "SELECT c FROM COMMENT c WHERE QUEST_QUESTION_ID = :questId")
+-    List<Comment> findByQuest(long questId);
++
++    @Query(value = "SELECT c FROM COMMENT c WHERE QUEST_QUESTION_ID = :questionId")
++    List<Comment> findByQuestion(long questionId);
+ 
+     @Query(value = "SELECT c FROM COMMENT c WHERE ANSWER_ANSWER_ID = :answerId")
+     List<Comment> findByAnswer(long answerId);
+Index: Server/pre/src/main/java/com/undefined14/pre/board/comment/controller/CommentController.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.undefined14.pre.board.comment.controller;\n\nimport com.undefined14.pre.auth.jwt.JwtTokenizer;\nimport com.undefined14.pre.board.comment.dto.CommentDto;\nimport com.undefined14.pre.board.comment.entity.Comment;\nimport com.undefined14.pre.board.comment.mapper.CommentMapper;\nimport com.undefined14.pre.board.comment.service.CommentService;\n\nimport java.util.List;\nimport javax.validation.Valid;\nimport javax.validation.constraints.Positive;\n\nimport lombok.AllArgsConstructor;\nimport lombok.extern.slf4j.Slf4j;\nimport org.springframework.http.HttpStatus;\nimport org.springframework.http.ResponseEntity;\nimport org.springframework.validation.annotation.Validated;\nimport org.springframework.web.bind.annotation.*;\n\n@CrossOrigin(origins = \"http://localhost:3000\")\n@RestController\n@Validated\n@RequestMapping(\"/board\")\n@AllArgsConstructor\n@Slf4j\npublic class CommentController {\n    private final CommentService commentService;\n    private final CommentMapper commentMapper;\n    private final JwtTokenizer jwtTokenizer;\n\n    @PostMapping(\"/questions/{quest-id}/comments\")\n    public ResponseEntity postCommentToQuestion(@RequestHeader(name = \"Authorization\") String token,\n                                                @PathVariable(\"quest-id\") @Positive long questId,\n                                                @Valid @RequestBody CommentDto.Post commentPostDto){\n        Comment comment = commentService.createCommentToQuestion(\n                commentMapper.commentPostDto_to_Comment(commentPostDto),\n                questId,jwtTokenizer.getMemberId(token));\n        CommentDto.Response response = commentMapper.comment_to_CommentResponseDto(comment);\n        return new ResponseEntity<>(\n                response,\n                HttpStatus.CREATED);\n    }\n\n    @PostMapping(\"/answers/{answer-id}/comments\")\n    public ResponseEntity postCommentToAnswer(@RequestHeader(name = \"Authorization\") String token,\n                                              @PathVariable(\"answer-id\") @Positive long questId,\n                                              @Valid @RequestBody CommentDto.Post commentPostDto){\n        Comment comment = commentService.createCommentToAnswer(\n                commentMapper.commentPostDto_to_Comment(commentPostDto),\n                questId,jwtTokenizer.getMemberId(token));\n        CommentDto.Response response = commentMapper.comment_to_CommentResponseDto(comment);\n        return new ResponseEntity<>(\n                response,\n                HttpStatus.CREATED);\n    }\n\n    @PatchMapping(\"/comments/{comment-id}\")\n    public ResponseEntity patchComment(@RequestHeader(name = \"Authorization\") String token,\n                                       @PathVariable(\"comment-id\") @Positive long commentId,\n                                       @Valid @RequestBody CommentDto.Patch commentPatchDto) {\n        commentPatchDto.setCommentId(commentId);\n        Comment comment = commentService.updateComment(\n                commentMapper.commentPatchDto_to_Comment(commentPatchDto),\n                jwtTokenizer.getMemberId(token));\n        CommentDto.Response response = commentMapper.comment_to_CommentResponseDto(comment);\n        return new ResponseEntity<>(\n                response,\n                HttpStatus.OK);\n    }\n\n    @GetMapping(\"/questions/{quest-id}/comments\")\n    public ResponseEntity getCommentFromQuestion(@PathVariable(\"quest-id\") @Positive long questId){\n        List<Comment> comments = commentService.findCommentByQuestionId(questId);\n\n        List<CommentDto.Response> responses = commentMapper.comments_to_CommentResponseDtos(comments);\n\n        return new ResponseEntity<>(responses,\n                HttpStatus.OK);\n    }\n\n    @GetMapping(\"/answers/{answer-id}/comments\")\n    public ResponseEntity getCommentFromAnswer(@PathVariable(\"answer-id\") @Positive long answerId){\n        List<Comment> comments = commentService.findCommentByAnswerId(answerId);\n\n        List<CommentDto.Response> responses = commentMapper.comments_to_CommentResponseDtos(comments);\n\n        return new ResponseEntity<>(responses,\n                HttpStatus.OK);\n    }\n\n    @DeleteMapping(\"/comments/{comment-id}\")\n    public ResponseEntity deleteComment(@RequestHeader(name = \"Authorization\") String token,\n                                        @PathVariable(\"comment-id\") @Positive long commentId){\n        commentService.deleteComment(commentId,jwtTokenizer.getMemberId(token));\n        return new ResponseEntity<>(HttpStatus.NO_CONTENT);\n    }\n}\n\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Server/pre/src/main/java/com/undefined14/pre/board/comment/controller/CommentController.java b/Server/pre/src/main/java/com/undefined14/pre/board/comment/controller/CommentController.java
+--- a/Server/pre/src/main/java/com/undefined14/pre/board/comment/controller/CommentController.java	(revision aa31eda2a79bb504ee375be206d1c4f70ec1d156)
++++ b/Server/pre/src/main/java/com/undefined14/pre/board/comment/controller/CommentController.java	(date 1682228091039)
+@@ -28,6 +28,7 @@
+     private final CommentMapper commentMapper;
+     private final JwtTokenizer jwtTokenizer;
+ 
++    // 질문에 댓글 작성
+     @PostMapping("/questions/{quest-id}/comments")
+     public ResponseEntity postCommentToQuestion(@RequestHeader(name = "Authorization") String token,
+                                                 @PathVariable("quest-id") @Positive long questId,
+@@ -41,6 +42,7 @@
+                 HttpStatus.CREATED);
+     }
+ 
++    // 답변에 댓글 작성
+     @PostMapping("/answers/{answer-id}/comments")
+     public ResponseEntity postCommentToAnswer(@RequestHeader(name = "Authorization") String token,
+                                               @PathVariable("answer-id") @Positive long questId,
+@@ -54,6 +56,7 @@
+                 HttpStatus.CREATED);
+     }
+ 
++    // 댓글 수정
+     @PatchMapping("/comments/{comment-id}")
+     public ResponseEntity patchComment(@RequestHeader(name = "Authorization") String token,
+                                        @PathVariable("comment-id") @Positive long commentId,
+@@ -68,6 +71,7 @@
+                 HttpStatus.OK);
+     }
+ 
++    // 질문에 달린 댓글 조회
+     @GetMapping("/questions/{quest-id}/comments")
+     public ResponseEntity getCommentFromQuestion(@PathVariable("quest-id") @Positive long questId){
+         List<Comment> comments = commentService.findCommentByQuestionId(questId);
+@@ -78,6 +82,7 @@
+                 HttpStatus.OK);
+     }
+ 
++    // 답변에 달린 댓글 조회
+     @GetMapping("/answers/{answer-id}/comments")
+     public ResponseEntity getCommentFromAnswer(@PathVariable("answer-id") @Positive long answerId){
+         List<Comment> comments = commentService.findCommentByAnswerId(answerId);
+@@ -88,6 +93,7 @@
+                 HttpStatus.OK);
+     }
+ 
++    // 댓글 삭제
+     @DeleteMapping("/comments/{comment-id}")
+     public ResponseEntity deleteComment(@RequestHeader(name = "Authorization") String token,
+                                         @PathVariable("comment-id") @Positive long commentId){
+Index: Server/pre/src/main/java/com/undefined14/pre/board/comment/service/CommentService.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.undefined14.pre.board.comment.service;\n\nimport com.undefined14.pre.board.anwser.entity.Answer;\nimport com.undefined14.pre.board.anwser.service.AnswerService;\nimport com.undefined14.pre.board.question.entity.Question;\nimport com.undefined14.pre.board.question.service.QuestionService;\nimport com.undefined14.pre.exception.ExceptionCode;\nimport com.undefined14.pre.exception.BusinessLogicException;\nimport com.undefined14.pre.member.entity.Member;\nimport com.undefined14.pre.member.service.MemberService;\nimport com.undefined14.pre.board.comment.entity.Comment;\nimport com.undefined14.pre.board.comment.repository.CommentRepository;\nimport java.util.List;\nimport java.util.Optional;\nimport org.springframework.stereotype.Service;\n\n@Service\npublic class CommentService {\n    private final CommentRepository commentRepository;\n    private final QuestionService questionService;\n    private final AnswerService answerService;\n    private final MemberService memberService;\n\n    public CommentService(CommentRepository commentRepository,\n                          QuestionService questionService,\n                          AnswerService answerService,\n                          MemberService memberService){\n        this.commentRepository = commentRepository;\n        this.questionService = questionService;\n        this.answerService = answerService;\n        this.memberService = memberService;\n    }\n\n    public Comment createCommentToQuestion(Comment comment, long questId, long tokenId){\n        Member member = memberService.findMember(tokenId);\n        Question question = questionService.findQuestion(questId);\n\n        comment.setInheritComment(true);\n        comment.setQuestion(question);\n        comment.setAnswer(null);\n        comment.setMemberId(member);\n\n        return commentRepository.save(comment);\n    }\n\n    public Comment createCommentToAnswer(Comment comment, long answerId, long tokenId){\n        Member member = memberService.findMember(tokenId);\n        Answer answer = answerService.findAnswer(answerId);\n\n        comment.setInheritComment(false);\n        comment.setQuestion(null);\n        comment.setAnswer(answer);\n        comment.setMemberId(member);\n\n        return commentRepository.save(comment);\n    }\n\n    public Comment updateComment(Comment comment,long tokenId){\n        Comment findComment = findVerifiedCommentByQuery(comment.getCommentId());\n        Member findMember = findComment.getMemberId();\n        if(findMember.getMemberId() != tokenId){\n            throw new BusinessLogicException(ExceptionCode.MEMBER_FORBIDDEN);\n        }\n        Optional.ofNullable(comment.getContent())\n                .ifPresent(content->findComment.setContent(content));\n        return commentRepository.save(findComment);\n    }\n\n    public void deleteComment(long commentId,long tokenId){\n        Comment findComment = findComment(commentId);\n        Member findMember = findComment.getMemberId();\n        if(findMember.getMemberId() != tokenId){\n            throw new BusinessLogicException(ExceptionCode.MEMBER_FORBIDDEN);\n        }\n        commentRepository.delete(findComment);\n    }\n\n    public Comment findComment(long commentId){\n        return findVerifiedCommentByQuery(commentId);\n    }\n\n    private Comment findVerifiedCommentByQuery(long commentId){\n        Optional<Comment> optionalComment = commentRepository.findByComment(commentId);\n        Comment findComment = optionalComment.orElseThrow(()->new BusinessLogicException(\n                ExceptionCode.COMMENT_NOT_FOUND));\n        return findComment;\n    }\n\n    public List<Comment> findCommentByQuestionId(long questId){\n        Question question = questionService.findQuestion(questId);\n        return commentRepository.findByQuest(questId);\n    }\n\n    public List<Comment> findCommentByAnswerId(long answerId){\n        Answer answer = answerService.findAnswer(answerId);\n        return commentRepository.findByAnswer(answerId);\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Server/pre/src/main/java/com/undefined14/pre/board/comment/service/CommentService.java b/Server/pre/src/main/java/com/undefined14/pre/board/comment/service/CommentService.java
+--- a/Server/pre/src/main/java/com/undefined14/pre/board/comment/service/CommentService.java	(revision aa31eda2a79bb504ee375be206d1c4f70ec1d156)
++++ b/Server/pre/src/main/java/com/undefined14/pre/board/comment/service/CommentService.java	(date 1682228091049)
+@@ -12,33 +12,30 @@
+ import com.undefined14.pre.board.comment.repository.CommentRepository;
+ import java.util.List;
+ import java.util.Optional;
++
++import lombok.AllArgsConstructor;
++import lombok.extern.slf4j.Slf4j;
+ import org.springframework.stereotype.Service;
++import org.springframework.transaction.annotation.Transactional;
+ 
+ @Service
++@Transactional
++@Slf4j
++@AllArgsConstructor
+ public class CommentService {
+     private final CommentRepository commentRepository;
+     private final QuestionService questionService;
+     private final AnswerService answerService;
+     private final MemberService memberService;
+ 
+-    public CommentService(CommentRepository commentRepository,
+-                          QuestionService questionService,
+-                          AnswerService answerService,
+-                          MemberService memberService){
+-        this.commentRepository = commentRepository;
+-        this.questionService = questionService;
+-        this.answerService = answerService;
+-        this.memberService = memberService;
+-    }
+-
+     public Comment createCommentToQuestion(Comment comment, long questId, long tokenId){
+         Member member = memberService.findMember(tokenId);
+-        Question question = questionService.findQuestion(questId);
++        Question question = questionService.findQuestionById(questId);
+ 
+-        comment.setInheritComment(true);
++        comment.setInheritQuestion(true);
+         comment.setQuestion(question);
+         comment.setAnswer(null);
+-        comment.setMemberId(member);
++        comment.setWriter(member);
+ 
+         return commentRepository.save(comment);
+     }
+@@ -47,28 +44,28 @@
+         Member member = memberService.findMember(tokenId);
+         Answer answer = answerService.findAnswer(answerId);
+ 
+-        comment.setInheritComment(false);
++        comment.setInheritQuestion(false);
+         comment.setQuestion(null);
+         comment.setAnswer(answer);
+-        comment.setMemberId(member);
++        comment.setWriter(member);
+ 
+         return commentRepository.save(comment);
+     }
+ 
+     public Comment updateComment(Comment comment,long tokenId){
+         Comment findComment = findVerifiedCommentByQuery(comment.getCommentId());
+-        Member findMember = findComment.getMemberId();
++        Member findMember = findComment.getWriter();
+         if(findMember.getMemberId() != tokenId){
+             throw new BusinessLogicException(ExceptionCode.MEMBER_FORBIDDEN);
+         }
+-        Optional.ofNullable(comment.getContent())
+-                .ifPresent(content->findComment.setContent(content));
++        Optional.ofNullable(comment.getBody())
++                .ifPresent(content->findComment.setBody(content));
+         return commentRepository.save(findComment);
+     }
+ 
+     public void deleteComment(long commentId,long tokenId){
+         Comment findComment = findComment(commentId);
+-        Member findMember = findComment.getMemberId();
++        Member findMember = findComment.getWriter();
+         if(findMember.getMemberId() != tokenId){
+             throw new BusinessLogicException(ExceptionCode.MEMBER_FORBIDDEN);
+         }
+@@ -87,8 +84,8 @@
+     }
+ 
+     public List<Comment> findCommentByQuestionId(long questId){
+-        Question question = questionService.findQuestion(questId);
+-        return commentRepository.findByQuest(questId);
++        Question question = questionService.findQuestionById(questId);
++        return commentRepository.findByQuestion(questId);
+     }
+ 
+     public List<Comment> findCommentByAnswerId(long answerId){
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"ProjectModuleManager\">\n    <modules>\n      <module fileurl=\"file://$PROJECT_DIR$/.idea/modules/pre.main.iml\" filepath=\"$PROJECT_DIR$/.idea/modules/pre.main.iml\" />\n    </modules>\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+--- a/.idea/modules.xml	(revision aa31eda2a79bb504ee375be206d1c4f70ec1d156)
++++ b/.idea/modules.xml	(date 1682219613908)
+@@ -2,6 +2,7 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
++      <module fileurl="file://$PROJECT_DIR$/.idea/modules/com.undefined14.pre.main.iml" filepath="$PROJECT_DIR$/.idea/modules/com.undefined14.pre.main.iml" />
+       <module fileurl="file://$PROJECT_DIR$/.idea/modules/pre.main.iml" filepath="$PROJECT_DIR$/.idea/modules/pre.main.iml" />
+     </modules>
+   </component>
+Index: Server/pre/src/main/java/com/undefined14/pre/member/entity/Member.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.undefined14.pre.member.entity;\n\nimport com.undefined14.pre.audit.Auditable;\nimport com.undefined14.pre.board.question.entity.Question;\nimport lombok.Getter;\nimport lombok.NoArgsConstructor;\nimport lombok.Setter;\n\nimport javax.persistence.*;\nimport java.util.ArrayList;\nimport java.util.List;\n\n@NoArgsConstructor\n@Getter\n@Setter\n@Entity\npublic class Member extends Auditable{\n    @Id\n    @GeneratedValue(strategy = GenerationType.AUTO)\n    private long memberId;\n\n    @Column(nullable = false, unique = true, length = 25)\n    private String name;\n\n    @Column(nullable = false, unique = true, length = 25)\n    private String email;\n\n    @Column(nullable = false, length = 100)\n    private String password;\n\n    @Column\n    private Boolean news;\n\n    // 회원 상태 값 (기본 활동 중)\n    @Enumerated(value = EnumType.STRING)\n    private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;\n\n    // 회원 활통 상태\n    public enum MemberStatus {\n        MEMBER_ACTIVE(\"활동 중\"),\n        MEMBER_QUIT(\"탈퇴 상태\");\n\n        @Getter\n        private String status;\n\n        MemberStatus(String status) {\n            this.status = status;\n        }\n    }\n\n    @ElementCollection(fetch = FetchType.EAGER) // 해당 에너테이션을 사용해 사용자 등록 시, 사용자의 권한을 등록하기 위한 권한 테이블 생성\n    private List<String> roles= new ArrayList<>();\n\n    // TODO: 2023-04-18  JPA 엔티티 연관 관계 매핑을 이 아래부터...\n    @OneToMany(mappedBy = \"member\", cascade = CascadeType.ALL)\n    private List<Question> questions = new ArrayList<>();\n    public List<Question> getQuestions() {\n        return this.questions;\n    }\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Server/pre/src/main/java/com/undefined14/pre/member/entity/Member.java b/Server/pre/src/main/java/com/undefined14/pre/member/entity/Member.java
+--- a/Server/pre/src/main/java/com/undefined14/pre/member/entity/Member.java	(revision aa31eda2a79bb504ee375be206d1c4f70ec1d156)
++++ b/Server/pre/src/main/java/com/undefined14/pre/member/entity/Member.java	(date 1682225268100)
+@@ -1,7 +1,9 @@
+ package com.undefined14.pre.member.entity;
+ 
+ import com.undefined14.pre.audit.Auditable;
++import com.undefined14.pre.board.anwser.entity.Answer;
+ import com.undefined14.pre.board.question.entity.Question;
++import lombok.AllArgsConstructor;
+ import lombok.Getter;
+ import lombok.NoArgsConstructor;
+ import lombok.Setter;
+@@ -11,6 +13,7 @@
+ import java.util.List;
+ 
+ @NoArgsConstructor
++@AllArgsConstructor
+ @Getter
+ @Setter
+ @Entity
+@@ -57,4 +60,16 @@
+     public List<Question> getQuestions() {
+         return this.questions;
+     }
++
++    @OneToMany(mappedBy = "writer", cascade = CascadeType.REMOVE)
++    private List<Answer> answerList = new ArrayList<>();
++
++    public void addAnswer(Answer answer) {
++        answerList.add(answer);
++    }
++    @OneToMany(mappedBy = "member", cascade = CascadeType.REMOVE)
++    private List<Question> questionList = new ArrayList<>();
++    public void addQuestion(Question question) {
++        questionList.add(question);
++    }
+ }
+Index: Server/pre/src/main/java/com/undefined14/pre/board/question/mapper/QuestionMapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.undefined14.pre.board.question.mapper;\n\nimport com.undefined14.pre.board.question.dto.QuestionPatchDto;\nimport com.undefined14.pre.board.question.dto.QuestionPostDto;\nimport com.undefined14.pre.board.question.dto.QuestionResponseDto;\nimport com.undefined14.pre.board.question.entity.Question;\nimport org.mapstruct.Mapper;\nimport org.mapstruct.Mapping;\nimport org.mapstruct.ReportingPolicy;\n\nimport java.util.List;\n\n@Mapper(componentModel = \"spring\", unmappedTargetPolicy = ReportingPolicy.IGNORE)\npublic interface QuestionMapper {\n    Question questionPostDtoToQuestion(QuestionPostDto questionPostDto);\n\n    Question questionPatchDtoToQuestion(QuestionPatchDto questionPatchDto);\n\n    @Mapping(source = \"member.memberId\", target = \"memberId\")\n    QuestionResponseDto questionToQuestionResponseDto(Question question);\n\n    List<QuestionResponseDto> questionListToResponseDtoList(List<Question> questions);\n}\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Server/pre/src/main/java/com/undefined14/pre/board/question/mapper/QuestionMapper.java b/Server/pre/src/main/java/com/undefined14/pre/board/question/mapper/QuestionMapper.java
+--- a/Server/pre/src/main/java/com/undefined14/pre/board/question/mapper/QuestionMapper.java	(revision aa31eda2a79bb504ee375be206d1c4f70ec1d156)
++++ b/Server/pre/src/main/java/com/undefined14/pre/board/question/mapper/QuestionMapper.java	(date 1682223295122)
+@@ -20,4 +20,4 @@
+     QuestionResponseDto questionToQuestionResponseDto(Question question);
+ 
+     List<QuestionResponseDto> questionListToResponseDtoList(List<Question> questions);
+-}
++}
+\ No newline at end of file
+Index: .idea/modules/com.undefined14.pre.main.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules/com.undefined14.pre.main.iml b/.idea/modules/com.undefined14.pre.main.iml
+new file mode 100644
+--- /dev/null	(date 1682219613907)
++++ b/.idea/modules/com.undefined14.pre.main.iml	(date 1682219613907)
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module version="4">
++  <component name="NewModuleRootManager">
++    <content url="file://$MODULE_DIR$/../../Server/pre/build/generated/sources/annotationProcessor/java/main">
++      <sourceFolder url="file://$MODULE_DIR$/../../Server/pre/build/generated/sources/annotationProcessor/java/main" isTestSource="false" generated="true" />
++    </content>
++  </component>
++</module>
+\ No newline at end of file
+Index: Server/pre/src/main/java/com/undefined14/pre/board/comment/mapper/CommentMapper.java
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>package com.undefined14.pre.board.comment.mapper;\n\nimport com.undefined14.pre.board.comment.entity.Comment;\nimport com.undefined14.pre.board.comment.dto.CommentDto.Response;\nimport com.undefined14.pre.board.comment.dto.CommentDto;\n\nimport java.util.List;\nimport org.mapstruct.Mapper;\n\n@Mapper(componentModel = \"spring\")\npublic interface CommentMapper {\n    Comment commentPostDto_to_Comment(CommentDto.Post commentPostDto);\n    Comment commentPatchDto_to_Comment(CommentDto.Patch commentPostDto);\n\n    List<CommentDto.Response> comments_to_CommentResponseDtos(List<Comment> comments);\n    default CommentDto.Response comment_to_CommentResponseDto(Comment comment){\n        CommentDto.Response commentResponseDto;\n        // 만약 comment.isInheritComment()가 ture이면 질문에 달린 댓글이므로 question에 대한 로직 작성\n        if(comment.isInheritComment()) {\n            commentResponseDto = new CommentDto.Response(\n                    comment.getQuestion().getQuestionId(),\n                    comment.getCommentId(),\n                    comment.getMemberId().getMemberId(),\n                    comment.getMemberId().getName(),\n                    comment.getContent(),\n                    comment.getCreatedAt()\n            );\n            // 반대\n        }else{\n            commentResponseDto = new Response(\n                    comment.getAnswer().getAnswerId(),\n                    comment.getCommentId(),\n                    comment.getMemberId().getMemberId(),\n                    comment.getMemberId().getName(),\n                    comment.getContent(),\n                    comment.getCreatedAt()\n            );\n        }\n        return commentResponseDto;\n    }\n}
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/Server/pre/src/main/java/com/undefined14/pre/board/comment/mapper/CommentMapper.java b/Server/pre/src/main/java/com/undefined14/pre/board/comment/mapper/CommentMapper.java
+--- a/Server/pre/src/main/java/com/undefined14/pre/board/comment/mapper/CommentMapper.java	(revision aa31eda2a79bb504ee375be206d1c4f70ec1d156)
++++ b/Server/pre/src/main/java/com/undefined14/pre/board/comment/mapper/CommentMapper.java	(date 1682223295130)
+@@ -6,8 +6,9 @@
+ 
+ import java.util.List;
+ import org.mapstruct.Mapper;
++import org.mapstruct.ReportingPolicy;
+ 
+-@Mapper(componentModel = "spring")
++@Mapper(componentModel = "spring", unmappedTargetPolicy = ReportingPolicy.IGNORE)
+ public interface CommentMapper {
+     Comment commentPostDto_to_Comment(CommentDto.Post commentPostDto);
+     Comment commentPatchDto_to_Comment(CommentDto.Patch commentPostDto);
+@@ -15,24 +16,22 @@
+     List<CommentDto.Response> comments_to_CommentResponseDtos(List<Comment> comments);
+     default CommentDto.Response comment_to_CommentResponseDto(Comment comment){
+         CommentDto.Response commentResponseDto;
+-        // 만약 comment.isInheritComment()가 ture이면 질문에 달린 댓글이므로 question에 대한 로직 작성
+-        if(comment.isInheritComment()) {
+-            commentResponseDto = new CommentDto.Response(
++        if(comment.isInheritQuestion()) {
++            commentResponseDto = new Response(
+                     comment.getQuestion().getQuestionId(),
+                     comment.getCommentId(),
+-                    comment.getMemberId().getMemberId(),
+-                    comment.getMemberId().getName(),
+-                    comment.getContent(),
++                    comment.getWriter().getMemberId(),
++                    comment.getWriter().getName(),
++                    comment.getBody(),
+                     comment.getCreatedAt()
+             );
+-            // 반대
+         }else{
+             commentResponseDto = new Response(
+                     comment.getAnswer().getAnswerId(),
+                     comment.getCommentId(),
+-                    comment.getMemberId().getMemberId(),
+-                    comment.getMemberId().getName(),
+-                    comment.getContent(),
++                    comment.getWriter().getMemberId(),
++                    comment.getWriter().getName(),
++                    comment.getBody(),
+                     comment.getCreatedAt()
+             );
+         }
+Index: .idea/compiler.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<project version=\"4\">\n  <component name=\"CompilerConfiguration\">\n    <annotationProcessing>\n      <profile name=\"Gradle Imported\" enabled=\"true\">\n        <outputRelativeToContentRoot value=\"true\" />\n        <processorPath useClasspath=\"false\">\n          <entry name=\"$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.26/8f8cf0372abf564913e9796623aac4c8ea44025a/lombok-1.18.26.jar\" />\n          <entry name=\"$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mapstruct/mapstruct-processor/1.5.3.Final/dce418bedafd71ff8dd2cef15006c0fee788b073/mapstruct-processor-1.5.3.Final.jar\" />\n        </processorPath>\n        <module name=\"pre.main\" />\n      </profile>\n    </annotationProcessing>\n    <bytecodeTargetLevel target=\"11\" />\n  </component>\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/compiler.xml b/.idea/compiler.xml
+--- a/.idea/compiler.xml	(revision aa31eda2a79bb504ee375be206d1c4f70ec1d156)
++++ b/.idea/compiler.xml	(date 1682219613914)
+@@ -8,7 +8,7 @@
+           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.projectlombok/lombok/1.18.26/8f8cf0372abf564913e9796623aac4c8ea44025a/lombok-1.18.26.jar" />
+           <entry name="$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.mapstruct/mapstruct-processor/1.5.3.Final/dce418bedafd71ff8dd2cef15006c0fee788b073/mapstruct-processor-1.5.3.Final.jar" />
+         </processorPath>
+-        <module name="pre.main" />
++        <module name="com.undefined14.pre.main" />
+       </profile>
+     </annotationProcessing>
+     <bytecodeTargetLevel target="11" />

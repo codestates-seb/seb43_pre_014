@@ -17,6 +17,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.undefined14.pre.board.comment.entity.Comment.PostType.*;
+
 @Service
 @Transactional
 @Slf4j
@@ -26,15 +28,17 @@ public class CommentService {
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final MemberService memberService;
+    private final Comment comment;
 
     public Comment createCommentToQuestion(Comment comment, long questId, long tokenId){
         Member member = memberService.findMember(tokenId);
         Question question = questionService.findQuestionById(questId);
 
-        comment.setInheritQuestion(true);
+        comment.setPostType(QUESTION);
         comment.setQuestion(question);
         comment.setAnswer(null);
         comment.setMember(member);
+        comment.setCommentStatus(Comment.CommentStatus.COMMENT_POSTED);
 
         return commentRepository.save(comment);
     }
@@ -43,15 +47,15 @@ public class CommentService {
         Member member = memberService.findMember(tokenId);
         Answer answer = answerService.findAnswer(answerId);
 
-        comment.setInheritQuestion(false);
+        comment.setPostType(ANSWER);
         comment.setQuestion(null);
         comment.setAnswer(answer);
         comment.setMember(member);
+        comment.setCommentStatus(Comment.CommentStatus.COMMENT_POSTED);
 
         return commentRepository.save(comment);
     }
 
-    // Todo 익셉션 코드쪽 리팩토링
     public Comment updateComment(Comment comment,long tokenId){
         Comment findComment = findVerifiedCommentByQuery(comment.getCommentId());
         Member findMember = findComment.getMember();
@@ -69,6 +73,8 @@ public class CommentService {
         if(findMember.getMemberId() != tokenId){
             throw new BusinessLogicException(ExceptionCode.MEMBER_FORBIDDEN);
         }
+        comment.setCommentStatus(Comment.CommentStatus.COMMENT_DELETED);
+
         commentRepository.delete(findComment);
     }
 
@@ -80,6 +86,11 @@ public class CommentService {
         Optional<Comment> optionalComment = commentRepository.findByComment(commentId);
         Comment findComment = optionalComment.orElseThrow(()->new BusinessLogicException(
                 ExceptionCode.COMMENT_NOT_FOUND));
+
+        Comment comment = optionalComment.get();
+        if (comment.getCommentStatus() == Comment.CommentStatus.COMMENT_DELETED) {
+            throw new BusinessLogicException(ExceptionCode.COMMENT_DELETED);
+        }
         return findComment;
     }
 
