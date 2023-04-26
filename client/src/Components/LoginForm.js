@@ -1,8 +1,9 @@
-import React, { useState } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { login } from "../store/userSlice";
-import axios from "axios";
+import axiosInstance from "../axiosConfig";
+import { useState } from "react";
+
 
 const Container = styled.div`
   background-color: #F1F2F3;
@@ -136,6 +137,8 @@ const Error = styled.p`
 `;
 
 const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -148,45 +151,30 @@ const LoginForm = () => {
   };
 
   const validatePassword = (password) => {
-    return password.length >= 8;
+    return passwordRegex.test(password);
   };
 
-  const loginUser = (email, password) => {
-    axios.get("  http://localhost:8080/users", 
-  //   {
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //     'ngrok-skip-browser-warning': '69420',
-  //   },
-  // }
-  )
-  .then((response) => {
-    const users = response.data;
-    console.log(response.data);
 
-    const user = users.find(
-      (user) => user.email === email && user.password === password
-    );
-
-    if (user) {
-      dispatch(login(user));
+const loginUser = async(email, password) => {
+  try{
+    const response = await axiosInstance.post('/login', {
+      email,
+      password,
+      //... 기타 쪼무래기들 추가할 거 있으면 추가
+    });
+    if (response.data.token) {
+      localStorage.setItem("jwt", response.data.token);
+      dispatch(login(response.data.user));
     } else {
       setError("Invalid email or password");
     }
-  })
-  .catch((error) => {
-    setError("Error fetching data");
-  });
+  } catch (error) {
+    setError("Error fetching data")
+  }
 };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // if (setEmail(email) === undefined ){
-    //   setError("Email cannot be empty.");
-    //   return null;
-    // } // 이 부분 기능 구현 안됨;
-
+  
     if (!validateEmail(email)) {
       setError("The email is not a valid email address.");
       return null;
@@ -196,12 +184,8 @@ const LoginForm = () => {
       setError("Password must be at least 8 characters");
       return null;
     }
-    // if(setPassword(password) === undefined){
-    //   setError("Password cannot be empty.")
-    //   return null; // 이 부분 기능 구현 안됨;
-    // }
 
-    loginUser(email, password);
+    await loginUser(email, password);
   };
 
   return (
@@ -212,7 +196,7 @@ const LoginForm = () => {
           Log in with Google
       </GoogleLogin>
       <GithubLogin>
-      <svg aria-hidden="true" class="svg-icon iconGitHub" width="18" height="18" viewBox="0 0 18 18">
+      <svg aria-hidden="true" className="svg-icon iconGitHub" width="18" height="18" viewBox="0 0 18 18">
         <path fill="#ffffff" 
         d="M9 1a8 8 0 0 0-2.53 15.59c.4.07.55-.17.55-.38l-.01-1.49c-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 
         0 .67-.21 2.2.82a7.42 7.42 0 0 1 4 0c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48l-.01 2.2c0 .21.15.46.55.38A8.01 8.01 0 0 0 9 1Z">
@@ -221,7 +205,7 @@ const LoginForm = () => {
           Log in with GitHub
       </GithubLogin>
       <FacebookLogin>
-      <svg aria-hidden="true" class="svg-icon iconFacebook" width="18" height="18" viewBox="0 0 18 18">
+      <svg aria-hidden="true" className="svg-icon iconFacebook" width="18" height="18" viewBox="0 0 18 18">
         <path fill="#ffffff" 
         d="M3 1a2 2 0 0 0-2 2v12c0 1.1.9 2 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H3Zm6.55 16v-6.2H7.46V8.4h2.09V6.61c0-2.07
         1.26-3.2 3.1-3.2.88 0 1.64.07 1.87.1v2.16h-1.29c-1 0-1.19.48-1.19 1.18V8.4h2.39l-.31 2.42h-2.08V17h-2.5Z">

@@ -10,6 +10,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.io.Encoders;
 import io.jsonwebtoken.security.Keys;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.nio.charset.StandardCharsets;
@@ -22,14 +23,17 @@ public class JwtTokenizer {
 
     @Getter
     @Value("${jwt.key}")
+    @Setter
     private String secretKey;
 
     @Getter
     @Value("${jwt.access-token-expiration-minutes}")
+    @Setter
     private int accessTokenExpirationMinutes;
 
     @Getter
     @Value("${jwt.refresh-token-expiration-minutes}")
+    @Setter
     private int refreshTokenExpirationMinutes;
 
     public String encodeBase64SecretKey(String secretKey) {

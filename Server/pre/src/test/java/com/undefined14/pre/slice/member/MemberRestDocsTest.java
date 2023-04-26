@@ -1,6 +1,8 @@
 package com.undefined14.pre.slice.member;
 
 import com.google.gson.Gson;
+import com.undefined14.pre.auth.jwt.JwtTokenizer;
+import com.undefined14.pre.auth.utils.CustomAuthorityUtils;
 import com.undefined14.pre.member.controller.MemberController;
 import com.undefined14.pre.member.dto.MemberPatchDto;
 import com.undefined14.pre.member.dto.MemberPostDto;
@@ -56,6 +58,11 @@ public class MemberRestDocsTest {
 
     @Autowired
     private Gson gson;
+
+    @MockBean
+    private JwtTokenizer jwtTokenizer;
+    @MockBean
+    private CustomAuthorityUtils customAuthorityUtils;
 
     @Test
     @DisplayName("멤버 등록")

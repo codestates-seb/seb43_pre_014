@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import { Navigate, useNavigate } from "react-router-dom";
 import styled from "styled-components";
-import TextEdit from "./TextEdit.js";
+import axiosInstance from "../axiosConfig";
 
 const EditProfile = () => {
   const [profileImage, setProfileImage] = useState("");
@@ -11,6 +12,8 @@ const EditProfile = () => {
   const [websiteLink, setWebsiteLink] = useState("");
   const [githubLink, setGithubLink] = useState("");
   const [twitterLink, setTwitterLink] = useState("");
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
 
   const handleCancel = () => {
     // Cancel 버튼 클릭 시, 상태 초기화
@@ -24,99 +27,117 @@ const EditProfile = () => {
     setTwitterLink("");
   };
 
+  const navigate = useNavigate();
+
+  const saveProfile = async () => {
+    try {
+      const response = await axiosInstance.post("/user/profile?이 맞나?", {
+        profileImage,
+        displayName,
+        location,
+        title,
+        aboutMe,
+        websiteLink,
+        githubLink,
+        twitterLink,
+      });
+      if (response.status === 200) {
+        // 성공시 응답처리 뭘로할까
+        setSuccess("Your profile has been saved successfully.");
+        navigate("/");
+      } else {
+        //성공 못했을 때 에러 표시 -> error 관련 css check하기
+        setError
+          ("Oops! There was a problem updating your profile: Display name may only be changed once every 30 days")
+      }
+    } catch (error) {
+      // error 메시지
+      setError("Fail fetching data")
+    }
+  };
+
   return (
-
     <Wrapper>
-      <h1>Edit your profile</h1>
-      <p>Public information</p>
-      <BoxContainer>
-        <ProfileImage>
-          <img src={profileImage} alt="" />
+      <h1>Edit Profile</h1>
+      <ProfileImage>
+        <img src={profileImage} alt="Profile" />
+        <input
+          type="text"
+          placeholder="Profile Image URL"
+          value={profileImage}
+          onChange={(e) => setProfileImage(e.target.value)}
+        />
+      </ProfileImage>
+      <InputContainer>
+        <label>Display Name</label>
+        <input
+          type="text"
+          placeholder="Display Name"
+          value={displayName}
+          onChange={(e) => setDisplayName(e.target.value)}
+        />
+      </InputContainer>
+      <InputContainer>
+        <label>Location</label>
+        <input
+          type="text"
+          placeholder="Location"
+          value={location}
+          onChange={(e) => setLocation(e.target.value)}
+        />
+      </InputContainer>
+      <InputContainer>
+        <label>Title</label>
+        <input
+          type="text"
+          placeholder="Title"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+      </InputContainer>
+      <InputContainer>
+        <label>About Me</label>
+        <textarea
+          placeholder="About Me"
+          value={aboutMe}
+          onChange={(e) => setAboutMe(e.target.value)}
+        />
+      </InputContainer>
+      <LinkContainer>
+        <LinkInputContainer>
+          <label>Website Link</label>
           <input
             type="text"
-            placeholder="Profile Image URL"
-            value={profileImage}
-            onChange={(e) => setProfileImage(e.target.value)}
+            placeholder="Website Link"
+            value={websiteLink}
+            onChange={(e) => setWebsiteLink(e.target.value)}
           />
-        </ProfileImage>
-        <InputContainer>
-          <label>Display Name</label>
+        </LinkInputContainer>
+        <LinkInputContainer>
+          <label>Github Link</label>
           <input
             type="text"
-            placeholder="Display Name"
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
+            placeholder="Github Link"
+            value={githubLink}
+            onChange={(e) => setGithubLink(e.target.value)}
           />
-        </InputContainer>
-        <InputContainer>
-          <label>Location</label>
+        </LinkInputContainer>
+        <LinkInputContainer>
+          <label>Twitter Link</label>
           <input
             type="text"
-            placeholder="Location"
-            value={location}
-            onChange={(e) => setLocation(e.target.value)}
+            placeholder="Twitter Link"
+            value={twitterLink}
+            onChange={(e) => setTwitterLink(e.target.value)}
           />
-        </InputContainer>
-        <InputContainer>
-          <label>Title</label>
-          <input
-            type="text"
-            placeholder="Title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </InputContainer>
-        <InputContainer>
-          <label>About Me</label>
-          <TextEdit
-            placeholder="About Me"
-            value={aboutMe}
-            onChange={(e) => setAboutMe(e.target.value)}
-          />
-        </InputContainer>
-      </BoxContainer>
-
-      <p>Links</p>
-      <BoxContainer>
-
-        <LinkContainer>
-          <LinkInputContainer>
-            <label>Website Link</label>
-            <input
-              type="text"
-              placeholder="Website Link"
-              value={websiteLink}
-              onChange={(e) => setWebsiteLink(e.target.value)}
-            />
-          </LinkInputContainer>
-          <LinkInputContainer>
-            <label>Github Link</label>
-            <input
-              type="text"
-              placeholder="Github Link"
-              value={githubLink}
-              onChange={(e) => setGithubLink(e.target.value)}
-            />
-          </LinkInputContainer>
-          <LinkInputContainer>
-            <label>Twitter Link</label>
-            <input
-              type="text"
-              placeholder="Twitter Link"
-              value={twitterLink}
-              onChange={(e) => setTwitterLink(e.target.value)}
-            />
-          </LinkInputContainer>
-        </LinkContainer>
-      </BoxContainer>
-
-      <BoxContainer>
-
-        <ButtonContainer>
-          <SaveButton>Save Profile</SaveButton>
-          <CancelButton onClick={handleCancel}>Cancel</CancelButton>
-        </ButtonContainer>
-      </BoxContainer>
+        </LinkInputContainer>
+      </LinkContainer>
+      {success && <Success>{success}</Success>}
+      {error && <Error>{error}</Error>}
+      <ButtonContainer>
+        <SaveButton onClick={saveProfile}>Save Profile</SaveButton>
+        <CancelButton onClick={handleCancel}>Cancel</CancelButton>
+      </ButtonContainer>
     </Wrapper>
   );
 };
@@ -237,7 +258,20 @@ const CancelButton = styled.button`
       &:hover {
         background - color: #999;
   }
-      `;
+`;
+const Error = styled.p`
+  color: red;
+  font-size: 12px;
+  margin-top: 3px;
+`;
+const Success = styled.p`
+  color: white;
+  background-color: #94c0de;
+  font-size: 14px;
+  padding: 10px;
+  border-radius: 5px;
+  margin-top: 10px;
+`;
 
 
 // const ProfileImage = styled.div`
