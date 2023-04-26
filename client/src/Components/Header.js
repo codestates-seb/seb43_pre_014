@@ -1,14 +1,16 @@
 import React from "react";
 import styled from "styled-components";
-import {FaSearch} from "react-icons/fa";
 
 const HeaderContainer = styled.header`
+    width: 100%;
     display: flex;
     justify-content: center;
-    align-items: center;
     background-color: #f8f9f9 ;
     height: 50px;
-    `;
+    position:fixed;
+
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
+`;
 
 const Container = styled.div`
     display: flex;
@@ -16,7 +18,7 @@ const Container = styled.div`
     align-items: center;
     height: 50px;
     width: 100%;
-    max-width: 1200px;
+    max-width: 1204px;
     padding: 0 20px;
     `;
 
@@ -25,7 +27,7 @@ const Logo = styled.div`
         height: 30px;
         padding: 10px;
         cursor: pointer;
-        &: hover{
+        &:hover{
             background-color: #E3E6E8;
         }
     }
@@ -43,29 +45,37 @@ const Nav = styled.nav`
 
         
         text-decoration: none;
-        &: hover{
+        &:hover{
             background-color: #E3E6E8;
             border-radius: 25px;
             height: 14px;
     }
-    `;
+}
+`;
 
 const Search = styled.div`
     width: 550px;
     height: 30px;
     border: 1px solid #ccc;
-    }
+    position: relative;
 
     input {
-        width: 500px;
-        height: 10px;
-        padding: 7px;
-        margin-left: 5px;
+        width: 100%;
+        height: 100%;
+        margin: 0;
+        padding: 0 0 0 30px;
         border-radius: 3px;
+        box-sizing: border-box;
         border: none;   
         &:focus {
             outline: none;
         }
+    }
+
+    svg {
+        position: absolute;
+        top: 7px;
+        left: 5px;
     }
 `;
 
@@ -121,9 +131,8 @@ const Header = () => {
                     <a href="#">For Teams</a>
                 </Nav>
                 <Search>
-                    <FaSearch /> 
-                    <input 
-                    type="text" placeholder="Search…" />
+                    <input type="text" placeholder="Search…" />
+                    <svg aria-hidden="true" className="s-input-icon s-input-icon__search svg-icon iconSearch" fill="#787878" width="18" height="18" viewBox="0 0 18 18"><path d="m18 16.5-5.14-5.18h-.35a7 7 0 1 0-1.19 1.19v.35L16.5 18l1.5-1.5ZM12 7A5 5 0 1 1 2 7a5 5 0 0 1 10 0Z"></path></svg>
                 </Search>
                 <Auth>
                     <LoginButton>Log in</LoginButton>

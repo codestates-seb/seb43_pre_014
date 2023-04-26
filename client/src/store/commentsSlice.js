@@ -1,17 +1,29 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-// import axios from 'axios';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axiosInstance from '../axiosConfig';
 
-// 나중에 백엔드와 통신할 코드
-// export const fetchComments = createAsyncThunk('comments/fetchComments', async () => {
-//   const response = await axios.get('/api/comments');
-//   return response.data;
-// });
+const initialState = {
+  items: [],
+  status: 'idle',
+  error: null,
+}
+
+export const fetchCommentAsync = createAsyncThunk(
+  'comments/fetchComments',
+  async (parentId, parentType, thunkAPI) => {
+    try {
+      const response = await axiosInstance.get(
+        `comments/${parentId}?type=${parentType}`
+      );
+      return response.data;
+    } catch (error){
+      return thunkAPI.rejectWithValue(error.response.data);
+    }
+  }
+);
 
 const commentsSlice = createSlice({
   name: 'comments',
-  initialState: {
-    items: [],
-  },
+  initialState,
   reducers: {
     addComment: (state, action) => {
       state.items.push(action.payload);
@@ -26,6 +38,20 @@ const commentsSlice = createSlice({
       state.items = state.items.filter((comment) => comment.id !== action.payload);
     },
   },
+  extraReducers: (builder) => {
+    builder
+    .addCase(fetchCommentAsync.pending, (state) => {
+      state.status = 'loading';
+    })
+    .addCase(fetchCommentAsync.fulfilled, (state,action)=>{
+      state.status = 'success';
+      state.items = action.payload;
+    })
+    .addCase(fetchCommentAsync.rejected, (state, action)=>{
+      state.status = 'failed';
+      state.error = action.payload;
+    })
+  }
 });
 
 export const { addComment, updateComment, deleteComment } = commentsSlice.actions;

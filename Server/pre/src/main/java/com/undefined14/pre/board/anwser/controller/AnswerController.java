@@ -1,9 +1,11 @@
 package com.undefined14.pre.board.anwser.controller;
 
+import com.undefined14.pre.auth.jwt.JwtTokenizer;
 import com.undefined14.pre.board.anwser.dto.AnswerDto;
 import com.undefined14.pre.board.anwser.entity.Answer;
 import com.undefined14.pre.board.anwser.mapper.AnswerMapper;
 import com.undefined14.pre.board.anwser.service.AnswerService;
+import com.undefined14.pre.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -62,6 +64,7 @@ public class AnswerController {
 
     // 답변 삭제
     @DeleteMapping("/{answer-id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAnswer(@RequestHeader(name = "Authorization") String token,
                              @PathVariable("answer-id") @Positive long answerId) {
 

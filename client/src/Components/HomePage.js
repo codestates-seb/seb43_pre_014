@@ -1,24 +1,18 @@
 import React from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { logout } from "../store/userSlice";
+import { useSelector } from "react-redux";
 import Comments from "./Comments";
+import LogOutBtn from "./LogoutForm";
 
 
 
 
-const HomePage = () => {
+const HomePage = () => { // homepage 파트는 메인페이지가 나왔을 때 바꿔주자.
   const user = useSelector((state) => state.user.userInfo);
-  const dispatch = useDispatch();
-
-  const handleLogout = () => {
-    dispatch(logout());
-  };
-
 
   return (
     <div>
       <h1>Welcome, {user.username}!</h1>
-      <button onClick={handleLogout}>Logout</button>
+      <LogOutBtn />
       <Comments />
       </div>
   );

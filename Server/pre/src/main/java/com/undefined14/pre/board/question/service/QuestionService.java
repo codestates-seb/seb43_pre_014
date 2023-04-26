@@ -1,12 +1,14 @@
 package com.undefined14.pre.board.question.service;
 
+import com.undefined14.pre.auth.jwt.JwtTokenizer;
 import com.undefined14.pre.board.question.dto.QuestionResponseAllDto;
-import com.undefined14.pre.board.question.dto.QuestionResponseDto;
 import com.undefined14.pre.board.question.entity.Question;
 import com.undefined14.pre.board.question.mapper.QuestionMapper;
 import com.undefined14.pre.board.question.repository.QuestionRepository;
 import com.undefined14.pre.exception.BusinessLogicException;
 import com.undefined14.pre.exception.ExceptionCode;
+import com.undefined14.pre.member.entity.Member;
+import com.undefined14.pre.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -15,18 +17,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.function.Function;
 
 @Service
 @Transactional
 public class QuestionService {
     private final QuestionRepository repository;
     private final QuestionMapper mapper;
+    private final JwtTokenizer jwtTokenizer;
+    private final MemberService memberService;
 
     @Autowired
-    public QuestionService(QuestionRepository repository, QuestionMapper mapper) {
+    public QuestionService(QuestionRepository repository, QuestionMapper mapper, JwtTokenizer jwtTokenizer, MemberService memberService) {
         this.repository = repository;
         this.mapper = mapper;
+        this.jwtTokenizer = jwtTokenizer;
+        this.memberService = memberService;
     }
 
     public List<Question> findAll() {
@@ -42,12 +47,17 @@ public class QuestionService {
        return findVerifiedQuestion(questionId);
     }
 
-    public Question save(Question question) {
+    public Question save(Question question, String token) {
+        Member member = memberService.findMember(jwtTokenizer.getMemberId(token));
+        question.setMember(member);
         return repository.save(question);
     }
 
-    public Question updateQuestion(Question question) {
+    public Question updateQuestion(Question question, String token) {
+        Long memberId = jwtTokenizer.getMemberId(token);
         Question existingQuestion = findVerifiedQuestion(question.getQuestionId());
+
+        verifiedRequest(memberId, existingQuestion.getMember().getMemberId());
 
         existingQuestion.setTitle(question.getTitle());
         existingQuestion.setProblem(question.getProblem());
@@ -55,8 +65,11 @@ public class QuestionService {
         return repository.save(existingQuestion);
     }
 
-    public void deleteQuestionById(Long id) {
+    public void deleteQuestionById(Long id, String token) {
+        Long memberId = jwtTokenizer.getMemberId(token);
         Question question = findQuestionById(id);
+
+        verifiedRequest(memberId, question.getMember().getMemberId());
         question.setQuestionStatus(Question.QuestionStatus.QUESTION_DELETED);
         repository.save(question);
     }
@@ -74,5 +87,10 @@ public class QuestionService {
         }
 
         return question;
+    }
+    private void verifiedRequest(Long memberId, Long questionMemberId) {
+        if (memberId != questionMemberId) {
+            throw new BusinessLogicException(ExceptionCode.MEMBER_MISMATCHED);
+        }
     }
 }
