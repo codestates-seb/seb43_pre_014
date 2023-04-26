@@ -1,5 +1,6 @@
 package com.undefined14.pre.board.comment.service;
 
+import com.undefined14.pre.auth.jwt.JwtTokenizer;
 import com.undefined14.pre.board.anwser.entity.Answer;
 import com.undefined14.pre.board.anwser.service.AnswerService;
 import com.undefined14.pre.board.question.entity.Question;
@@ -29,9 +30,11 @@ public class CommentService {
     private final AnswerService answerService;
     private final MemberService memberService;
     private final Comment comment;
+    private final JwtTokenizer jwtTokenizer;
 
-    public Comment createCommentToQuestion(Comment comment, long questId, long tokenId){
-        Member member = memberService.findMember(tokenId);
+
+    public Comment createCommentToQuestion(Comment comment, long questId, String token){
+        Member member = memberService.findMember(token);
         Question question = questionService.findQuestionById(questId);
 
         comment.setPostType(QUESTION);
@@ -43,8 +46,8 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public Comment createCommentToAnswer(Comment comment, long answerId, long tokenId){
-        Member member = memberService.findMember(tokenId);
+    public Comment createCommentToAnswer(Comment comment, long answerId, String token){
+        Member member = memberService.findMember(token);
         Answer answer = answerService.findAnswer(answerId);
 
         comment.setPostType(ANSWER);
@@ -56,21 +59,22 @@ public class CommentService {
         return commentRepository.save(comment);
     }
 
-    public Comment updateComment(Comment comment,long tokenId){
+    public Comment updateComment(Comment comment,String token){
         Comment findComment = findVerifiedCommentByQuery(comment.getCommentId());
         Member findMember = findComment.getMember();
-        if(findMember.getMemberId() != tokenId){
+        if(findMember.getMemberId() != jwtTokenizer.getMemberId(token)){
             throw new BusinessLogicException(ExceptionCode.MEMBER_FORBIDDEN);
         }
         Optional.ofNullable(comment.getBody())
-                .ifPresent(content->findComment.setBody(content));
+                .ifPresent(findComment::setBody);
         return commentRepository.save(findComment);
     }
 
-    public void deleteComment(long commentId,long tokenId){
+    public void deleteComment(long commentId,String token){
         Comment findComment = findComment(commentId);
         Member findMember = findComment.getMember();
-        if(findMember.getMemberId() != tokenId){
+
+        if(findMember.getMemberId() != jwtTokenizer.getMemberId(token)){
             throw new BusinessLogicException(ExceptionCode.MEMBER_FORBIDDEN);
         }
         comment.setCommentStatus(Comment.CommentStatus.COMMENT_DELETED);

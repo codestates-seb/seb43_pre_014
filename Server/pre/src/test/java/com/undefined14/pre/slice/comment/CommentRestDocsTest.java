@@ -32,6 +32,7 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
@@ -39,6 +40,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.undefined14.pre.board.comment.entity.Comment.CommentStatus.COMMENT_POSTED;
 import static com.undefined14.pre.board.comment.entity.Comment.PostType.QUESTION;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
@@ -91,6 +94,7 @@ public class CommentRestDocsTest {
 
     @Test
     @DisplayName("질문 댓글 작성")
+    @WithMockUser
     public void postCommentToQuestionTest() throws Exception{
         long questionId = 1L;
 
@@ -109,7 +113,7 @@ public class CommentRestDocsTest {
         given(commentMapper.commentPostDto_to_Comment(Mockito.any(CommentDto.Post.class)))
                 .willReturn(new Comment());
         given(commentService.createCommentToQuestion(Mockito.any(Comment.class),
-                Mockito.anyLong(),Mockito.anyLong())).willReturn(new Comment());
+                Mockito.anyLong(),Mockito.any())).willReturn(new Comment());
         given(commentMapper.comment_to_CommentResponseDto(Mockito.any(Comment.class)))
                 .willReturn(response);
 
@@ -151,6 +155,7 @@ public class CommentRestDocsTest {
 //
     @Test
     @DisplayName("답변 댓글 작성")
+    @WithMockUser
     public void postCommentToAnswerTest() throws Exception {
         long answerId = 1L;
 
@@ -169,7 +174,7 @@ public class CommentRestDocsTest {
         given(commentMapper.commentPostDto_to_Comment(Mockito.any(CommentDto.Post.class)))
                 .willReturn(new Comment());
         given(commentService.createCommentToAnswer(Mockito.any(Comment.class),
-                Mockito.anyLong(), Mockito.anyLong())).willReturn(new Comment());
+                Mockito.anyLong(), Mockito.any())).willReturn(new Comment());
         given(commentMapper.comment_to_CommentResponseDto(Mockito.any(Comment.class)))
                 .willReturn(response);
 
@@ -209,6 +214,7 @@ public class CommentRestDocsTest {
 
     @Test
     @DisplayName("댓글 수정")
+    @WithMockUser
     public void patchCommentTest() throws Exception{
         long commentId = 1L;
         CommentDto.Patch patch = new Patch(commentId,"수정된 댓글내용입니다");
@@ -224,7 +230,7 @@ public class CommentRestDocsTest {
 
         given(commentMapper.commentPatchDto_to_Comment(Mockito.any(CommentDto.Patch.class)))
                 .willReturn(new Comment());
-        given(commentService.updateComment(Mockito.any(Comment.class),Mockito.anyLong()))
+        given(commentService.updateComment(Mockito.any(Comment.class),Mockito.any()))
                 .willReturn(new Comment());
         given(commentMapper.comment_to_CommentResponseDto(Mockito.any(Comment.class)))
                 .willReturn(response);
@@ -267,6 +273,7 @@ public class CommentRestDocsTest {
 
     @Test
     @DisplayName("댓글 삭제")
+    @WithMockUser
     public void deleteCommentTest() throws Exception {
         LocalDateTime createdAt = LocalDateTime.of(2022, 11, 11, 11, 11, 11);
 
@@ -292,7 +299,7 @@ public class CommentRestDocsTest {
         comment.setQuestion(question);
         comment.setAnswer(null);
 
-        doNothing().when(commentService).deleteComment(comment.getCommentId(), 1L);
+        doNothing().when(commentService).deleteComment(comment.getCommentId(), eq(any()));
 
         ResultActions resultActions = mockMvc.perform(
                 delete("/board/comments/{comment-id}", comment.getCommentId())

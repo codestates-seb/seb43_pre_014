@@ -64,27 +64,32 @@ public class SecurityConfiguration implements WebMvcConfigurer {
 
                 .authorizeHttpRequests(authorize -> authorize
                         //TODO
-                                .antMatchers(HttpMethod.GET, "/member").permitAll()
-                                .antMatchers(HttpMethod.POST, "/member").permitAll()
-                                .antMatchers(HttpMethod.PATCH, "/member/**").hasRole("USER")
-                                .antMatchers(HttpMethod.DELETE, "/member/**").hasRole("USER")
+                                // 멤버십
+                                .antMatchers(HttpMethod.GET, "/members").hasRole("USER")
+                                .antMatchers(HttpMethod.POST, "/members").permitAll()
+                                .antMatchers(HttpMethod.PATCH, "/members").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE, "/members").hasRole("USER")
+
+                                // 로그인/아웃
                                 .antMatchers(HttpMethod.GET, "/logout").hasRole("USER")
-                                .antMatchers(HttpMethod.GET, "/questions").permitAll()
-                                .antMatchers(HttpMethod.POST, "/questions").hasRole("USER")
-                                .antMatchers(HttpMethod.PATCH, "/questions/**").hasRole("USER")
-                                .antMatchers(HttpMethod.DELETE, "/questions/**").hasRole("USER")
-                                .antMatchers(HttpMethod.GET,"/answers/comments").permitAll()
-                                .antMatchers(HttpMethod.GET,"/questions/comments").permitAll()
-                                .antMatchers(HttpMethod.GET,"/members/answers").permitAll()
-                                .antMatchers(HttpMethod.GET,"/questions/answers").permitAll()
-                                .antMatchers(HttpMethod.POST,"/questions/answers").hasRole("USER")
-                                .antMatchers(HttpMethod.PATCH,"/answers/**").hasRole("USER")
-                                .antMatchers(HttpMethod.DELETE,"/answers/**").hasRole("USER")
-//                                .antMatchers(HttpMethod.POST,"/questions/tags").hasRole("USER")
-                                .antMatchers(HttpMethod.POST,"/questions/comments").hasRole("USER")
-                                .antMatchers(HttpMethod.POST,"/answers/comments").hasRole("USER")
-                                .antMatchers(HttpMethod.DELETE,"/comments/**").hasRole("USER")
-                .anyRequest().permitAll()
+
+                                // 게시판 - 질문
+                                .antMatchers(HttpMethod.GET, "*/questions").hasRole("USER") // 페이지네이션
+                                .antMatchers(HttpMethod.GET, "*/questions/**").hasRole("USER") // 하나 조회
+                                .antMatchers(HttpMethod.POST, "*/questions").hasRole("USER")
+                                .antMatchers(HttpMethod.PATCH, "*/questions/**").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE, "*/questions/**").hasRole("USER")
+
+                                // 게시판 - 답변
+                                .antMatchers(HttpMethod.PATCH,"*/answers/**").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE,"*/answers/**").hasRole("USER")
+                                .antMatchers(HttpMethod.POST,"*/answers").hasRole("USER")
+
+                                // 게시판 = 댓글
+                                .antMatchers(HttpMethod.POST,"*/questions/comments").hasRole("USER")
+                                .antMatchers(HttpMethod.POST,"*/answers/comments").hasRole("USER")
+                                .antMatchers(HttpMethod.PATCH, "*/comments/**").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE,"*/comments/**").hasRole("USER")
                 );
 
         return http.build();

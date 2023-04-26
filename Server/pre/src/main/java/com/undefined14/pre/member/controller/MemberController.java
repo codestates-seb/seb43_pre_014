@@ -56,7 +56,7 @@ public class MemberController {
     }
 
     // 회원 정보 조회
-    @GetMapping("/{member-id}")
+    @GetMapping
     public ResponseEntity getMember(@RequestHeader(name = "Authorization") String token) {
 
         Member response = service.findMember(token);

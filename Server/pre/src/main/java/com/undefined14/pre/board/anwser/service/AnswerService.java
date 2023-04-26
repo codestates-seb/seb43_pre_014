@@ -48,8 +48,8 @@ public class AnswerService {
     }
 
     // 있는지 조회
-    public Answer findAnswer(String token) {
-        Answer findAnswer = findVerfiedAnswer(jwtTokenizer.getMemberId(token));
+    public Answer findAnswer(long answerId) {
+        Answer findAnswer = findVerfiedAnswer(answerId);
 
         if (findAnswer.getAnswerStatus().equals(Answer.AnswerStatus.ANSWER_DELETED)) {
             throw new BusinessLogicException(ExceptionCode.ANSWER_DELETED);
