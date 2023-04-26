@@ -48,7 +48,7 @@ public class QuestionService {
     }
 
     public Question save(Question question, String token) {
-        Member member = memberService.findMember(jwtTokenizer.getMemberId(token));
+        Member member = memberService.findMember(token);
         question.setMember(member);
         return repository.save(question);
     }

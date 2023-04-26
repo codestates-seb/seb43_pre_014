@@ -39,6 +39,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import static com.undefined14.pre.board.comment.entity.Comment.CommentStatus.COMMENT_POSTED;
 import static com.undefined14.pre.board.comment.entity.Comment.PostType.QUESTION;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
@@ -109,7 +111,7 @@ public class CommentRestDocsTest {
         given(commentMapper.commentPostDto_to_Comment(Mockito.any(CommentDto.Post.class)))
                 .willReturn(new Comment());
         given(commentService.createCommentToQuestion(Mockito.any(Comment.class),
-                Mockito.anyLong(),Mockito.anyLong())).willReturn(new Comment());
+                Mockito.anyLong(),Mockito.any())).willReturn(new Comment());
         given(commentMapper.comment_to_CommentResponseDto(Mockito.any(Comment.class)))
                 .willReturn(response);
 
@@ -169,7 +171,7 @@ public class CommentRestDocsTest {
         given(commentMapper.commentPostDto_to_Comment(Mockito.any(CommentDto.Post.class)))
                 .willReturn(new Comment());
         given(commentService.createCommentToAnswer(Mockito.any(Comment.class),
-                Mockito.anyLong(), Mockito.anyLong())).willReturn(new Comment());
+                Mockito.anyLong(), Mockito.any())).willReturn(new Comment());
         given(commentMapper.comment_to_CommentResponseDto(Mockito.any(Comment.class)))
                 .willReturn(response);
 
@@ -224,7 +226,7 @@ public class CommentRestDocsTest {
 
         given(commentMapper.commentPatchDto_to_Comment(Mockito.any(CommentDto.Patch.class)))
                 .willReturn(new Comment());
-        given(commentService.updateComment(Mockito.any(Comment.class),Mockito.anyLong()))
+        given(commentService.updateComment(Mockito.any(Comment.class),Mockito.any()))
                 .willReturn(new Comment());
         given(commentMapper.comment_to_CommentResponseDto(Mockito.any(Comment.class)))
                 .willReturn(response);
@@ -292,7 +294,7 @@ public class CommentRestDocsTest {
         comment.setQuestion(question);
         comment.setAnswer(null);
 
-        doNothing().when(commentService).deleteComment(comment.getCommentId(), 1L);
+        doNothing().when(commentService).deleteComment(comment.getCommentId(), eq(any()));
 
         ResultActions resultActions = mockMvc.perform(
                 delete("/board/comments/{comment-id}", comment.getCommentId())

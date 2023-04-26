@@ -19,6 +19,7 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -59,6 +60,7 @@ public class AnswerDocTest {
 
     @Test
     @DisplayName("답변 등록")
+    @WithMockUser
     public void postAnswer() throws Exception {
         AnswerDto.Post post = new AnswerDto.Post();
         post.setQuestionId(1L);
@@ -104,6 +106,7 @@ public class AnswerDocTest {
 
     @Test
     @DisplayName("답변 수정")
+    @WithMockUser
     public void updateAnswer() throws Exception {
 
         AnswerDto.Patch patch = new AnswerDto.Patch();
@@ -165,6 +168,7 @@ public class AnswerDocTest {
 
     @Test
     @DisplayName("답변 삭제")
+    @WithMockUser
     public void deleteAnswer() throws Exception {
 
         long answerId = 1L;

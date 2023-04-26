@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.*;
 public class CommentController {
     private final CommentService commentService;
     private final CommentMapper commentMapper;
-    private final JwtTokenizer jwtTokenizer;
 
     // 질문에 댓글 작성
     @PostMapping("/questions/{quest-id}/comments")
@@ -34,7 +33,7 @@ public class CommentController {
                                                 @PathVariable("quest-id") @Positive long questId,
                                                 @Valid @RequestBody CommentDto.Post commentPostDto){
         Comment comment = commentService.createCommentToQuestion(
-                commentMapper.commentPostDto_to_Comment(commentPostDto), questId, jwtTokenizer.getMemberId(token));
+                commentMapper.commentPostDto_to_Comment(commentPostDto), questId, token);
         CommentDto.Response response = commentMapper.comment_to_CommentResponseDto(comment);
         return new ResponseEntity<>(
                 response,
@@ -48,7 +47,7 @@ public class CommentController {
                                               @Valid @RequestBody CommentDto.Post commentPostDto){
         Comment comment = commentService.createCommentToAnswer(
                 commentMapper.commentPostDto_to_Comment(commentPostDto),
-                questId,jwtTokenizer.getMemberId(token));
+                questId, token);
         CommentDto.Response response = commentMapper.comment_to_CommentResponseDto(comment);
         return new ResponseEntity<>(
                 response,
@@ -63,7 +62,7 @@ public class CommentController {
         commentPatchDto.setCommentId(commentId);
         Comment comment = commentService.updateComment(
                 commentMapper.commentPatchDto_to_Comment(commentPatchDto),
-                jwtTokenizer.getMemberId(token));
+                token);
         CommentDto.Response response = commentMapper.comment_to_CommentResponseDto(comment);
         return new ResponseEntity<>(
                 response,
@@ -74,7 +73,7 @@ public class CommentController {
     @DeleteMapping("/comments/{comment-id}")
     public ResponseEntity deleteComment(@RequestHeader(name = "Authorization") String token,
                                         @PathVariable("comment-id") @Positive long commentId){
-        commentService.deleteComment(commentId,jwtTokenizer.getMemberId(token));
+        commentService.deleteComment(commentId,token);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
