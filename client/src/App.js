@@ -3,9 +3,9 @@ import { useSelector } from "react-redux";
 import { Route, Routes, Navigate } from "react-router-dom";
 import LoginForm from "./Components/LoginForm";
 import HomePage from "./Components/HomePage";
+import LoginHeader from "./Components/Header";
 import Header from "./Components/Header";
-import EditProfile from "./components/EditProfile";
-import Header from './Components/Header';
+import EditProfile from "./Components/EditProfile";
 import Join from './Components/Join';
 import Result from './Components/Result';
 import Question from './Components/Question';
@@ -22,10 +22,12 @@ const MainContent = styled.div`
 function App() {
   
   const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  // 질문 글 작성하고 그 질문글 페이지로 이동하기 위해 작성
+  // const rand = Math.random().toString(16).substr(2, 8);
   
   return (
     <>
-      <Header />
+      {isAuthenticated ? <Header /> : <LoginHeader />}
       <MainContent>
         <Routes>
             <Route path="/write" element={<Write />} />

@@ -1,12 +1,12 @@
 import axios from "axios";
 import styled from "styled-components"
-import DOMPurify from 'dompurify';
+import { useEffect } from "react";
+import { useState } from "react";
+import Viewer from "../editor/Viewer";
 
 // react-syntax-highlighter 와 관련된 내용. js 코드를 표시할 때 쓰는 부분
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
 import { prism } from 'react-syntax-highlighter/dist/esm/styles/prism';
-import { useEffect } from "react";
-import { useState } from "react";
 
 const DisplayFlex = styled.div`
     display: flex;
@@ -84,6 +84,11 @@ const PostHeader = styled.div`
             padding: 0;
             margin: 0;
             font-weight: 400;
+
+            a {
+                color: black;
+                text-decoration: none;
+            }
         }
         
         button {
@@ -134,11 +139,20 @@ const PostMain = styled.div`
         text-align: center;
         font-size: 18pt;
         color: lightgray;
+        cursor: pointer;
 
         list-style: none;
 
         li {
             padding-bottom: 5px;
+
+            :nth-child(2) {
+                cursor: text !important;
+            }
+
+            :last-child svg:hover{
+                fill: #0A95FF;
+            }
         }
     }
 
@@ -169,6 +183,13 @@ const PostFooter = styled.div`
 
            padding: 3px 7px;
            margin-right: 5px;
+
+           cursor: pointer;
+
+           :hover {
+            background-color: #D0E3F1;
+            color: #2C5877;
+           }
         }
     }
 
@@ -186,6 +207,17 @@ const PostFooter = styled.div`
 
             >li {
                 margin-right: 10px;
+
+                a{
+                    :link {
+                        text-decoration: none;
+                        color: #646464;
+                    }
+
+                    :visited {
+                        color: #646464;
+                    }
+                }
             }
         }
 
@@ -236,35 +268,19 @@ const PostFooter = styled.div`
     }
 `;
 
+const CommentBox = styled.div`
+    
+`;
+
 const Question = () => {
 
 const [question, setQuestion] = useState(null);
 const [filteredContent, setFilteredContent] = useState("");
 
 useEffect(() => {
-    axios
-      .get("http://localhost:3001/write/1", { withCredentials: true })
+    axios.get("http://localhost:3001/write/1", { withCredentials: true })
       .then((res) => {
         setQuestion(res.data);
-  
-        const test = res.data.text;
-  
-        let extractedContent = test.match(/`([^`]+)`/)[1];
-  
-        if (extractedContent.startsWith('</p><p>') || extractedContent.startsWith('<p>')) {
-          extractedContent = extractedContent.replace(/^<\/p><p>|^<p>/, '');
-        }
-  
-        if (extractedContent.endsWith('</p><p>') || extractedContent.endsWith('</p>')) {
-          extractedContent = extractedContent.replace(/<\/p><p>$|<\/p>$/, '');
-        }
-  
-        const newFilteredContent = extractedContent.replace(/<\/p><p>/g, '\n').replace(/<ul><\/p><p><\/li><\/p><p><\/li><\/p><p><\/ul>/g, '<ul>\n<li>\n</li>\n<li>\n</li>\n</ul>');
-  
-        setFilteredContent(newFilteredContent);
-  
-        console.log(newFilteredContent);
-  
       })
       .catch((err) => {
         console.log(err);
@@ -302,7 +318,7 @@ const codeString =
                 <PostComponent>
                     <PostHeader>
                         <div>
-                            <h2>{question.title}</h2>
+                            <h2><a href="">{question.title}</a></h2>
                             <button onClick={() => window.location.href = '/write'}>Ask Question</button>
                         </div>
                         <ul>
@@ -313,18 +329,14 @@ const codeString =
                     </PostHeader>
                     <PostMain>
                         <ul>
-                            <li>▲</li>
+                            <li><svg aria-hidden="true" className="svg-icon iconArrowUpLg" width="36" height="36" fill="#c0c0c0" viewBox="0 0 36 36"><path d="M2 25h32L18 9 2 25Z"></path></svg></li>
                             <li className="black">0</li>
-                            <li>▼</li>
-                            <li>●</li>
-                            <li>●</li>
+                            <li><svg aria-hidden="true" className="svg-icon iconArrowDownLg" width="36" height="36" fill="#c0c0c0" viewBox="0 0 36 36"><path d="M2 11h32L18 27 2 11Z"></path></svg></li>
+                            <li><svg aria-hidden="true" className="js-saves-btn-unselected svg-icon iconBookmarkAlt" fill="#c0c0c0" width="18" height="18" viewBox="0 0 18 18"><path d="m9 10.6 4 2.66V3H5v10.26l4-2.66ZM3 17V3c0-1.1.9-2 2-2h8a2 2 0 0 1 2 2v14l-6-4-6 4Z"></path></svg></li>
+                            <li><svg aria-hidden="true" className="mln2 mr0 svg-icon iconHistory" fill="#c0c0c0" width="19" height="18" viewBox="0 0 19 18"><path d="M3 9a8 8 0 1 1 3.73 6.77L8.2 14.3A6 6 0 1 0 5 9l3.01-.01-4 4-4-4h3L3 9Zm7-4h1.01L11 9.36l3.22 2.1-.6.93L10 10V5Z"></path></svg></li>
                         </ul>
                         <div>
-                            <div dangerouslySetInnerHTML={{__html: DOMPurify.sanitize([question.text, question.expecting])}}></div>
-                            <SyntaxHighlighter language="javascript" style={prism}>
-                                {filteredContent}
-                                {console.log(filteredContent)}
-                            </SyntaxHighlighter>
+                            <Viewer problemText={question.problem} expectingText={question.expecting} />
                         </div>
                     </PostMain>
                     <PostFooter>
@@ -353,6 +365,10 @@ const codeString =
                             </div>
                         </div>
                     </PostFooter>
+                    <CommentBox>
+                        {/* 위쪽으로 코멘트 일부가 보이는 거 같은데 이건 어떻게 해야할지 여쭤보기 */}
+                        <span>Add a comment</span>
+                    </CommentBox>
                 </PostComponent>
             </MainBox>
         </DisplayFlex>
