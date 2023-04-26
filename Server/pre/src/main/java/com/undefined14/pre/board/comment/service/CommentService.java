@@ -30,6 +30,8 @@ public class CommentService {
     private final AnswerService answerService;
     private final MemberService memberService;
     private final Comment comment;
+    private final JwtTokenizer jwtTokenizer;
+
 
     public Comment createCommentToQuestion(Comment comment, long questId, String token){
         Member member = memberService.findMember(token);

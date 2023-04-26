@@ -25,6 +25,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
@@ -71,6 +72,7 @@ public class QuestionRestDocsTest {
     private JwtTokenizer jwtTokenizer;
 
     @Test
+    @WithMockUser
     @DisplayName("질문 작성")
     public void postQuestionTest() throws Exception {
         // given
@@ -132,6 +134,7 @@ public class QuestionRestDocsTest {
 
     @Test
     @DisplayName("질문 수정")
+    @WithMockUser
     public void patchQuestionTest() throws Exception {
         // given
         QuestionPatchDto patchDto = new QuestionPatchDto(1L, "제목", "문제", "원인");
@@ -198,6 +201,7 @@ public class QuestionRestDocsTest {
 
     @Test
     @DisplayName("질문 조회")
+    @WithMockUser
     public void getQuestionTest() throws Exception {
         // given
         Long questionId = 1L;
@@ -253,6 +257,7 @@ public class QuestionRestDocsTest {
     }
     @Test
     @DisplayName("질문 삭제")
+    @WithMockUser
     public void deleteQuestionTest() throws Exception {
         // given
         Long questionId = 1L;
@@ -283,6 +288,7 @@ public class QuestionRestDocsTest {
 
     @Test
     @DisplayName("질문 목록 페이지네이션")
+    @WithMockUser
     public void getQuestionsPagesTest() throws Exception {
         // given
         List<QuestionResponseAllDto> questionList = new ArrayList<>();

@@ -30,8 +30,7 @@ import static org.hamcrest.Matchers.startsWith;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.responseHeaders;
+import static org.springframework.restdocs.headers.HeaderDocumentation.*;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
@@ -131,7 +130,8 @@ public class MemberRestDocsTest {
         //when
         ResultActions actions =
                 mockMvc.perform(
-                        patch("/members/{member-id}", memberId)
+                        patch("/members")
+                                .header("Authorization", "Bearer " + "test-token")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(content)
@@ -144,8 +144,8 @@ public class MemberRestDocsTest {
                 .andDo(document("patch-member",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        pathParameters(
-                                parameterWithName("member-id").description("회원 식별자")
+                        requestHeaders(
+                                headerWithName(HttpHeaders.AUTHORIZATION).description("jwt-token")
                         ),
                         requestFields(
                                 List.of(
