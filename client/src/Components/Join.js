@@ -84,12 +84,21 @@ const LoginContainer = styled.div`
             border: 1px solid lightgray;
             border-radius: 2px;
             padding-left: 10px;
-            outline: none;
+            outline: none; 
 
+            :focus {
+                outline: 4px solid #D9EAF8;
+                border: 1px solid #59A4DE;
+            }
         }
         
         .invalid {
             border-color: #DE4F54;
+            
+            :focus {
+                border-color: #DE4F54;
+                outline: 4px solid #F6E0E0;
+            }
         }
 
         label {
@@ -146,6 +155,7 @@ const LoginContainer = styled.div`
 
             :hover {
             box-shadow: inset 50px 50px rgba(0, 0, 0, .2);
+            cursor: pointer;
             }
             
         }
@@ -219,10 +229,6 @@ const Login = () => {
           .catch((error) => {
             console.log(error);
           });
-        // axios.get("/members/1", {withCredentials: true})
-        // .then((res) => {
-        //   console.log(res)
-        // })
     };
 
     function handleChange(e) {
@@ -297,8 +303,8 @@ const Login = () => {
                         validate: { // 커스텀 유효성 검사 규칙을 정의할 때 사용
                             // 아래 hasNumberr와 hasLetter은 함수, .test()는 js문법으로 정규표현식에 따라 true/fasle 반환.
                             // 아래의 value는 별도로 함수를 부르지 않아도 register의 기능상 password값이 실시간으로 추적됨.
-                        hasNumber: value => /\d/.test(value) || "Please add one of the following things to make your password stronger:",
-                        hasLetter: value => /[a-zA-Z]/.test(value) || "Please add one of the following things to make your password stronger:",
+                        hasNumber: value => /\d/.test(value),
+                        hasLetter: value => /[a-zA-Z]/.test(value),
                         }
                     })}
                     onChange={(e)=>{
