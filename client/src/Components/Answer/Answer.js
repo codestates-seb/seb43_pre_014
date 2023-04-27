@@ -129,3 +129,5 @@ const Answer = () => {
     </AnswerWrapper>
   );
 };
+
+export default Answer;
