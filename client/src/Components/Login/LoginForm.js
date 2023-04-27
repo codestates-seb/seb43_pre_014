@@ -3,6 +3,8 @@ import { useDispatch } from "react-redux";
 import { login } from "../../store/userSlice";
 import axiosInstance from "../../axiosConfig";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 
 
 const Container = styled.div`
@@ -145,6 +147,7 @@ const LoginForm = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const validateEmail = (email) => {
     return emailRegex.test(email);
@@ -157,13 +160,15 @@ const LoginForm = () => {
 
 const loginUser = async(email, password) => {
   try{
-    const response = await axiosInstance.post('/login', {
+    const response = await axiosInstance.post('/members/login', {
       email,
       password,
     });
-    if (response.data.token) {
-      localStorage.setItem("jwt", response.data.token);
-      dispatch(login(response.data.user));
+    if (response.headers.authorization) {
+      localStorage.setItem("jwt", response.headers.authorization);
+      dispatch(login(response.headers.user));
+      
+      navigate("/")
     } else {
       setError("Invalid email or password");
     }

@@ -214,7 +214,7 @@ const Login = () => {
         const number = getRandomNumber();
         const imgPath = `/profile/${number}.png`;
 
-        axiosInstance.post("/members", {
+        axiosInstance.post("/members/join", {
             name,
             email,
             password,
