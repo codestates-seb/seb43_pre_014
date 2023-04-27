@@ -14,5 +14,6 @@ public class MemberResponseDto {
     private String email;
     private Member.MemberStatus memberStatus;
     private Boolean news;
+    private String img;
     private LocalDateTime create_at;
 }

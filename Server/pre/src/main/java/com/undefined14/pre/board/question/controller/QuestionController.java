@@ -49,14 +49,14 @@ public class QuestionController {
         return ResponseEntity.created(location).body(responseDto);
     }
 
-    // 질문 전체 조회 (QuestionStatus QUESTION_DELETED("삭제 완료")도 조회 됨)
-    @GetMapping("/all")
-    public ResponseEntity<List<QuestionResponseDto>> getQuestions() {
-        List<Question> questions = service.findAll();
-        List<QuestionResponseDto> responseDtos = mapper.questionListToResponseDtoList(questions);
-
-        return ResponseEntity.ok().body(responseDtos);
-    }
+//    // 질문 전체 조회 (QuestionStatus QUESTION_DELETED("삭제 완료")도 조회 됨)
+//    @GetMapping("/all")
+//    public ResponseEntity<List<QuestionResponseDto>> getQuestions() {
+//        List<Question> questions = service.findAll();
+//        List<QuestionResponseDto> responseDtos = mapper.questionListToResponseDtoList(questions);
+//
+//        return ResponseEntity.ok().body(responseDtos);
+//    }
 
     // 질문 한 건 조회
     @GetMapping("/{question-id}")

@@ -10,14 +10,11 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 @Getter
 public class MemberPatchDto {
-
     private String name;
-
     @Email
     private String email;
-
     @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)[A-Za-z\\d]{8,}$")
     private String password;
-
     private Boolean news;
+
 }

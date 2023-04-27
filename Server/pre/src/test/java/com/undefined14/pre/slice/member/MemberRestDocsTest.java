@@ -67,7 +67,7 @@ public class MemberRestDocsTest {
     @DisplayName("멤버 등록")
     public void postMemberTest() throws Exception {
         //  given
-        MemberPostDto post = new MemberPostDto("홍길동", "asd@gmail.com", "qwer1234",true);
+        MemberPostDto post = new MemberPostDto("홍길동", "asd@gmail.com", "qwer1234",true, "/profile/1.png");
         String content = gson.toJson(post);
 
         MemberResponseDto responseDto = new MemberResponseDto();
@@ -76,6 +76,7 @@ public class MemberRestDocsTest {
         responseDto.setName("홍길동");
         responseDto.setMemberStatus(Member.MemberStatus.MEMBER_ACTIVE);
         responseDto.setNews(true);
+        responseDto.setImg("/profile/1.png");
 
         given(mapper.memberPostDtoToMember(Mockito.any(MemberPostDto.class))).willReturn(new Member());
         Member mockResultMember = new Member();
@@ -87,7 +88,7 @@ public class MemberRestDocsTest {
         // when
         ResultActions actions =
                 mockMvc.perform(
-                        post("/members/")
+                        post("/members/join")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(content)
@@ -96,7 +97,7 @@ public class MemberRestDocsTest {
         // then
         actions
                 .andExpect(status().isCreated())
-                .andExpect(header().string("Location", is(startsWith("/members/"))))
+                .andExpect(header().string("Location", is(startsWith("/members/1"))))
                 .andDo(print())
                 .andDo(document("post-member",
                         preprocessRequest(prettyPrint()),
@@ -106,7 +107,8 @@ public class MemberRestDocsTest {
                                         fieldWithPath("email").type(JsonFieldType.STRING).description("이메일"),
                                         fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
                                         fieldWithPath("password").type(JsonFieldType.STRING).description("비밀번호"),
-                                        fieldWithPath("news").type(JsonFieldType.BOOLEAN).description("뉴스레터")
+                                        fieldWithPath("news").type(JsonFieldType.BOOLEAN).description("뉴스레터"),
+                                        fieldWithPath("img").type(JsonFieldType.STRING).description("이미지")
                                 )
                         ),
                         responseHeaders(
@@ -170,6 +172,7 @@ public class MemberRestDocsTest {
         responseDto.setName("홍홍홍");
         responseDto.setMemberStatus(Member.MemberStatus.MEMBER_ACTIVE);
         responseDto.setNews(true);
+        responseDto.setImg("/profile/1.png");
 
         given(memberService.findMember(any())).willReturn(new Member());
 
@@ -184,6 +187,7 @@ public class MemberRestDocsTest {
                 .andExpect(jsonPath("$.memberId").value(responseDto.getMemberId()))
                 .andExpect(jsonPath("$.name").value(responseDto.getName()))
                 .andExpect(jsonPath("$.email").value(responseDto.getEmail()))
+                .andExpect(jsonPath("$.img").value(responseDto.getImg()))
                 .andDo(print())
                 .andDo(document("get-member",
                         preprocessRequest(prettyPrint()),
@@ -198,6 +202,7 @@ public class MemberRestDocsTest {
                                         fieldWithPath("name").type(JsonFieldType.STRING).description("이름"),
                                         fieldWithPath("memberStatus").type(JsonFieldType.STRING).description("회원 상태: 활동중 / 탈퇴 상태"),
                                         fieldWithPath("news").type(JsonFieldType.BOOLEAN).description("뉴스레터"),
+                                        fieldWithPath("img").type(JsonFieldType.STRING).description("이미지"),
                                         fieldWithPath("create_at").type(JsonFieldType.NULL).description("가입 시기")
                                 )
                         )
