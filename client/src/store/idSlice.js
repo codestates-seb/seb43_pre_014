@@ -2,7 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 let idSlice = createSlice({
     name : 'id',
-    initialState : '',
+    initialState : [],
     reducers: {
       setId: (state, action) => action.payload,
     },

@@ -8,6 +8,7 @@ const HeaderContainer = styled.header`
     background-color: #f8f9f9 ;
     height: 50px;
     position:fixed;
+    z-index: 1;
 
     box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.2);
 `;
