@@ -174,7 +174,7 @@ const HomePage = () => { // homepage 파트는 메인페이지가 나왔을 때 
         <Questions>
           <QuestionsHeader>
             <div>
-                <h2><a href="">All Questions</a></h2>
+                <h2>All Questions</h2>
                 <button onClick={() => window.location.href = '/write'}>Ask Question</button>
             </div>
             <div className="menu">

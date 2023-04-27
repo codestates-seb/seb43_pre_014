@@ -121,10 +121,12 @@ const Header = () => {
         <HeaderContainer>
             <Container>
                 <Logo>
+                    <a href="/">
                     <img
                     src="logo/logo-stackoverflow_main.png"
                     alt="Stack Overflow Logo"
                     />
+                    </a>
                 </Logo>
                 <Nav>
                     <a href="#">About</a>

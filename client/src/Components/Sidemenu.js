@@ -36,6 +36,7 @@ font-size: 10pt;
 }
 
 a:link, a:visited {
+    color: black;
     text-decoration: none;
 }
 
@@ -52,7 +53,7 @@ return (
             <li><a href="/">Home</a></li>
             <li>
                 <ul>PUBLIC
-                    <li><a href="/question">Questions</a></li>
+                    <li><a href="/">Questions</a></li>
                     <li>Users</li>
                 </ul>
             </li>

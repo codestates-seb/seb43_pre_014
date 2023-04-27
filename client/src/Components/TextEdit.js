@@ -6,9 +6,7 @@ const QuillWrapper = styled.div`
   .ql-container {
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 16px;
     height: 150px;
-    margin-bottom: 16px;
     transition: border-color 0.2s ease-in-out;
   }
 
@@ -22,12 +20,11 @@ function TextEdit() {
     const modules = {
         toolbar: {
             container: [
-                // [{ header: [1, 2, false] }],
-                ['bold', 'italic'],
-                // 'underline', 'strike', ],
-                ['link', 'blockquote', 'code-block', 'image'],
-                [{ list: 'ordered' }, { list: 'bullet' }, { 'align': [] }],
-                ['clean'],
+              [{ header: [1, 2, false] }],
+              ['underline', 'strike', 'blockquote'],
+              [{ list: 'ordered' }, { list: 'bullet' }, 'link'],
+              ['image', 'code-block'],
+              ['clean'],
             ],
         },
     };

@@ -273,7 +273,7 @@ const handleDelete = () => {
                 <PostComponent>
                     <PostHeader>
                         <div>
-                            <h2><a href="">{question.title}</a></h2>
+                            <h2><a href={`http://localhost:3000/question/${id}`}>{question.title}</a></h2>
                             <button onClick={() => window.location.href = '/write'}>Ask Question</button>
                         </div>
                         <ul>
@@ -305,7 +305,7 @@ const handleDelete = () => {
                                 <ul>
                                     <li><a href="https://www.naver.com/">Share</a></li>
                                     <li><a href={`/modify/${id}`}>Edit</a></li>
-                                    <li><a onClick={handleDelete}>Delete</a></li>
+                                    <li><spand onClick={handleDelete}>Delete</spand></li>
                                 </ul>
                                 <div>
                                     <div>asked 16 mins ago</div>
