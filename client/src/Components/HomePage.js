@@ -1,4 +1,4 @@
-import axios from "axios";
+import axiosInstance from "../axiosConfig";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import QuestionBox from "./QuestionBox";
@@ -156,13 +156,21 @@ const HomePage = () => { // homepage 파트는 메인페이지가 나왔을 때 
   const [questions, setQuestions] = useState(null);
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/write`, { withCredentials: true })
-        .then((res) => {
+    // baseURL과 axiosInstance 설정을 사용하여 API를 호출합니다.
+    axiosInstance
+      .get("/board/questions", {
+        params: {
+          page: 0,
+          size: 10,
+          sort: "questionId,desc",
+        },
+      })
+      .then((res) => {
         setQuestions(res.data);
-        })
-        .catch((err) => {
+      })
+      .catch((err) => {
         console.log(err);
-        });
+      });
   }, []);
 
   return (

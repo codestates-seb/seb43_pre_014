@@ -1,5 +1,5 @@
 import styled from "styled-components"
-import { useSelector } from "react-redux"
+// import { useSelector } from "react-redux"
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useParams } from "react-router";
@@ -53,7 +53,7 @@ const Result = () => {
             .catch((err) => {
             console.log(err);
             });
-    }, []);
+    }, [id]);
 
     return (
     <>

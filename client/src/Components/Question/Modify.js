@@ -4,7 +4,7 @@ import { useForm } from "react-hook-form";
 import { useParams } from 'react-router';
 import styled from "styled-components"
 import StackEditor from "../../editor/StackEditor";
-import axios from "axios";
+import axiosInstance from '../../axiosConfig';
 
 // import { Editor } from '@toast-ui/editor';
 // import '@toast-ui/editor/dist/toastui-editor.css';
@@ -456,46 +456,42 @@ const Header = () => {
         setTags(tags.filter((el) => {
             return el !== tags[indexToRemove]
         }))
-      };
+        };
 
     const [question, setQuestion] = useState(null);
-   
-    useEffect(() => {
-    axios.get(`http://localhost:3001/write/${id}`, { withCredentials: true })
-        .then((res) => {
-        setQuestion(res.data);
-        setTitle(res.data.title);
-        setText(res.data.problem);
-        setExpecting(res.data.expecting);
-        setTags(res.data.tags);
-        })
-        .catch((err) => {
-        console.log(err);
-        });
-    }, []);
 
     const { id } = useParams(); // URL에서 id값을 가져오기
 
+    useEffect(() => {
+        axiosInstance.get(`/board/questions/${id}`)
+        .then((res) => {
+            setQuestion(res.data);
+            setTitle(res.data.title);
+            setText(res.data.problem);
+            setExpecting(res.data.expecting);
+            setTags(res.data.tags);
+        })
+        .catch((err) => {
+            console.log(err);
+        });
+    }, [id]);
+
     // put으로 수정하는 부분
     const onSubmit = (data) => {
-        axios.put(`http://localhost:3001/write/${id}`, {
-            title,
-            problem : text,
-            expecting,
-            tags
-          }, {headers: {
-            'Content-Type': `application/json`,
-            'ngrok-skip-browser-warning': '69420',
-          }
+        axiosInstance.put(`/board/questions/${id}`, {
+        title,
+        problem: text,
+        expecting,
+        tags
         })
-          .then((response) => {
+            .then((response) => {
             console.log(response);
             reset();
             window.location.href = `/question/${response.data.id}`;
-          })
-          .catch((error) => {
+            })
+            .catch((error) => {
             console.log(error);
-          });
+            });
     };
 
     const handleEnter = (event) => {

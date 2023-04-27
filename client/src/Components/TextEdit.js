@@ -7,6 +7,8 @@ const QuillWrapper = styled.div`
     border: 1px solid #ccc;
     border-radius: 4px;
     height: 150px;
+    width: 100%;
+    margin-bottom: 16px;
     transition: border-color 0.2s ease-in-out;
   }
 
@@ -16,7 +18,7 @@ const QuillWrapper = styled.div`
   }
 `;
 
-function TextEdit() {
+function TextEdit({ text, setText }) {
     const modules = {
         toolbar: {
             container: [
@@ -28,9 +30,11 @@ function TextEdit() {
             ],
         },
     };
+    const textChange = (contents) => { setText(contents) }
     return (
+
         <QuillWrapper>
-            <ReactQuill modules={modules} />
+            <ReactQuill value={text} onChange={textChange} modules={modules} />
         </QuillWrapper>
     );
 }

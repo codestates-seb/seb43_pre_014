@@ -107,8 +107,12 @@ const Comments = ({ parentId, parentType }) => {
   };
 
   const handleEdit = (comment) => {
-    setEditingComment(comment.commentId);
-    setEditedComment(comment.body);
+    if (comment.author === user.name) {
+      setEditingComment(comment.commentId);
+      setEditedComment(comment.body);
+    } else {
+      alert("You can only edit your own comments.");
+    }
   };
 
   const handleUpdate = (e) => {
@@ -123,8 +127,12 @@ const Comments = ({ parentId, parentType }) => {
     setEditedComment('');
   };
 
-  const handleDelete = (commentId) => {
-    dispatch(deleteCommentAsync(commentId));
+  const handleDelete = (commentId, commentAuthor) => {
+    if (commentAuthor === user.name) {
+      dispatch(deleteCommentAsync(commentId));
+    } else {
+      alert("You can only delete your own comments.");
+    }
   };
 
   return (
@@ -155,7 +163,7 @@ const Comments = ({ parentId, parentType }) => {
                     <CommentFooterButton onClick={() => handleEdit(comment)}>
                       Edit
                     </CommentFooterButton>
-                    <CommentFooterButton onClick={() => handleDelete(comment.commentId)}>
+                    <CommentFooterButton onClick={() => handleDelete(comment.commentId, comment.author)}>
                       Delete
                     </CommentFooterButton>
                   </CommentFooter>
@@ -173,9 +181,9 @@ const Comments = ({ parentId, parentType }) => {
           placeholder="Write a comment..."
         />
         <CommentFormButton type="submit">Submit</CommentFormButton>
-</CommentForm>
-</StyledComments>
-);
+      </CommentForm>
+    </StyledComments>
+  );
 };
 
 export default Comments;

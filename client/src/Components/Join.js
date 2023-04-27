@@ -1,7 +1,9 @@
-import axiosInstance from "../../axiosConfig";
 import styled from "styled-components"
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux"
+import { setId } from "../store/idSlice";
+import axiosInstance from "../axiosConfig";
 
 const DisplayFlex = styled.div`
     background-color: #F1F2F3;
@@ -200,46 +202,39 @@ const SocialBtn = styled.button`
 
 const Login = () => {
 
-    const [name, setUser] = useState("");
+    const dispatch = useDispatch();
+    
+    const name = useSelector(state => state.id);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [news, setNews] = useState(false);
-
-    let number = getRandomNumber();
-
-    function getRandomNumber() {
-      return Math.floor(Math.random() * 10) + 1;
-    }
-
+    const [img, setImg] = useState(null);
+    
     const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
+    const newInfo = {
+        name,
+        email,
+        password,
+        news,
+        img,
+    }
     const onSubmit = () => {
-        const number = getRandomNumber();
-        const imgPath = `/profile/${number}.png`;
-
-        axios.post("/members", {
-            name,
-            email,
-            password,
-            news,
-            img : imgPath
-          }, {headers: {
-            'Content-Type': `application/json`,
-            'ngrok-skip-browser-warning': '69420',
-          }
-        })
-          .then((response) => {
+        axiosInstance
+            .post('/members',newInfo)
+            .then((response) => {
             console.log(response);
             reset();
-            window.location.href = `http://localhost:3001/members/join/result/${response.data.id}`;
-          })
-          .catch((error) => {
+            window.location.href = `/result/${response.data.id}`;
+        })
+        .catch((error) => {
             console.log(error);
-          });
+        });
     };
 
     function handleChange(e) {
-        setUser(e.target.value)
-      }    
+        const id = e.target.value;
+        dispatch(setId(id));
+        }    
 
     return (
     <DisplayFlex>
