@@ -1,5 +1,6 @@
 package com.undefined14.pre.member.service;
 
+import com.undefined14.pre.auth.jwt.JwtTokenizer;
 import com.undefined14.pre.auth.utils.CustomAuthorityUtils;
 import com.undefined14.pre.exception.BusinessLogicException;
 import com.undefined14.pre.exception.ExceptionCode;
@@ -20,6 +21,7 @@ public class MemberService {
     private MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
+    private final JwtTokenizer jwtTokenizer;
 
     public Member createMember(Member member) {
 
@@ -29,32 +31,41 @@ public class MemberService {
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
 
+        if (member.getName() == null) {
+            member.setName(member.getEmail());
+        }
+
+        if (member.getNews() == null) {
+            member.setNews(false);
+        }
+
         return memberRepository.save(member);
     }
 
-    public Member updateMember(Member member) {
+    public Member updateMember(Member member, String token) {
 
-        Member findMember = findVerifiedMember(member.getMemberId());
+        long memberId = jwtTokenizer.getMemberId(token);
+
+        Member findMember = findVerifiedMember(memberId);
+
         Optional.ofNullable(member.getName())
                 .ifPresent(findMember::setName);
         Optional.ofNullable(member.getEmail())
                 .ifPresent(findMember::setEmail);
         Optional.ofNullable(member.getPassword())
                 .ifPresent(findMember::setPassword);
+        Optional.ofNullable(member.getNews())
+                .ifPresent(findMember::setNews);
 
-        if (member.getNews()) {
-            findMember.setNews(true);
-        }
-        if (!member.getNews()) {
-            findMember.setNews(false);
-        }
-
-        //findMember.setModifiedAt(LocalDateTime.now()); 수정날짜 표기
+            //findMember.setModifiedAt(LocalDateTime.now()); 수정날짜 표기
 
         return memberRepository.save(findMember);
     }
 
-    public Member findMember(long memberId) {
+    public Member findMember(String token) {
+
+        long memberId = jwtTokenizer.getMemberId(token);
+
         Member findMember = findVerifiedMember(memberId);
 
         if(findMember.getMemberStatus().equals(Member.MemberStatus.MEMBER_QUIT)) {
@@ -64,7 +75,10 @@ public class MemberService {
         return findMember;
     }
 
-    public void deleteMember(long memberId) {
+    public void deleteMember(String token) {
+
+        long memberId = jwtTokenizer.getMemberId(token);
+
         Member findMember = findVerifiedMember(memberId);
 
         findMember.setMemberStatus(Member.MemberStatus.MEMBER_QUIT);

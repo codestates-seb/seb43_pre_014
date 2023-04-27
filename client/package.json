@@ -56,5 +56,6 @@
   "devDependencies": {
     "@svgr/webpack": "^7.0.0",
     "http-proxy-middleware": "^2.0.6"
-  }
+  },
+  "proxy" : "https://0e68-175-213-102-16.ngrok-free.app/"
 }

@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addComment, updateComment, deleteComment, fetchCommentAsync } from '../../store/commentsSlice';
+import { addComment, updateComment, deleteComment, fetchCommentAsync } from '../store/commentsSlice';
 import styled from 'styled-components';
 import { useEffect } from 'react';
 
 const StyledComments = styled.div`
   width: 100%;
+  max-width: 600px;
   margin: 0 auto;
   padding: 1rem;
   box-sizing: border-box;
@@ -64,11 +65,10 @@ const CommentFormInput = styled.input`
 `;
 
 const CommentFormButton = styled.button`
-  background-color: #0A95FF;
+  background-color: #0079ff;
   color: #fff;
   border: none;
-  border-radius: 3px;
-  box-shadow: inset 0px 1px rgba(255, 255, 255, .5);
+  border-radius: 4px;
   padding: 0.5rem 1rem;
   cursor: pointer;
 `;
@@ -124,57 +124,3 @@ const Comments = ({ parentId, parentType }) => {
   const handleDelete = (id) => {
     dispatch(deleteComment(id));
   };
-
-  return (
-    <StyledComments>
-      <h2>Comments</h2>
-      <CommentsList>
-        {status === 'loading'&& <p>Loading...</p>}
-        {status === 'success' && 
-        comments.map((comment) => (
-          <CommentItem key = {comment.id}>
-            {editingComment === comment.id ? (
-              <CommentForm onSubmit={handleUpdate}>
-                <CommentFormInput
-                type = "text"
-                value = {editedComment}
-                onChange = {(e) => setEditedComment(e.target.value)}
-                />
-                <CommentFormButton type = "submit">Update</CommentFormButton>
-          </CommentForm>
-        ) : (
-          <>
-            <p>{comment.text}</p>
-            <CommentFooter>
-              <CommentFooterLink href="#">
-                {comment.author}
-              </CommentFooterLink>
-              <CommentTimestamp>
-                {new Date(comment.timestamp).toLocaleString()}
-              </CommentTimestamp>
-              <CommentFooterButton onClick={() => handleEdit(comment)}>
-                Edit
-              </CommentFooterButton>
-              <CommentFooterButton onClick={() => handleDelete(comment.id)}>
-                Delete
-              </CommentFooterButton>
-            </CommentFooter>
-          </>
-        )}
-      </CommentItem>
-    ))}
-  {status === 'failed' && <p>Error:{error}</p>}
-  </CommentsList>
-  <CommentForm onSubmit={handleSubmit}>
-    <CommentFormInput
-      type="text"
-      value={newComment}
-      onChange={(e) => setNewComment(e.target.value)}
-      placeholder="Write a comment..."
-    />
-    <CommentFormButton type="submit">Submit</CommentFormButton>
-  </CommentForm>
-</StyledComments>
-);
-};
-export default Comments;

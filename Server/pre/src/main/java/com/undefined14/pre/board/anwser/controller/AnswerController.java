@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.Positive;
 
-@CrossOrigin(origins = "http://localhost:3000") // CORS 정책 허용
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "X-AUTH-TOKEN") // CORS 정책 허용
 @RestController
 @RequestMapping("/board/answers")
 @Validated

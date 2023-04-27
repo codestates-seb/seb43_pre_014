@@ -1,0 +1,131 @@
+= 스택오버플로우 클론 애플리케이션
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: Table of Contents
+:source-highlighter: prettify
+
+v1.0.0, 2023.04.20
+
+***
+== CommentController
+=== 질문 게시물 댓글 등록
+.curl-request
+include::{snippets}/post-comment-to-question/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-comment-to-question/http-request.adoc[]
+
+.request-headers
+include::{snippets}/post-comment-to-question/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/post-comment-to-question/request-fields.adoc[]
+
+.http-response
+include::{snippets}/post-comment-to-question/http-response.adoc[]
+
+// .response-body
+// include::{snippets}/post-comment-to-question/response-body.adoc[]
+//
+// .path-parameters
+// include::{snippets}/post-comment-to-question/path-parameters.adoc[]
+//
+// .request-body
+// include::{snippets}/post-comment-to-question/request-body.adoc[]
+//
+// .httpie-request
+// include::{snippets}/post-comment-to-question/httpie-request.adoc[]
+//
+// .response-fields
+// include::{snippets}/post-comment-to-question/response-fields.adoc[]
+
+=== 답변 게시물 댓글 등록
+.curl-request
+include::{snippets}/post-comment-to-answers/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-comment-to-answers/http-request.adoc[]
+
+.request-headers
+include::{snippets}/post-comment-to-answers/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/post-comment-to-answers/request-fields.adoc[]
+
+// .http-response
+// include::{snippets}/post-comment-to-answers/http-response.adoc[]
+//
+// .response-fields
+// include::{snippets}/post-comment-to-answers/response-fields.adoc[]
+//
+// .response-body
+// include::{snippets}/post-comment-to-answers/response-body.adoc[]
+//
+// .request-body
+// include::{snippets}/post-comment-to-answers/request-body.adoc[]
+//
+// .httpie-request
+// include::{snippets}/post-comment-to-answers/httpie-request.adoc[]
+//
+// .path-parameters
+// include::{snippets}/post-comment-to-answers/path-parameters.adoc[]
+
+=== 댓글 수정
+.curl-request
+include::{snippets}/patch-comment/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-comment/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/patch-comment/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/patch-comment/request-headers.adoc[]
+
+.request-fields
+include::{snippets}/patch-comment/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-comment/http-response.adoc[]
+
+// .response-fields
+// include::{snippets}/patch-comment/response-fields.adoc[]
+//
+// .response-body
+// include::{snippets}/patch-comment/response-body.adoc[]
+//
+// .request-body
+// include::{snippets}/patch-comment/request-body.adoc[]
+//
+// .httpie-request
+// include::{snippets}/patch-comment/httpie-request.adoc[]
+
+=== 댓글 삭제
+.curl-request
+include::{snippets}/delete-comment/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-comment/http-request.adoc[]
+
+.path-parameters
+include::{snippets}/delete-comment/path-parameters.adoc[]
+
+.request-headers
+include::{snippets}/delete-comment/request-headers.adoc[]
+
+.http-response
+include::{snippets}/delete-comment/http-response.adoc[]
+
+// .response-body
+// include::{snippets}/delete-comment/response-body.adoc[]
+//
+// .request-body
+// include::{snippets}/delete-comment/request-body.adoc[]
+//
+// .httpie-request
+// include::{snippets}/delete-comment/httpie-request.adoc[]
+
+
+

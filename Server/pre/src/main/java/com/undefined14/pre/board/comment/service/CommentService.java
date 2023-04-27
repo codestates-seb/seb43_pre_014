@@ -1,5 +1,6 @@
 package com.undefined14.pre.board.comment.service;
 
+import com.undefined14.pre.auth.jwt.JwtTokenizer;
 import com.undefined14.pre.board.anwser.entity.Answer;
 import com.undefined14.pre.board.anwser.service.AnswerService;
 import com.undefined14.pre.board.question.entity.Question;
@@ -17,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.undefined14.pre.board.comment.entity.Comment.PostType.*;
+
 @Service
 @Transactional
 @Slf4j
@@ -26,50 +29,55 @@ public class CommentService {
     private final QuestionService questionService;
     private final AnswerService answerService;
     private final MemberService memberService;
+    private final Comment comment;
+    private final JwtTokenizer jwtTokenizer;
 
-    public Comment createCommentToQuestion(Comment comment, long questId, long tokenId){
-        Member member = memberService.findMember(tokenId);
+
+    public Comment createCommentToQuestion(Comment comment, long questId, String token){
+        Member member = memberService.findMember(token);
         Question question = questionService.findQuestionById(questId);
 
-        comment.setInheritQuestion(true);
+        comment.setPostType(QUESTION);
         comment.setQuestion(question);
         comment.setAnswer(null);
         comment.setMember(member);
+        comment.setCommentStatus(Comment.CommentStatus.COMMENT_POSTED);
 
         return commentRepository.save(comment);
     }
 
-    public Comment createCommentToAnswer(Comment comment, long answerId, long tokenId){
-        Member member = memberService.findMember(tokenId);
+    public Comment createCommentToAnswer(Comment comment, long answerId, String token){
+        Member member = memberService.findMember(token);
         Answer answer = answerService.findAnswer(answerId);
 
-        comment.setInheritQuestion(false);
+        comment.setPostType(ANSWER);
         comment.setQuestion(null);
         comment.setAnswer(answer);
         comment.setMember(member);
+        comment.setCommentStatus(Comment.CommentStatus.COMMENT_POSTED);
 
         return commentRepository.save(comment);
     }
 
-    // Todo 익셉션 코드쪽 리팩토링
-    public Comment updateComment(Comment comment,long tokenId){
+    public Comment updateComment(Comment comment,String token){
         Comment findComment = findVerifiedCommentByQuery(comment.getCommentId());
         Member findMember = findComment.getMember();
-        if(findMember.getMemberId() != tokenId){
+        if(findMember.getMemberId() != jwtTokenizer.getMemberId(token)){
             throw new BusinessLogicException(ExceptionCode.MEMBER_FORBIDDEN);
         }
         Optional.ofNullable(comment.getBody())
-                .ifPresent(content->findComment.setBody(content));
+                .ifPresent(findComment::setBody);
         return commentRepository.save(findComment);
     }
 
-    public void deleteComment(long commentId,long tokenId){
+    public void deleteComment(long commentId,String token){
         Comment findComment = findComment(commentId);
         Member findMember = findComment.getMember();
-        if(findMember.getMemberId() != tokenId){
+
+        if(findMember.getMemberId() != jwtTokenizer.getMemberId(token)){
             throw new BusinessLogicException(ExceptionCode.MEMBER_FORBIDDEN);
         }
-        commentRepository.delete(findComment);
+        comment.setCommentStatus(Comment.CommentStatus.COMMENT_DELETED);
     }
 
     public Comment findComment(long commentId){
@@ -80,6 +88,11 @@ public class CommentService {
         Optional<Comment> optionalComment = commentRepository.findByComment(commentId);
         Comment findComment = optionalComment.orElseThrow(()->new BusinessLogicException(
                 ExceptionCode.COMMENT_NOT_FOUND));
+
+        Comment comment = optionalComment.get();
+        if (comment.getCommentStatus() == Comment.CommentStatus.COMMENT_DELETED) {
+            throw new BusinessLogicException(ExceptionCode.COMMENT_DELETED);
+        }
         return findComment;
     }
 

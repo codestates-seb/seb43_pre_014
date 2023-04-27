@@ -25,9 +25,11 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -35,6 +37,7 @@ import java.util.Arrays;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "X-AUTH-TOKEN")
 @Configuration
 @EnableWebSecurity(debug = true)
 @AllArgsConstructor
@@ -64,14 +67,40 @@ public class SecurityConfiguration implements WebMvcConfigurer {
 
                 .authorizeHttpRequests(authorize -> authorize
                         //TODO
+                                // 멤버십
+                                .antMatchers(HttpMethod.GET, "/members").hasRole("USER")
                                 .antMatchers(HttpMethod.POST, "/members").permitAll()
-                                .antMatchers(HttpMethod.PATCH, "/members/**").hasRole("USER")
-                                .antMatchers(HttpMethod.GET, "/members/**").hasAnyRole("USER", "ADMIN")
-                                .antMatchers(HttpMethod.DELETE, "/members/**").hasRole("USER")
-                .anyRequest().permitAll()
+                                .antMatchers(HttpMethod.PATCH, "/members").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE, "/members").hasRole("USER")
+
+                                // 로그인/아웃
+                                .antMatchers(HttpMethod.GET, "/logout").hasRole("USER")
+
+                                // 게시판 - 질문
+                                .antMatchers(HttpMethod.GET, "/board/questions").hasRole("USER") // 페이지네이션
+                                .antMatchers(HttpMethod.GET, "/board/questions/**").hasRole("USER") // 하나 조회
+                                .antMatchers(HttpMethod.POST, "/board/questions").hasRole("USER")
+                                .antMatchers(HttpMethod.PATCH, "/board/questions/**").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE, "/board/questions/**").hasRole("USER")
+
+                                // 게시판 - 답변
+                                .antMatchers(HttpMethod.PATCH,"/board/answers/**").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE,"/board/answers/**").hasRole("USER")
+                                .antMatchers(HttpMethod.POST,"/board/answers").hasRole("USER")
+
+                                // 게시판 = 댓글
+                                .antMatchers(HttpMethod.POST,"/board/questions/*/comments").hasRole("USER")
+                                .antMatchers(HttpMethod.POST,"/board/answers/*/comments").hasRole("USER")
+                                .antMatchers(HttpMethod.PATCH, "/board/comments/**").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE,"/board/comments/**").hasRole("USER")
                 );
 
         return http.build();
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedOrigins("http://localhost:3000");
     }
 
     // PasswordEncoder Beans 객체 생성
@@ -89,7 +118,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         configuration.setAllowedOrigins(Arrays.asList("*"));
 
         // setAllowedMethods()를 통해 파라미터로 지정한 HTTP Method에 대한 HTTP 통신을 허용
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
 
         // UrlBasedCorsConfigurationSource 클래스의 객체를 생성
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
