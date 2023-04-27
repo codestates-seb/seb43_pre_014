@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router";
-import axios from "axios";
+import axiosInstance from "../../axiosConfig";
 import styled from "styled-components"
 import Viewer from "../../editor/Viewer";
 import Comments from "./Comments";
