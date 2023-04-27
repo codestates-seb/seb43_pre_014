@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "X-AUTH-TOKEN")
 @RestController
 @RequestMapping("/members")
 @Validated
@@ -30,7 +30,7 @@ public class MemberController {
     private final MemberService service;
 
     // 회원 가입
-    @PostMapping
+    @PostMapping("/join")
     public ResponseEntity postMember(@Validated @RequestBody MemberPostDto memberPostDto) {
 
         log.info(String.valueOf(memberPostDto));
