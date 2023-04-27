@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { fetchCommentAsync, postQuestionCommentAsync, postAnswerCommentAsync, updateCommentAsync, deleteCommentAsync,} from '../store/commentsSlice';
+import { addComment, updateComment, deleteComment, fetchCommentAsync } from '../store/commentsSlice';
 import styled from 'styled-components';
 import { useEffect } from 'react';
 
@@ -80,8 +80,8 @@ const Comments = ({ parentId, parentType }) => {
   const status = useSelector((state) => state.comments.status);
   const error = useSelector((state) => state.comments.error);
 
-  useEffect(() => {
-    if (status === 'idle') {
+  useEffect(()=>{
+    if (status === 'idle'){
       dispatch(fetchCommentAsync(parentId, parentType));
     }
   }, [dispatch, parentId, parentType, status]);
@@ -92,35 +92,25 @@ const Comments = ({ parentId, parentType }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (parentType === 'question') {
-      dispatch(
-        postQuestionCommentAsync({
-          parentId,
-          body: newComment,
-        }),
-      );
-    } else if (parentType === 'answer') {
-      dispatch(
-        postAnswerCommentAsync({
-          parentId,
-          body: newComment,
-        }),
-      );
-    }
-
+    const newCommentObject = {
+      id: Date.now(),
+      text: newComment,
+      author: user.username,
+      timestamp: Date.now(),
+    };
+    dispatch(addComment(newCommentObject));
     setNewComment('');
   };
 
   const handleEdit = (comment) => {
-    setEditingComment(comment.commentId);
-    setEditedComment(comment.body);
+    setEditingComment(comment.id);
+    setEditedComment(comment.text);
   };
 
   const handleUpdate = (e) => {
     e.preventDefault();
     dispatch(
-      updateCommentAsync({
+      updateComment({
         id: editingComment,
         text: editedComment,
         author: user.username,
@@ -132,59 +122,5 @@ const Comments = ({ parentId, parentType }) => {
   };
 
   const handleDelete = (id) => {
-    dispatch(deleteCommentAsync(id));
+    dispatch(deleteComment(id));
   };
-
-  return (
-    <StyledComments>
-      <h2>Comments</h2>
-      <CommentsList>
-        {status === 'loading'&& <p>Loading...</p>}
-        {status === 'success' && 
-        comments.map((comment) => (
-          <CommentItem key = {comment.commentId}>
-            {editingComment === comment.commentId ? (
-              <CommentForm onSubmit={handleUpdate}>
-                <CommentFormInput
-                type = "text"
-                value = {editedComment}
-                onChange = {(e) => setEditedComment(e.target.value)}
-                />
-                <CommentFormButton type = "submit">Update</CommentFormButton>
-          </CommentForm>
-        ) : (
-          <>
-            <p>{comment.body}</p>
-            <CommentFooter>
-              <CommentFooterLink href="#">
-                {comment.user.username}
-              </CommentFooterLink>
-              <CommentTimestamp>
-                {new Date(comment.createdAt).toLocaleString()}
-              </CommentTimestamp>
-              <CommentFooterButton onClick={() => handleEdit(comment)}>
-                Edit
-              </CommentFooterButton>
-              <CommentFooterButton onClick={() => handleDelete(comment.commentId)}>
-                Delete
-              </CommentFooterButton>
-            </CommentFooter>
-          </>
-        )}
-      </CommentItem>
-    ))}
-  {status === 'failed' && <p>Error:{error}</p>}
-  </CommentsList>
-  <CommentForm onSubmit={handleSubmit}>
-    <CommentFormInput
-      type="text"
-      value={newComment}
-      onChange={(e) => setNewComment(e.target.value)}
-      placeholder="Write a comment..."
-    />
-    <CommentFormButton type="submit">Submit</CommentFormButton>
-  </CommentForm>
-</StyledComments>
-);
-};
-export default Comments;

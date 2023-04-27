@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { login } from "../store/userSlice";
-import axiosInstance from "../axiosConfig";
+import { login } from "../../store/userSlice";
+import axiosInstance from "../../axiosConfig";
 import { useState } from "react";
 
 

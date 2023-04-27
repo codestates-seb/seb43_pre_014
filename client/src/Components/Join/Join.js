@@ -1,9 +1,9 @@
+import axios from "axios";
 import styled from "styled-components"
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux"
-import { setId } from "../store/idSlice";
-import axiosInstance from "../axiosConfig";
+import idSlice from "../../store/idSlice";
 
 const DisplayFlex = styled.div`
     background-color: #F1F2F3;
@@ -208,33 +208,33 @@ const Login = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [news, setNews] = useState(false);
-    const [error, setError] = useState("");
     
     const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
-    const newInfo = {
-        name,
-        email,
-        password,
-        news
-    }
-    const onSubmit = async () => {
-        try {
-            const response = await axiosInstance.post("/", newInfo);
-            if (response.status >= 200 && response.data < 300){
+    const onSubmit = () => {
+        axios.post("/members", {
+            name,
+            email,
+            password,
+            news
+          }, {headers: {
+            'Content-Type': `application/json`,
+            'ngrok-skip-browser-warning': '69420',
+          }
+        })
+          .then((response) => {
+            console.log(response);
             reset();
-            window.location.href = "/result";
-            } else { setError(error);
-                } 
-            } catch (error){
-                setError(error); // errorMessage 만들기
-                console.log("에러남")
-        }
+            window.location.href = `/result/${response.data.id}`;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     };
 
     function handleChange(e) {
         const id = e.target.value;
-        dispatch(setId(id));
-        }    
+        dispatch(idSlice(id));
+      }    
 
     return (
     <DisplayFlex>
