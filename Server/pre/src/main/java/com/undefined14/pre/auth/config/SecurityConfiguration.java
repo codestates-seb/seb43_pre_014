@@ -25,9 +25,11 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -35,6 +37,7 @@ import java.util.Arrays;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "X-AUTH-TOKEN")
 @Configuration
 @EnableWebSecurity(debug = true)
 @AllArgsConstructor
@@ -90,9 +93,17 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                                 .antMatchers(HttpMethod.POST,"*/answers/comments").hasRole("USER")
                                 .antMatchers(HttpMethod.PATCH, "*/comments/**").hasRole("USER")
                                 .antMatchers(HttpMethod.DELETE,"*/comments/**").hasRole("USER")
+
+                        // jwt 요청 허용
+                        .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
                 );
 
         return http.build();
+    }
+
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**").allowedOrigins("http://localhost:3000");
     }
 
     // PasswordEncoder Beans 객체 생성
@@ -110,7 +121,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
         configuration.setAllowedOrigins(Arrays.asList("*"));
 
         // setAllowedMethods()를 통해 파라미터로 지정한 HTTP Method에 대한 HTTP 통신을 허용
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
+        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE", "OPTIONS"));
 
         // UrlBasedCorsConfigurationSource 클래스의 객체를 생성
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

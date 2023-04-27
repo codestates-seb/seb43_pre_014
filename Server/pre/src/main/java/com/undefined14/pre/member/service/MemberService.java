@@ -31,6 +31,14 @@ public class MemberService {
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
 
+        if (member.getName() == null) {
+            member.setName(member.getEmail());
+        }
+
+        if (member.getNews() == null) {
+            member.setNews(false);
+        }
+
         return memberRepository.save(member);
     }
 
@@ -46,15 +54,10 @@ public class MemberService {
                 .ifPresent(findMember::setEmail);
         Optional.ofNullable(member.getPassword())
                 .ifPresent(findMember::setPassword);
+        Optional.ofNullable(member.getNews())
+                .ifPresent(findMember::setNews);
 
-        if (member.getNews()) {
-            findMember.setNews(true);
-        }
-        if (!member.getNews()) {
-            findMember.setNews(false);
-        }
-
-        //findMember.setModifiedAt(LocalDateTime.now()); 수정날짜 표기
+            //findMember.setModifiedAt(LocalDateTime.now()); 수정날짜 표기
 
         return memberRepository.save(findMember);
     }
