@@ -34,6 +34,9 @@ public class Member extends Auditable{
     @Column
     private Boolean news;
 
+    @Column
+    private String img;
+
     // 회원 상태 값 (기본 활동 중)
     @Enumerated(value = EnumType.STRING)
     private MemberStatus memberStatus = MemberStatus.MEMBER_ACTIVE;
