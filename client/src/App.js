@@ -49,7 +49,7 @@ function App() {
           <Route path="/result" element={<Result />} /> */}
           {/* <Route path="/editProfile" element={<PrivateRoute />} /> */}
           {/* <Route index element={<EditProfile />} /> */}
-          <Route path="/result" element={<Result />} /> */}
+          <Route path="/result" element={<Result />} />
           {/* <Route path="/editProfile" element={<PrivateRoute />} /> */}
           {/* <Route index element={<EditProfile />} /> */}
           {/* 추후 메인 페이지가 작성되면 LoginForm을 /login으로 바꾸고 매안페이지를 /로 설정하기 */}
