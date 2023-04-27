@@ -87,7 +87,7 @@ public class MemberRestDocsTest {
         // when
         ResultActions actions =
                 mockMvc.perform(
-                        post("/members/")
+                        post("/members/join")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .content(content)
@@ -130,7 +130,7 @@ public class MemberRestDocsTest {
         //when
         ResultActions actions =
                 mockMvc.perform(
-                        patch("/members")
+                        patch("/members/editprofile")
                                 .header("Authorization", "Bearer " + "test-token")
                                 .accept(MediaType.APPLICATION_JSON)
                                 .contentType(MediaType.APPLICATION_JSON)

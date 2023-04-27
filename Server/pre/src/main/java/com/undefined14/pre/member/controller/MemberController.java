@@ -43,7 +43,7 @@ public class MemberController {
     }
 
     // 회원 정보 수정
-    @PatchMapping
+    @PatchMapping("/editprofile")
     public ResponseEntity patchMember(@RequestHeader(name = "Authorization") String token,
                                       @Validated @RequestBody MemberPatchDto memberPatchDto) {
 
