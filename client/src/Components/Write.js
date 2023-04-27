@@ -1,4 +1,3 @@
-import React, { useEffect } from 'react';
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components"
@@ -464,10 +463,10 @@ button {
 `;
 
 const Header = () => {
-    
-    // 버튼 활성화, 가이드 활성화
-    const [part, setPart] = useState([0, 1, 2, 3]);
-    const [guide, setGuide] = useState(0);
+
+// 버튼 활성화, 가이드 활성화
+const [part, setPart] = useState([0, 1, 2, 3]);
+const [guide, setGuide] = useState(0);
 
 // 내용 들어가는 부분
 const [title, setTitle] = useState('');
