@@ -4,6 +4,7 @@ import com.undefined14.pre.board.comment.dto.CommentDto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter
@@ -14,4 +15,5 @@ public class AnswerResponseDto {
     private String body;
     private String answerStatus;
     private List<CommentDto.Response> comments;
+    private LocalDateTime create_at;
 }

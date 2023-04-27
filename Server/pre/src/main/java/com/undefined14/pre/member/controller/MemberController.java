@@ -1,5 +1,6 @@
 package com.undefined14.pre.member.controller;
 
+import com.undefined14.pre.auth.jwt.JwtTokenizer;
 import com.undefined14.pre.member.dto.MemberPatchDto;
 import com.undefined14.pre.member.dto.MemberPostDto;
 import com.undefined14.pre.member.entity.Member;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 
-@CrossOrigin(origins = "http://localhost:3000")
+@CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "X-AUTH-TOKEN")
 @RestController
 @RequestMapping("/members")
 @Validated
@@ -29,7 +30,7 @@ public class MemberController {
     private final MemberService service;
 
     // 회원 가입
-    @PostMapping
+    @PostMapping("/join")
     public ResponseEntity postMember(@Validated @RequestBody MemberPostDto memberPostDto) {
 
         log.info(String.valueOf(memberPostDto));
@@ -42,37 +43,33 @@ public class MemberController {
     }
 
     // 회원 정보 수정
-    @PatchMapping("/{member-id}")
-    public ResponseEntity patchMember(@PathVariable("member-id") @Positive long memberId,
+    @PatchMapping
+    public ResponseEntity patchMember(@RequestHeader(name = "Authorization") String token,
                                       @Validated @RequestBody MemberPatchDto memberPatchDto) {
-
-        memberPatchDto.setMemberId(memberId);
 
         log.info(String.valueOf(memberPatchDto));
 
-        Member response = service.updateMember(mapper.memberPatchDtoToMember(memberPatchDto));
+        Member response = service.updateMember(mapper.memberPatchDtoToMember(memberPatchDto),token);
+
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // 회원 정보 조회
-    @GetMapping("/{member-id}")
-    public ResponseEntity getMember(@PathVariable("member-id") @Positive long memberId) {
+    @GetMapping
+    public ResponseEntity getMember(@RequestHeader(name = "Authorization") String token) {
 
-        log.info(String.valueOf(memberId));
-
-        Member response = service.findMember(memberId);
+        Member response = service.findMember(token);
 
         return new ResponseEntity<>(mapper.memberToMemberResponseDto(response), HttpStatus.OK);
     }
 
     // 회원 정보 삭제 -> status 만 변경
     // 리턴 값이 void 이기 때문에 @ResponseStatus 사용
-    @DeleteMapping("/{member-id}")
+    @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteMember(@PathVariable("member-id") @Positive long memberId) {
-        log.info(String.valueOf(memberId));
+    public void deleteMember(@RequestHeader(name = "Authorization") String token) {
 
-        service.deleteMember(memberId);
+        service.deleteMember(token);
     }
 }

@@ -19,6 +19,7 @@ import org.springframework.data.jpa.mapping.JpaMetamodelMappingContext;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -31,6 +32,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import static org.mockito.ArgumentMatchers.*;
 import static org.springframework.restdocs.headers.HeaderDocumentation.*;
@@ -57,6 +60,7 @@ public class AnswerDocTest {
 
     @Test
     @DisplayName("답변 등록")
+    @WithMockUser
     public void postAnswer() throws Exception {
         AnswerDto.Post post = new AnswerDto.Post();
         post.setQuestionId(1L);
@@ -102,6 +106,7 @@ public class AnswerDocTest {
 
     @Test
     @DisplayName("답변 수정")
+    @WithMockUser
     public void updateAnswer() throws Exception {
 
         AnswerDto.Patch patch = new AnswerDto.Patch();
@@ -113,6 +118,7 @@ public class AnswerDocTest {
         responseDto.setMemberId(1L);
         responseDto.setAnswerId(1L);
         responseDto.setBody("test-script");
+        responseDto.setCreate_at(LocalDateTime.now());
         responseDto.setAnswerStatus(Answer.AnswerStatus.ANSWER_POSTED.getStatus());
         responseDto.setComments(null);
 
@@ -152,6 +158,7 @@ public class AnswerDocTest {
                                         fieldWithPath("memberId").type(JsonFieldType.NUMBER).description("회원 식별자"),
                                         fieldWithPath("answerId").type(JsonFieldType.NUMBER).description("답변 식별자"),
                                         fieldWithPath("body").type(JsonFieldType.STRING).description("답변 내용"),
+                                        fieldWithPath("create_at").type(JsonFieldType.STRING).description("작성 일자"),
                                         fieldWithPath("answerStatus").type(JsonFieldType.STRING).description("답변 삭제 유무"),
                                         fieldWithPath("comments").type(JsonFieldType.ARRAY).description("답변에 달린 댓글 리스트").optional()
                                 )
@@ -161,6 +168,7 @@ public class AnswerDocTest {
 
     @Test
     @DisplayName("답변 삭제")
+    @WithMockUser
     public void deleteAnswer() throws Exception {
 
         long answerId = 1L;

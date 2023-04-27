@@ -17,7 +17,7 @@ public interface CommentMapper {
 
     default CommentDto.Response comment_to_CommentResponseDto(Comment comment){
         CommentDto.Response commentResponseDto;
-        if(comment.isInheritQuestion()) {
+        if(comment.getPostType() == Comment.PostType.QUESTION) {
             commentResponseDto = new Response(
 //                    comment.getQuestion().getQuestionId(),
                     comment.getCommentId(),
