@@ -12,10 +12,8 @@ import Comments from "./Components/Question/Comments";
 import Write from './Components/Question/Write'
 import Modify from './Components/Question/Modify'
 import PrivateRoute from "./Components/PrivateRoute";
-import LoginForm from "./Components/Login/LoginForm";
-import EditProfile from "./Components/EditProfile";
-import Answer from "./Components/Answer/Answer";
-import SubmittedAnswer from "./Components/Answer/SubmittedAnswer";
+import Answer from "./Components/Answer";
+import SubmittedAnswer from "./Components/SubmittedAnswer";
 // "proxy": "https://6a4c-175-213-102-16.ngrok-free.app/"
 
 const MainContent = styled.div`

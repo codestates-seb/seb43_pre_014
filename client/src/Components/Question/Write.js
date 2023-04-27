@@ -1,12 +1,8 @@
-import React, { useEffect } from 'react';
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components"
 import StackEditor from "../../editor/StackEditor";
 import axios from "axios";
-
-// import { Editor } from '@toast-ui/editor';
-// import '@toast-ui/editor/dist/toastui-editor.css';
 
 const DisplayFlex = styled.div`
     display: flex;
@@ -464,7 +460,7 @@ const Header = () => {
             setGuide(3);
         }
     };
-      
+
     const handleBlur = () => {
     setIsOutlineActive(false);
     };    
@@ -486,7 +482,7 @@ const Header = () => {
         setTags(tags.filter((el) => {
             return el !== tags[indexToRemove]
         }))
-      };
+    };
     
     // post로 보내는 부분
     const onSubmit = (data) => {
@@ -495,7 +491,7 @@ const Header = () => {
             problem : text,
             expecting,
             tags
-          }, {headers: {
+        }, {headers: {
             'Content-Type': `application/json`,
             'ngrok-skip-browser-warning': '69420',
           }

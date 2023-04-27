@@ -39,6 +39,8 @@ public class AnswerService {
 
         Answer findAnswer = findVerfiedAnswer(answer.getAnswerId());
 
+        checkIfDeleted(findAnswer);
+
         verifiedRequest(answer.getMember().getMemberId(),findAnswer.getMember().getMemberId());
 
         Optional.ofNullable(answer.getBody())
@@ -51,26 +53,34 @@ public class AnswerService {
     public Answer findAnswer(long answerId) {
         Answer findAnswer = findVerfiedAnswer(answerId);
 
-        if (findAnswer.getAnswerStatus().equals(Answer.AnswerStatus.ANSWER_DELETED)) {
-            throw new BusinessLogicException(ExceptionCode.ANSWER_DELETED);
-        }
+        checkIfDeleted(findAnswer);
 
         return findAnswer;
     }
 
     // 답변 삭제
+
     public void deleteAnswer(long answerId, String token) {
+
         Long memberId = jwtTokenizer.getMemberId(token);
 
         Member member = memberService.findMember(token);
 
         Answer findAnswer = findVerfiedAnswer(answerId);
 
+        checkIfDeleted(findAnswer);
+
         verifiedRequest(member.getMemberId(),findAnswer.getMember().getMemberId());
 
         findAnswer.setAnswerStatus(Answer.AnswerStatus.ANSWER_DELETED);
 
         repository.save(findAnswer);
+    }
+
+    private static void checkIfDeleted(Answer findAnswer) {
+        if (findAnswer.getAnswerStatus().equals(Answer.AnswerStatus.ANSWER_DELETED)) {
+            throw new BusinessLogicException(ExceptionCode.ANSWER_DELETED);
+        }
     }
 
     // DB 에서 답변 가져옴

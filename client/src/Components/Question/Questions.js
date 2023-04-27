@@ -145,15 +145,15 @@ const PostContent = styled.div`
             border-radius: 3px;
             color: #39739D;
 
-           padding: 3px 7px;
-           margin-right: 5px;
+            padding: 3px 7px;
+            margin-right: 5px;
 
-           cursor: pointer;
+            cursor: pointer;
 
-           :hover {
+            :hover {
             background-color: #D0E3F1;
             color: #2C5877;
-           }
+            }
         }
     }
 
@@ -254,7 +254,7 @@ const Question = () => {
             .catch((err) => {
                 console.log(err);
             });
-    }, []);
+    }, [id]);
 
     const handleDelete = () => {
         axios.delete(`http://localhost:3001/write/${id}`, { withCredentials: true })
