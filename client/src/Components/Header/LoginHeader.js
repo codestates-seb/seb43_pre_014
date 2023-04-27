@@ -1,4 +1,5 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 
 const HeaderContainer = styled.header`
@@ -138,14 +139,29 @@ const Auth = styled.div`
 `;
 
 const Header = () => {
+
+const [userImg, setUserImg] = useState(null);
+
+useEffect(() => {
+    axios.get(`http://localhost:3001/mebers`, { withCredentials: true })
+        .then((res) => {
+        setUserImg(res.data);
+        })
+        .catch((err) => {
+        console.log(err);
+        });
+}, []);
+
     return (
         <HeaderContainer>
             <Container>
                 <Logo>
+                    <a href="/">
                     <img
-                    src="logo/logo-stackoverflow_main.png"
+                    src="/logo/logo-stackoverflow_main.png"
                     alt="Stack Overflow Logo"
                     />
+                    </a>
                 </Logo>
                 <Nav>
                     <a href="#">Products</a>

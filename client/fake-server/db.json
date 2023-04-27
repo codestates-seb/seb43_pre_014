@@ -1,4 +1,13 @@
 {
+  "members": [
+    {
+      "name": "test",
+      "email": "test@test.com",
+      "password": "rkskekfk1",
+      "news": false,
+      "id": 1
+    }
+  ],
   "write": [
     {
       "title": "하 난 예시를 작성하는 게 제일 어려워..b-b",

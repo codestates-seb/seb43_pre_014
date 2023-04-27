@@ -12,8 +12,8 @@ import Comments from "./Components/Question/Comments";
 import Write from './Components/Question/Write'
 import Modify from './Components/Question/Modify'
 import PrivateRoute from "./Components/PrivateRoute";
-import Answer from "./Components/Answer";
-import SubmittedAnswer from "./Components/SubmittedAnswer";
+import EditProfile from "./Components/EditProfile";
+import LoginForm from "./Components/Login/LoginForm";
 // "proxy": "https://6a4c-175-213-102-16.ngrok-free.app/"
 
 const MainContent = styled.div`
@@ -33,14 +33,15 @@ function App() {
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/join" element={<Join />} />
+          <Route path="/login" element={<LoginForm />} />
           <Route path="/question" element={<PrivateRoute />} />
           <Route path="/write" element={<Write />} />
           <Route path="/modify/:id" element={<Modify />} />
           <Route path="/question" element={<HomePage />} />
           <Route path="/question/:id" element={<Question />} />
           <Route path="/comments" element={<Comments />} />
-          <Route path="/result" element={<Result />} />
-          <Route path="/editProfile" element={<PrivateRoute />} />
+          <Route path="/result/:id" element={<Result />} />
+          <Route path="/editprofile" element={<EditProfile />} />
         </Routes>
       </MainContent>
     </>

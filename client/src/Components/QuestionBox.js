@@ -9,11 +9,19 @@ const PaginateContainer = styled.div`
 
   ul {
     display: flex;
+    justify-content: center;
+    align-items: center;
     list-style: none;
 
     li {
-      margin: 0 10px;
+      margin: 0 5px;
       cursor: pointer;
+
+      border: 1px solid #D6D9DC;
+      padding: 5px 10px;
+      border-radius: 5px;
+      box-sizing: border-box;
+      font-size: 9pt;
 
       &.previousPage,
       &.nextPage {
@@ -22,6 +30,10 @@ const PaginateContainer = styled.div`
         border-color: #007bff;
         padding: 5px 10px;
         border-radius: 5px;
+
+        :hover {
+        background-color : #D6D9DC !important;
+        }
       }
 
       &.paginationDisabled {
@@ -31,10 +43,13 @@ const PaginateContainer = styled.div`
 
       &.paginationActive {
         color: #fff;
-        background-color: #007bff;
+        background-color: #F48225 !important;
         border-color: #007bff;
-        padding: 5px 10px;
-        border-radius: 5px;
+        border: 1px solid #F48225 !important;
+      }
+
+      :hover {
+        background-color : #D6D9DC;
       }
     }
   }
@@ -166,11 +181,9 @@ const Question = styled.div`
 
 const QuestionBox = ({ questions }) => { 
   const [pageNumber, setPageNumber] = useState(0);
-  const questionsPerPage = 5;
+  const questionsPerPage = 10;
   const pagesVisited = pageNumber * questionsPerPage;
-
-  console.log(questions[0].id)
-
+  
   const displayQuestions = questions
     .slice(pagesVisited, pagesVisited + questionsPerPage)
     .map((question, index) => (
@@ -211,8 +224,8 @@ return (
       {displayQuestions}
       <PaginateContainer>
       <ReactPaginate
-        previousLabel={"이전"}
-        nextLabel={"다음"}
+        previousLabel={"Prev"}
+        nextLabel={"Next"}
         pageCount={pageCount}
         onPageChange={handlePageClick}
         containerClassName={"pagination"}

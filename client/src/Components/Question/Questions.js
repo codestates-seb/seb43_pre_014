@@ -330,7 +330,6 @@ const Question = () => {
                             </PostMain>
                             <Answer>
                                 <AnswerViewer problemText={question.problem} expectingText={question.expecting} />
-                                {/* 여기가 답변 부분 */}
                             </Answer>
                         </PostComponent>
                     </MainBox>

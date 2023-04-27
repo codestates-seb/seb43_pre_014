@@ -2,8 +2,6 @@ import axiosInstance from "../../axiosConfig";
 import styled from "styled-components"
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch, useSelector } from "react-redux"
-import idSlice from "../../store/idSlice";
 
 const DisplayFlex = styled.div`
     background-color: #F1F2F3;
@@ -202,20 +200,28 @@ const SocialBtn = styled.button`
 
 const Login = () => {
 
-    const dispatch = useDispatch();
-    
-    const name = useSelector(state => state.id);
+    const [name, setUser] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [news, setNews] = useState(false);
-    
+
+    let number = getRandomNumber();
+
+    function getRandomNumber() {
+      return Math.floor(Math.random() * 10) + 1;
+    }
+
     const { register, handleSubmit, watch, formState: { errors }, reset } = useForm();
     const onSubmit = () => {
-        axiosInstance.post("/members", {
+        const number = getRandomNumber();
+        const imgPath = `/profile/${number}.png`;
+
+        axios.post("/members", {
             name,
             email,
             password,
-            news
+            news,
+            img : imgPath
           }, {headers: {
             'Content-Type': `application/json`,
             'ngrok-skip-browser-warning': '69420',
@@ -224,7 +230,7 @@ const Login = () => {
           .then((response) => {
             console.log(response);
             reset();
-            window.location.href = `/result/${response.data.id}`;
+            window.location.href = `http://localhost:3001/members/join/result/${response.data.id}`;
           })
           .catch((error) => {
             console.log(error);
@@ -232,9 +238,8 @@ const Login = () => {
     };
 
     function handleChange(e) {
-        const id = e.target.value;
-        dispatch(idSlice(id));
-        }    
+        setUser(e.target.value)
+      }    
 
     return (
     <DisplayFlex>
