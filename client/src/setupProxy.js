@@ -2,9 +2,9 @@ const { createProxyMiddleware } = require('http-proxy-middleware');
 
 module.exports = function(app) {
   app.use(
-    '/members',
+    '/members/join',
     createProxyMiddleware({
-      target: 'https://6a4c-175-213-102-16.ngrok-free.app/',
+      target: 'https://0e68-175-213-102-16.ngrok-free.app/',      
       changeOrigin: true
     })
   );

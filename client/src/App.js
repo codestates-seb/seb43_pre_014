@@ -13,6 +13,7 @@ import Result from './Components/Result';
 import Question from './Components/Question';
 import Write from './Components/Write'
 import styled from "styled-components"
+import Comments from "./Components/Comments";
 
 import Answer from "./Components/Answer";
 import AnswerList from "./Components/AnswerList";
@@ -38,17 +39,25 @@ function App() {
       {isAuthenticated ? <Header /> : <LoginHeader />}
       <MainContent>
         <Routes>
-          <Route path="/" element={<LoginForm />} />
+          {/* <Route path="/" element={<LoginForm />} />
+          {/* <Route path="/" element={<LoginForm />} />
           <Route path="/write" element={<PrivateRoute />} />
           <Route index element={<Write />} />
           <Route path="/question" element={<PrivateRoute />} />
           <Route index element={<Question />} />
           <Route path="/join" element={<Join />} />
+          <Route path="/result" element={<Result />} /> */}
+          {/* <Route path="/editProfile" element={<PrivateRoute />} /> */}
+          {/* <Route index element={<EditProfile />} /> */}
           <Route path="/result" element={<Result />} />
-          <Route path="/editProfile" element={<PrivateRoute />} />
-          <Route index element={<EditProfile />} />
+          {/* <Route path="/editProfile" element={<PrivateRoute />} /> */}
+          {/* <Route index element={<EditProfile />} /> */}
           {/* 추후 메인 페이지가 작성되면 LoginForm을 /login으로 바꾸고 매안페이지를 /로 설정하기 */}
           {/* <Route path="/" element={<PrivateRoute />} /> */}
+          {/* <Route index element={<HomePage />} /> */}
+          <Route path="/write" element={<Write />} />
+          <Route path="/comment" element={<Comments />} />
+          <Route path="/join" element={<Join />} />
           {/* <Route index element={<HomePage />} />
           <Route path="/write" element={<Write />} />
           <Route path="/question" element={<Question />} />
