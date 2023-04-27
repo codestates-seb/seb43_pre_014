@@ -459,9 +459,9 @@ const Header = () => {
         };
 
     const [question, setQuestion] = useState(null);
-
+    const { id } = useParams();
     useEffect(() => {
-        axiosInstance.get(`/write/${id}`)
+        axiosInstance.get(`board/questions/${id}`)
             .then((res) => {
                 setQuestion(res.data);
                 setTitle(res.data.title);
@@ -472,12 +472,12 @@ const Header = () => {
             .catch((err) => {
                 console.log(err);
             });
-    }, []);
+    }, [id]);
 
-    const { id } = useParams();
+
 
     const onSubmit = (data) => {
-        axiosInstance.put(`/write/${id}`, {
+        axiosInstance.patch(`board/questions/${id}`, {
             title,
             problem: text,
             expecting,

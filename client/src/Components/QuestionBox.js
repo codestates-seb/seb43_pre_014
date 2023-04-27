@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import ReactPaginate from 'react-paginate';
 import { useState } from "react";
-import { useParams } from "react-router";
 
 const PaginateContainer = styled.div`
   display: flex;
@@ -165,11 +164,10 @@ const Question = styled.div`
 
 
 
-const QuestionBox = ({questions}) => { 
+const QuestionBox = ({ questions }) => { 
   const [pageNumber, setPageNumber] = useState(0);
   const questionsPerPage = 5;
   const pagesVisited = pageNumber * questionsPerPage;
-  const { id } = useParams();
 
   console.log(questions[0].id)
 
@@ -187,7 +185,7 @@ const QuestionBox = ({questions}) => {
       </div>
       <div className="main">
           <ul>
-            <li><h3><a href={`http://localhost:3000/question/${question.id}`}>{question.title}</a></h3></li>
+            <li><h3><a href={`http:///board/questions/${question.id}`}>{question.title}</a></h3></li>
             <li>{question.problem.replace(/(<([^>]+)>)/gi, '')}</li>
             <li> {question.tags.map((tag) => (
                               <div key={tag}>{tag}</div>
