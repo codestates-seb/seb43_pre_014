@@ -46,14 +46,15 @@ const Result = () => {
     const { id } = useParams(); // URL에서 id값을 가져오기
 
     useEffect(() => {
-        axiosInstance.get(`/members/${id}`)
+        axiosInstance.get(`/members/result/${id}`)
             .then((res) => {
             setUser(res.data);
+            console.log(res.data)
             })
             .catch((err) => {
             console.log(err);
             });
-    }, [id]);
+    }, []);
 
     return (
     <>

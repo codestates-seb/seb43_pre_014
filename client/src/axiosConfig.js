@@ -3,11 +3,13 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:3000",
+    baseURL: "",
     headers: {
         "Content-Type": "application/json",
         "Authorization": `Bearer ${localStorage.getItem("your-token-key")}`,
         "Accept": "application/json",
+        'ngrok-skip-browser-warning': '69420',
+
     },
 });
 

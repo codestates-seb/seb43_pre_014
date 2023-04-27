@@ -11,7 +11,7 @@ import Question from './Components/Question/Question';
 import Comments from "./Components/Question/Comments";
 import Write from './Components/Question/Write'
 import Modify from './Components/Question/Modify'
-import PrivateRoute from "./Components/PrivateRoute";
+// import PrivateRoute from "./Components/PrivateRoute";
 import EditProfile from "./Components/EditProfile";
 import LoginForm from "./Components/Login/LoginForm";
 // "proxy": "https://6a4c-175-213-102-16.ngrok-free.app/"
@@ -36,8 +36,8 @@ function App() {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/write" element={<Write />} />
           <Route path="/modify/:id" element={<Modify />} />
-          <Route path="/question" element={<HomePage />} />
-          <Route path="/question/:id" element={<Question />} />
+          <Route path="/questions" element={<HomePage />} />
+          <Route path="/questions/:id" element={<Question />} />
           <Route path="/comments" element={<Comments />} />
           <Route path="/result/:id" element={<Result />} />
           <Route path="/editprofile" element={<EditProfile />} />

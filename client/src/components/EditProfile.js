@@ -228,7 +228,7 @@ const EditProfile = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    axiosInstance.get(`/`)
+    axiosInstance.get("/members/")
         .then((res) => {
         setUser(res.data);
         })

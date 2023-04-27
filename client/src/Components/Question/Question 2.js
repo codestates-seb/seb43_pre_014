@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router";
-import axiosInstance from "../../axiosConfig";
+import axiosInstance from "../axiosConfig";
 import styled from "styled-components"
 import Viewer from "../../editor/Viewer";
-import Comments from "./Comments";
+import Comments from "./Question/Comments";
 import SideMenu from "../Sidemenu";
 
 const DisplayFlex = styled.div`
@@ -215,7 +215,7 @@ const [commnet, setCommnet] = useState(false);
 const { id } = useParams(); // URL에서 id값을 가져오기
 
 useEffect(() => {
-    axiosInstance.get(`/board/questions/${id}`)
+    axiosInstance.get(`board/questions/${id}`)
         .then((res) => {
         setQuestion(res.data);
         })
@@ -225,7 +225,7 @@ useEffect(() => {
     }, [id]);
 
     const handleDelete = () => {
-    axiosInstance.delete(`/board/questions/${id}`)
+    axiosInstance.delete(`board/questions/${id}`)
         .then((res) => {
         window.location.href = `/`;
         })
@@ -243,7 +243,7 @@ useEffect(() => {
                 <PostComponent>
                     <PostHeader>
                         <div>
-                            <h2><a href="./">{question.title.map}</a></h2>
+                            <h2><a href="./">{question.title}</a></h2>
                             <button onClick={() => window.location.href = '/write'}>Ask Question</button>
                         </div>
                         <ul>
