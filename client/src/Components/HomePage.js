@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import QuestionBox from "./QuestionBox";
 import SideMenu from "./Sidemenu";
+import { useParams } from "react-router";
 
 const DisplayFlex = styled.div`
   display: flex;
@@ -154,11 +155,12 @@ const QuestionContainer = styled.div`
 const HomePage = () => { // homepage 파트는 메인페이지가 나왔을 때 바꿔주자.
 
   const [questions, setQuestions] = useState(null);
+  const {id} = useParams();
 
   useEffect(() => {
     // baseURL과 axiosInstance 설정을 사용하여 API를 호출합니다.
     axiosInstance
-      .get("/board/questions", {
+      .get(`/board/questions/${id}`, {
         params: {
           page: 0,
           size: 10,
@@ -171,7 +173,7 @@ const HomePage = () => { // homepage 파트는 메인페이지가 나왔을 때 
       .catch((err) => {
         console.log(err);
       });
-  }, []);
+  }, [id]);
 
   return (
   <>

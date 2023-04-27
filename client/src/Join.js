@@ -2,8 +2,8 @@ import styled from "styled-components"
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux"
-import { setId } from "../store/idSlice";
-import axiosInstance from "../axiosConfig";
+import { setId } from "./store/idSlice";
+import axiosInstance from "./axiosConfig";
 
 const DisplayFlex = styled.div`
     background-color: #F1F2F3;

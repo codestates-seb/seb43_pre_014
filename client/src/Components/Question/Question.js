@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router";
-import axiosInstance from "../axiosConfig";
+import axiosInstance from "../../axiosConfig";
 import styled from "styled-components"
 import Viewer from "../../editor/Viewer";
-import Comments from "./Question/Comments";
+import Comments from "./Comments";
 import SideMenu from "../Sidemenu";
 
 const DisplayFlex = styled.div`

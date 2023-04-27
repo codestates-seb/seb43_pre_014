@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axiosInstance from "../axiosConfig";
-import TextEdit from '../TextEdit';
-import Sidemenu from "../Sidemenu";
-import axios from "axios";
+import TextEdit from './TextEdit';
+import Sidemenu from "./Sidemenu";
 
 const MainContainer = styled.div`
   display: flex;
@@ -93,7 +92,8 @@ const Submenu = styled.div`
         display: flex;
         margin: 0;
         padding: 0;
-
+        cursor: pointer;
+        
         li {
           padding: 7px 12px;
           border-radius: 50px;
@@ -202,8 +202,7 @@ const Success = styled.p`
 `;
 
 const EditProfile = () => {
-  const [img, setImg] = useState("");
-  const [displayName, setDisplayName] = useState("");
+  const [name, setName] = useState("");
   const [location, setLocation] = useState("");
   const [title, setTitle] = useState("");
   const [aboutMe, setAboutMe] = useState("");
@@ -212,10 +211,12 @@ const EditProfile = () => {
   const [twitterLink, setTwitterLink] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [user, setUser] = useState(null);
+  const [img, setImg] = useState("")
 
   const handleCancel = () => {
     // Cancel 버튼 클릭 시, 상태 초기화
-    setDisplayName("");
+    setName("");
     setLocation("");
     setTitle("");
     setAboutMe("");
@@ -226,10 +227,8 @@ const EditProfile = () => {
 
   const navigate = useNavigate();
 
-  const [user, setUser] = useState(null);
-
   useEffect(() => {
-    axios.get(`http://localhost:3001/`, { withCredentials: true })
+    axiosInstance.get(`/`)
         .then((res) => {
         setUser(res.data);
         })
@@ -240,9 +239,9 @@ const EditProfile = () => {
 
   const saveProfile = async () => {
     try {
-      const response = await axiosInstance.post("/user/profile?이 맞나?", {
+      const response = await axiosInstance.post("members", {
         img,
-        displayName,
+        name,
         location,
         title,
         aboutMe,
@@ -304,8 +303,8 @@ const EditProfile = () => {
           <label>Display Name</label>
           <input
             type="text"
-            value={displayName}
-            onChange={(e) => setDisplayName(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
           />
         </InputContainer>
         <InputContainer>

@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import styled from 'styled-components';
+import axiosInstance from '../../axiosConfig';
 
 import 'react-quill/dist/quill.snow.css';
 
@@ -26,7 +26,17 @@ const DeleteButton = styled.button`
   }
 `;
 
-const SubmittedAnswer = ({ answer, handleDelete }) => {
+const SubmittedAnswer = ({ answer}) => {
+  const handleDelete = () => {
+    axiosInstance.delete(`board/answers/${answer.id}`)
+      .then((response) => {
+        console.log(response);
+        // 이후 상태 업데이트 및 UI 변경을 처리하는 코드
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   return (
     <AnswerWrapper>
 
