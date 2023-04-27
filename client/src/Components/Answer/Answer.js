@@ -1,12 +1,49 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import TextEdit from './TextEdit';
-import SubmittedAnswer from './SubmittedAnswer';
+import TextEdit from '../TextEdit';
+import SubmittedAnswer from '../Answer/SubmittedAnswer';
+
 const AnswerWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  border: 1px solid #ccc;
+  /* border: 1px solid #ccc; */
   padding: 16px;
+  margin : 20px;
+  width: 80%;
+  p {
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    /* font-weight: bold; */
+  }
+  h2 {
+    display: block;
+    font-size: 1.5em;
+    margin-block-start: 0.83em;
+    margin-block-end: 0.83em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    font-weight: bold;
+}
+`;
+
+const AnswerListWrapper = styled.div`
+display: flex;
+flex-direction: column;
+align : right;
+`
+
+const EditButton = styled.button`
+  background: none;
+  border: none;
+  color: #aaa;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 0;
+  margin-left: 0.5rem;
 `;
 
 
@@ -71,15 +108,24 @@ const Answer = () => {
     setSubmittedAnswer('');
   };
 
+  const handleEdit = () => {
+    setAnswer(submittedAnswer);
+    setSubmittedAnswer('');
+  }
+
   return (
     <AnswerWrapper>
-      <TextEdit value={answer} handleChange={handleAnswerChange} />
+      <AnswerListWrapper>
+        {submittedAnswer && <SubmittedAnswer answer={submittedAnswer} handleDelete={handleDelete} />}
+        <EditButton onClick={handleEdit}> Edit </EditButton>
+      </AnswerListWrapper>
+      <div><p> Your Answer</p></div>
+      <TextEdit text={answer} setText={setAnswer} handleChange={handleAnswerChange} />
       <AnswerButtonWrapper>
         <AnswerButton onClick={handleSubmit} >Post Your Answer</AnswerButton>
         <ClearButton onClick={handleClear}>Clear</ClearButton>
 
       </AnswerButtonWrapper>
-      {submittedAnswer && <SubmittedAnswer answer={submittedAnswer} handleDelete={handleDelete} />}
     </AnswerWrapper>
   );
 };
