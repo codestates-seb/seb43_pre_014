@@ -77,25 +77,22 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                                 .antMatchers(HttpMethod.GET, "/logout").hasRole("USER")
 
                                 // 게시판 - 질문
-                                .antMatchers(HttpMethod.GET, "*/questions").hasRole("USER") // 페이지네이션
-                                .antMatchers(HttpMethod.GET, "*/questions/**").hasRole("USER") // 하나 조회
-                                .antMatchers(HttpMethod.POST, "*/questions").hasRole("USER")
-                                .antMatchers(HttpMethod.PATCH, "*/questions/**").hasRole("USER")
-                                .antMatchers(HttpMethod.DELETE, "*/questions/**").hasRole("USER")
+                                .antMatchers(HttpMethod.GET, "/board/questions").hasRole("USER") // 페이지네이션
+                                .antMatchers(HttpMethod.GET, "/board/questions/**").hasRole("USER") // 하나 조회
+                                .antMatchers(HttpMethod.POST, "/board/questions").hasRole("USER")
+                                .antMatchers(HttpMethod.PATCH, "/board/questions/**").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE, "/board/questions/**").hasRole("USER")
 
                                 // 게시판 - 답변
-                                .antMatchers(HttpMethod.PATCH,"*/answers/**").hasRole("USER")
-                                .antMatchers(HttpMethod.DELETE,"*/answers/**").hasRole("USER")
-                                .antMatchers(HttpMethod.POST,"*/answers").hasRole("USER")
+                                .antMatchers(HttpMethod.PATCH,"/board/answers/**").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE,"/board/answers/**").hasRole("USER")
+                                .antMatchers(HttpMethod.POST,"/board/answers").hasRole("USER")
 
                                 // 게시판 = 댓글
-                                .antMatchers(HttpMethod.POST,"*/questions/comments").hasRole("USER")
-                                .antMatchers(HttpMethod.POST,"*/answers/comments").hasRole("USER")
-                                .antMatchers(HttpMethod.PATCH, "*/comments/**").hasRole("USER")
-                                .antMatchers(HttpMethod.DELETE,"*/comments/**").hasRole("USER")
-
-                        // jwt 요청 허용
-                        .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
+                                .antMatchers(HttpMethod.POST,"/board/questions/*/comments").hasRole("USER")
+                                .antMatchers(HttpMethod.POST,"/board/answers/*/comments").hasRole("USER")
+                                .antMatchers(HttpMethod.PATCH, "/board/comments/**").hasRole("USER")
+                                .antMatchers(HttpMethod.DELETE,"/board/comments/**").hasRole("USER")
                 );
 
         return http.build();
