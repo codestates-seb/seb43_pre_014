@@ -38,9 +38,6 @@ include::{snippets}/patch-member/request-fields.adoc[]
 .http-response
 include::{snippets}/patch-member/http-response.adoc[]
 
-.response-fields
-include::{snippets}/patch-member/response-fields.adoc[]
-
 === 회원 조회 (마이페이지)
 .curl-request
 include::{snippets}/get-member/curl-request.adoc[]

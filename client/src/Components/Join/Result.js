@@ -1,7 +1,7 @@
 import styled from "styled-components"
-import { useSelector } from "react-redux"
+// import { useSelector } from "react-redux"
 import { useEffect, useState } from "react";
-import axios from "axios";
+import axiosInstance from "../../axiosConfig";
 import { useParams } from "react-router";
 
 const CenterConponent = styled.div`
@@ -46,14 +46,14 @@ const Result = () => {
     const { id } = useParams(); // URL에서 id값을 가져오기
 
     useEffect(() => {
-        axios.get(`http://localhost:3001/members/${id}`, { withCredentials: true })
+        axiosInstance.get(`/members/${id}`)
             .then((res) => {
             setUser(res.data);
             })
             .catch((err) => {
             console.log(err);
             });
-    }, []);
+    }, [id]);
 
     return (
     <>

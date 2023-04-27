@@ -1,8 +1,9 @@
-import axios from "axios";
+import axiosInstance from "../axiosConfig";
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import QuestionBox from "./QuestionBox";
 import SideMenu from "./Sidemenu";
+import { useParams } from "react-router";
 
 const DisplayFlex = styled.div`
   display: flex;
@@ -154,16 +155,25 @@ const QuestionContainer = styled.div`
 const HomePage = () => { // homepage 파트는 메인페이지가 나왔을 때 바꿔주자.
 
   const [questions, setQuestions] = useState(null);
+  const {id} = useParams();
 
   useEffect(() => {
-    axios.get(`http://localhost:3001/write`, { withCredentials: true })
-        .then((res) => {
+    // baseURL과 axiosInstance 설정을 사용하여 API를 호출합니다.
+    axiosInstance
+      .get(`/board/questions/${id}`, {
+        params: {
+          page: 0,
+          size: 10,
+          sort: "questionId,desc",
+        },
+      })
+      .then((res) => {
         setQuestions(res.data);
-        })
-        .catch((err) => {
+      })
+      .catch((err) => {
         console.log(err);
-        });
-  }, []);
+      });
+  }, [id]);
 
   return (
   <>
@@ -174,7 +184,7 @@ const HomePage = () => { // homepage 파트는 메인페이지가 나왔을 때 
         <Questions>
           <QuestionsHeader>
             <div>
-                <h2><a href="">All Questions</a></h2>
+                <h2>All Questions</h2>
                 <button onClick={() => window.location.href = '/write'}>Ask Question</button>
             </div>
             <div className="menu">

@@ -6,8 +6,8 @@ const QuillWrapper = styled.div`
   .ql-container {
     border: 1px solid #ccc;
     border-radius: 4px;
-    font-size: 16px;
     height: 150px;
+    width: 100%;
     margin-bottom: 16px;
     transition: border-color 0.2s ease-in-out;
   }
@@ -18,22 +18,23 @@ const QuillWrapper = styled.div`
   }
 `;
 
-function TextEdit() {
+function TextEdit({ text, setText }) {
     const modules = {
         toolbar: {
             container: [
-                // [{ header: [1, 2, false] }],
-                ['bold', 'italic'],
-                // 'underline', 'strike', ],
-                ['link', 'blockquote', 'code-block', 'image'],
-                [{ list: 'ordered' }, { list: 'bullet' }, { 'align': [] }],
-                ['clean'],
+              [{ header: [1, 2, false] }],
+              ['underline', 'strike', 'blockquote'],
+              [{ list: 'ordered' }, { list: 'bullet' }, 'link'],
+              ['image', 'code-block'],
+              ['clean'],
             ],
         },
     };
+    const textChange = (contents) => { setText(contents) }
     return (
+
         <QuillWrapper>
-            <ReactQuill modules={modules} />
+            <ReactQuill value={text} onChange={textChange} modules={modules} />
         </QuillWrapper>
     );
 }

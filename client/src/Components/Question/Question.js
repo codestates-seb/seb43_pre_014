@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useState } from "react";
 import { useParams } from "react-router";
-import axios from "axios";
+import axiosInstance from "../../axiosConfig";
 import styled from "styled-components"
 import Viewer from "../../editor/Viewer";
 import Comments from "./Comments";
@@ -25,7 +25,6 @@ const PostComponent = styled.div`
     align-items: center;
     flex-direction: column;
     margin-left: 25px;
-
     width: 100%;
     overflow: hidden;
 `;
@@ -34,7 +33,6 @@ const PostHeader = styled.div`
     width: 100%;
     border-bottom: 1px solid lightgray;
     padding-top: 25px;
-
     div {
         display: flex;
         
@@ -43,7 +41,6 @@ const PostHeader = styled.div`
             padding: 0;
             margin: 0;
             font-weight: 400;
-
             a {
                 color: black;
                 text-decoration: none;
@@ -59,13 +56,11 @@ const PostHeader = styled.div`
             color: white;
             border-radius: 3px;
             box-shadow: inset 0px 1px rgba(255, 255, 255, .5);
-
             :hover {
                 box-shadow: inset 50px 50px rgba(0, 0, 0, .2);
             }
         }
     }
-
     ul {
         display: flex;
         list-style: none;
@@ -78,17 +73,14 @@ const PostHeader = styled.div`
             padding-right: 20px;
         }
     }
-
     .black {
         color: black;
     }
-
 `;
 
 const PostMemu = styled.div`
     padding: 25px 0;
     font-size: 11pt;
-
     ul {
         padding: 0;
         margin: 0 10px;
@@ -97,22 +89,17 @@ const PostMemu = styled.div`
         font-size: 18pt;
         color: lightgray;
         cursor: pointer;
-
         list-style: none;
-
         li {
             padding-bottom: 5px;
-
             :nth-child(2) {
                 cursor: text !important;
             }
-
             :last-child svg:hover{
                 fill: #0A95FF;
             }
         }
     }
-
     .black {
         color: black;
     }
@@ -129,7 +116,6 @@ const PostContent = styled.div`
     >div {
         flex: 1;
     }
-
     >ul {
         margin: 0;
         padding: 0;
@@ -142,23 +128,18 @@ const PostContent = styled.div`
             background-color : #D9EAF7;
             border-radius: 3px;
             color: #39739D;
-
-           padding: 3px 7px;
-           margin-right: 5px;
-
-           cursor: pointer;
-
-           :hover {
+            padding: 3px 7px;
+            margin-right: 5px;
+            cursor: pointer;
+            :hover {
             background-color: #D0E3F1;
             color: #2C5877;
-           }
+            }
         }
     }
-
     .submenu {
         display: flex;
         justify-content: space-between;
-
         >ul {
             display: flex;
             margin: 0;
@@ -166,23 +147,19 @@ const PostContent = styled.div`
             list-style: none;
             font-size: 10pt;
             color: gray;
-
             >li {
                 margin-right: 10px;
-
                 a{
                     :link {
                         text-decoration: none;
                         color: #646464;
                     }
-
                     :visited {
                         color: #646464;
                     }
                 }
             }
         }
-
         >div {
             background-color: #D9EAF7;
             color: gray;
@@ -191,34 +168,28 @@ const PostContent = styled.div`
             padding: 5px;
             display: flex;
             flex-direction: column;
-
             >div {
                 padding-bottom: 3px;
-
                 >ul {
                     display: flex;
                     list-style: none;
                     margin: 0;
                     padding: 0;
-
                     >li:first-child {
                         background-color: blue;
                         width: 30px;
                         height: 30px;
                         border-radius: 3px;
                     }
-
                     >li ul {
                         margin: 0;
                         padding: 0 5px;
                         display: flex;
                         flex-direction: column;
                         list-style: none;
-
                         >li:first-child {
                             color: #0074CC;
                         }
-
                         span {
                             padding: 0 5px;
                             color: #D1A684;
@@ -244,25 +215,24 @@ const [commnet, setCommnet] = useState(false);
 const { id } = useParams(); // URL에서 id값을 가져오기
 
 useEffect(() => {
+    axiosInstance.get(`board/questions/${id}`)
+        .then((res) => {
+        setQuestion(res.data);
+        })
+        .catch((err) => {
+        console.log(err);
+        });
+    }, [id]);
 
-axios.get(`http://localhost:3001/write/${id}`, { withCredentials: true })
-    .then((res) => {
-    setQuestion(res.data);
-    })
-    .catch((err) => {
-    console.log(err);
-    });
-}, []);
-
-const handleDelete = () => {
-    axios.delete(`http://localhost:3001/write/${id}`, { withCredentials: true })
+    const handleDelete = () => {
+    axiosInstance.delete(`board/questions/${id}`)
         .then((res) => {
         window.location.href = `/`;
         })
         .catch((err) => {
         console.log(err);
         });
-    };
+    }
 
     return (
     <>
@@ -273,7 +243,7 @@ const handleDelete = () => {
                 <PostComponent>
                     <PostHeader>
                         <div>
-                            <h2><a href="">{question.title}</a></h2>
+                            <h2><a href="./">{question.title}</a></h2>
                             <button onClick={() => window.location.href = '/write'}>Ask Question</button>
                         </div>
                         <ul>
@@ -305,7 +275,7 @@ const handleDelete = () => {
                                 <ul>
                                     <li><a href="https://www.naver.com/">Share</a></li>
                                     <li><a href={`/modify/${id}`}>Edit</a></li>
-                                    <li><a onClick={handleDelete}>Delete</a></li>
+                                    <li><span onClick={handleDelete}>Delete</span></li>
                                 </ul>
                                 <div>
                                     <div>asked 16 mins ago</div>
