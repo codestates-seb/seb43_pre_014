@@ -68,8 +68,8 @@ public class SecurityConfiguration implements WebMvcConfigurer {
                 .authorizeHttpRequests(authorize -> authorize
                         //TODO
                                 // 멤버십
-                                .antMatchers(HttpMethod.GET, "/members").hasRole("USER")
-                                .antMatchers(HttpMethod.POST, "/members").permitAll()
+                                .antMatchers(HttpMethod.GET, "/members/editprofile").hasRole("USER")
+                                .antMatchers(HttpMethod.POST, "/members/join").permitAll()
                                 .antMatchers(HttpMethod.PATCH, "/members").hasRole("USER")
                                 .antMatchers(HttpMethod.DELETE, "/members").hasRole("USER")
 
@@ -144,7 +144,7 @@ public class SecurityConfiguration implements WebMvcConfigurer {
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);  // (2-3)
 
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer());  // (2-4)
-            jwtAuthenticationFilter.setFilterProcessesUrl("/auth/login");          // (2-5)
+            jwtAuthenticationFilter.setFilterProcessesUrl("/members/login");          // (2-5)
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());  // (3) 추가
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());  // (4) 추가
 
