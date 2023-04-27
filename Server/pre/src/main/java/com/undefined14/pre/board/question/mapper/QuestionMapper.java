@@ -31,6 +31,7 @@ public interface QuestionMapper {
         questionResponseDto.setProblem(question.getProblem());
         questionResponseDto.setExpecting(question.getExpecting());
         questionResponseDto.setCreate_at(question.getCreateAt());
+        questionResponseDto.setTags(new ArrayList<>(question.getTags()));
         questionResponseDto.setQuestionStatus(question.getQuestionStatus());
         questionResponseDto.setComments(new ArrayList<>());
         questionResponseDto.setAnswerResponseDto(new ArrayList<>());
@@ -88,6 +89,7 @@ public interface QuestionMapper {
         questionResponseAllDto.setProblem(question.getProblem());
         questionResponseAllDto.setExpecting(question.getExpecting());
         questionResponseAllDto.setCreate_at(question.getCreateAt());
+        questionResponseAllDto.setTags(new ArrayList<>(question.getTags()));
         questionResponseAllDto.setQuestionStatus(question.getQuestionStatus());
 
         return questionResponseAllDto;

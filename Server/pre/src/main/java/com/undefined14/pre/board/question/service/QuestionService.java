@@ -59,10 +59,14 @@ public class QuestionService {
 
         verifiedRequest(memberId, existingQuestion.getMember().getMemberId());
 
-        // TODO: 2023-04-27 수정은 값이 전부 들어올 수도 아닐 수도 있기 때문에 Optional 적용해서 수정해야합니다.
-        existingQuestion.setTitle(question.getTitle());
-        existingQuestion.setProblem(question.getProblem());
-        existingQuestion.setExpecting(question.getExpecting());
+        Optional.ofNullable(question.getTitle())
+                .ifPresent(existingQuestion::setTitle);
+        Optional.ofNullable(question.getProblem())
+                .ifPresent(existingQuestion::setProblem);
+        Optional.ofNullable(question.getExpecting())
+                .ifPresent(existingQuestion::setExpecting);
+        Optional.ofNullable(question.getTags())
+                .ifPresent(existingQuestion::setTags);
         return repository.save(existingQuestion);
     }
 

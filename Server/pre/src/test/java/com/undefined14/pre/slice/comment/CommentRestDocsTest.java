@@ -1,6 +1,8 @@
 package com.undefined14.pre.slice.comment;
 import com.google.gson.Gson;
 import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 
 import com.undefined14.pre.PreApplication;
@@ -277,7 +279,7 @@ public class CommentRestDocsTest {
     public void deleteCommentTest() throws Exception {
         LocalDateTime createdAt = LocalDateTime.of(2022, 11, 11, 11, 11, 11);
 
-        Question question = new Question("질문 제목", "질문 내용", "질문 익스펙팅", member);
+        Question question = new Question("질문 제목", "질문 내용", "질문 익스펙팅", member, new HashSet<>(Arrays.asList("태그", "기능")));
 
         Member member = new Member();
         member.setName("John Doe");
