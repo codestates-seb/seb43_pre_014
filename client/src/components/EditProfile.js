@@ -236,14 +236,15 @@ const ButtonContainer = styled.div`
 const SaveButton = styled.button`
       background-color: #0a95ff;
       color: white;
-      border: none;
-      border-radius: 5px;
       padding: 10px 20px;
       font-size: 16px;
       margin-right: 10px;
+      border: 1px solid #0a95ff;
+      border-radius: 3px;
+      box-shadow: rgba(255, 255, 255, 0.5) 0px 1px inset;
       cursor: pointer;
       &:hover {
-        background - color: #0074cc;
+        background-color: #0074cc;
   }
       `;
 
