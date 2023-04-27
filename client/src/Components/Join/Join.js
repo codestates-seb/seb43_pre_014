@@ -3,7 +3,7 @@ import styled from "styled-components"
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux"
-import idSlice from "../store/idSlice";
+import idSlice from "../../store/idSlice";
 
 const DisplayFlex = styled.div`
     background-color: #F1F2F3;
@@ -224,7 +224,7 @@ const Login = () => {
           .then((response) => {
             console.log(response);
             reset();
-            window.location.href = "/result";
+            window.location.href = `/result/${response.data.id}`;
           })
           .catch((error) => {
             console.log(error);

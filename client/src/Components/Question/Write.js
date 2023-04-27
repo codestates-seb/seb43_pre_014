@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import styled from "styled-components"
-import StackEditor from "../editor/StackEditor";
+import StackEditor from "../../editor/StackEditor";
 import axios from "axios";
 
 // import { Editor } from '@toast-ui/editor';
@@ -24,7 +24,7 @@ const WriteMain = styled.div`
     // 좋은 방식이 아닌 거 같아서 더 고민해보기
     .outline {  
         outline: 4px solid #D9EAF8;
-        border: 1px solid #59A4DE;
+        border: 1px solid #59A4DE !important;
         box-sizing: border-box;
     }
 
@@ -289,7 +289,7 @@ const TagBox = styled(TitleBox)`
         >div:first-child >div {
         margin: 10px 0 0 0;
         border-radius: 5px;
-        border: 1px solid #A6CEED;
+        border: 1px solid #BABFC4;
 
         display: flex;
         flex-wrap : wrap;
@@ -490,26 +490,23 @@ const Header = () => {
     
     // post로 보내는 부분
     const onSubmit = (data) => {
-        console.log(data)
-        // axios.post("http://localhost:3001/write", {
-        //     // id : {rand},
-        //     title,
-        //     problem : text,
-        //     expecting,
-        //     tags
-        //   }, {headers: {
-        //     'Content-Type': `application/json`,
-        //     'ngrok-skip-browser-warning': '69420',
-        //   }
-        // })
-        //   .then((response) => {
-        //     console.log(response);
-        //     reset();
-        //     window.location.href = `/`;
-        //   })
-        //   .catch((error) => {
-        //     console.log(error);
-        //   });
+        axios.post("http://localhost:3001/write", {
+            title,
+            problem : text,
+            expecting,
+            tags
+          }, {headers: {
+            'Content-Type': `application/json`,
+            'ngrok-skip-browser-warning': '69420',
+          }
+        })
+          .then((response) => {
+            reset();
+            window.location.href = `/question/${response.data.id}`;
+          })
+          .catch((error) => {
+            console.log(error);
+          });
     };
 
     const handleEnter = (event) => {
@@ -672,7 +669,7 @@ const Header = () => {
                                 placeholder="e.g. (asp.net-mvc objective-c ruby-on-rails)"
                                 className={errors.tag && tags.length === 0 ? "tag invalid" : "tag"}
                                 {...register("tag", { 
-                                    required: true
+                                    required: (tags.length === 0)
                                 })}
                                 onClick={()=>{if (guide !== 3) setGuide(3);}}
                                 onKeyDown={handleEnter}

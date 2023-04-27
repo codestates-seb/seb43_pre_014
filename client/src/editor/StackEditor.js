@@ -8,6 +8,7 @@ const EditorWrapper = styled.div`
   
   .quill {
     border: 1px solid #BABFC4;
+    border-radius: 5px;
   }
   
   .outline{  

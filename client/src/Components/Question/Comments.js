@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addComment, updateComment, deleteComment, fetchCommentAsync } from '../store/commentsSlice';
+import { addComment, updateComment, deleteComment, fetchCommentAsync } from '../../store/commentsSlice';
 import styled from 'styled-components';
 import { useEffect } from 'react';
 
 const StyledComments = styled.div`
   width: 100%;
-  max-width: 600px;
   margin: 0 auto;
   padding: 1rem;
   box-sizing: border-box;
@@ -65,10 +64,11 @@ const CommentFormInput = styled.input`
 `;
 
 const CommentFormButton = styled.button`
-  background-color: #0079ff;
+  background-color: #0A95FF;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 3px;
+  box-shadow: inset 0px 1px rgba(255, 255, 255, .5);
   padding: 0.5rem 1rem;
   cursor: pointer;
 `;
