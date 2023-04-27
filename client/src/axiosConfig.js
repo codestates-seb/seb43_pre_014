@@ -1,9 +1,13 @@
 import axios from "axios";
 
+axios.defaults.withCredentials = true;
+
 const axiosInstance = axios.create({
-    baseURL: "http://localhost:8080/api",
+    baseURL: "http://localhost:3000",
     headers: {
-    "Content-Type": "application/json",
+        "Content-Type": "application/json",
+        "Authorization": `Bearer ${localStorage.getItem("your-token-key")}`,
+        "Accept": "application/json",
     },
 });
 

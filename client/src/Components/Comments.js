@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addComment, updateComment, deleteComment, fetchCommentAsync } from '../store/commentsSlice';
+import { fetchCommentAsync, postQuestionCommentAsync, postAnswerCommentAsync, updateCommentAsync, deleteCommentAsync,} from '../store/commentsSlice';
 import styled from 'styled-components';
 import { useEffect } from 'react';
 
@@ -80,8 +80,8 @@ const Comments = ({ parentId, parentType }) => {
   const status = useSelector((state) => state.comments.status);
   const error = useSelector((state) => state.comments.error);
 
-  useEffect(()=>{
-    if (status === 'idle'){
+  useEffect(() => {
+    if (status === 'idle') {
       dispatch(fetchCommentAsync(parentId, parentType));
     }
   }, [dispatch, parentId, parentType, status]);
@@ -92,25 +92,35 @@ const Comments = ({ parentId, parentType }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newCommentObject = {
-      id: Date.now(),
-      text: newComment,
-      author: user.username,
-      timestamp: Date.now(),
-    };
-    dispatch(addComment(newCommentObject));
+
+    if (parentType === 'question') {
+      dispatch(
+        postQuestionCommentAsync({
+          parentId,
+          body: newComment,
+        }),
+      );
+    } else if (parentType === 'answer') {
+      dispatch(
+        postAnswerCommentAsync({
+          parentId,
+          body: newComment,
+        }),
+      );
+    }
+
     setNewComment('');
   };
 
   const handleEdit = (comment) => {
-    setEditingComment(comment.id);
-    setEditedComment(comment.text);
+    setEditingComment(comment.commentId);
+    setEditedComment(comment.body);
   };
 
   const handleUpdate = (e) => {
     e.preventDefault();
     dispatch(
-      updateComment({
+      updateCommentAsync({
         id: editingComment,
         text: editedComment,
         author: user.username,
@@ -122,7 +132,7 @@ const Comments = ({ parentId, parentType }) => {
   };
 
   const handleDelete = (id) => {
-    dispatch(deleteComment(id));
+    dispatch(deleteCommentAsync(id));
   };
 
   return (
@@ -132,8 +142,8 @@ const Comments = ({ parentId, parentType }) => {
         {status === 'loading'&& <p>Loading...</p>}
         {status === 'success' && 
         comments.map((comment) => (
-          <CommentItem key = {comment.id}>
-            {editingComment === comment.id ? (
+          <CommentItem key = {comment.commentId}>
+            {editingComment === comment.commentId ? (
               <CommentForm onSubmit={handleUpdate}>
                 <CommentFormInput
                 type = "text"
@@ -144,18 +154,18 @@ const Comments = ({ parentId, parentType }) => {
           </CommentForm>
         ) : (
           <>
-            <p>{comment.text}</p>
+            <p>{comment.body}</p>
             <CommentFooter>
               <CommentFooterLink href="#">
-                {comment.author}
+                {comment.user.username}
               </CommentFooterLink>
               <CommentTimestamp>
-                {new Date(comment.timestamp).toLocaleString()}
+                {new Date(comment.createdAt).toLocaleString()}
               </CommentTimestamp>
               <CommentFooterButton onClick={() => handleEdit(comment)}>
                 Edit
               </CommentFooterButton>
-              <CommentFooterButton onClick={() => handleDelete(comment.id)}>
+              <CommentFooterButton onClick={() => handleDelete(comment.commentId)}>
                 Delete
               </CommentFooterButton>
             </CommentFooter>
