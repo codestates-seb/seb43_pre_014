@@ -15,7 +15,6 @@ import Modify from './Components/Question/Modify'
 import EditProfile from "./Components/EditProfile";
 import PrivateRoute from "./Components/PrivateRoute";
 import Answer from "./Components/Answer";
-import AnswerList from "./Components/AnswerList";
 import SubmittedAnswer from "./Components/SubmittedAnswer";
 // "proxy": "https://6a4c-175-213-102-16.ngrok-free.app/"
 
@@ -34,7 +33,7 @@ function App() {
       {isAuthenticated ? <Header /> : <LoginHeader />}
       <MainContent>
         <Routes>
-          <Route path="/" element={<LoginForm />} />
+          {/* <Route path="/" element={<LoginForm />} />
           <Route path="/write" element={<PrivateRoute />} />
           <Route index element={<Write />} />
           <Route path="/question" element={<PrivateRoute />} />
@@ -51,7 +50,12 @@ function App() {
           <Route index element={<EditProfile />} />
           {/* 추후 메인 페이지가 작성되면 LoginForm을 /login으로 바꾸고 매안페이지를 /로 설정하기 */}
           {/* <Route path="/" element={<PrivateRoute />} /> */}
-          <Route index element={<HomePage />} />
+          {/* <Route index element={<HomePage />} />
+          <Route index element={<Answer />} />  */}
+          {/* <Route index element={<SubmittedAnswer />} /> */}
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/editprofile" element={<EditProfile />} />
         </Routes>
       </MainContent>
     </>

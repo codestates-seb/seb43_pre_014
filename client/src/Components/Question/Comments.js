@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { addComment, updateComment, deleteComment, fetchCommentAsync } from '../store/commentsSlice';
+import {
+  postQuestionCommentAsync,
+  postAnswerCommentAsync,
+  updateCommentAsync,
+  deleteCommentAsync,
+  fetchCommentAsync,
+} from '../../store/commentsSlice';
 import styled from 'styled-components';
 import { useEffect } from 'react';
 
 const StyledComments = styled.div`
   width: 100%;
-  max-width: 600px;
   margin: 0 auto;
   padding: 1rem;
   box-sizing: border-box;
@@ -65,10 +70,11 @@ const CommentFormInput = styled.input`
 `;
 
 const CommentFormButton = styled.button`
-  background-color: #0079ff;
+  background-color: #0A95FF;
   color: #fff;
   border: none;
-  border-radius: 4px;
+  border-radius: 3px;
+  box-shadow: inset 0px 1px rgba(255, 255, 255, .5);
   padding: 0.5rem 1rem;
   cursor: pointer;
 `;
@@ -80,9 +86,9 @@ const Comments = ({ parentId, parentType }) => {
   const status = useSelector((state) => state.comments.status);
   const error = useSelector((state) => state.comments.error);
 
-  useEffect(()=>{
-    if (status === 'idle'){
-      dispatch(fetchCommentAsync(parentId, parentType));
+  useEffect(() => {
+    if (status === 'idle') {
+      dispatch(fetchCommentAsync({ parentId, parentType }));
     }
   }, [dispatch, parentId, parentType, status]);
 
@@ -92,35 +98,92 @@ const Comments = ({ parentId, parentType }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const newCommentObject = {
-      id: Date.now(),
-      text: newComment,
-      author: user.username,
-      timestamp: Date.now(),
-    };
-    dispatch(addComment(newCommentObject));
+    if (parentType === 'question') {
+      dispatch(postQuestionCommentAsync({ parentId, body: newComment }));
+    } else if (parentType === 'answer') {
+      dispatch(postAnswerCommentAsync({ parentId, body: newComment }));
+    }
     setNewComment('');
   };
 
   const handleEdit = (comment) => {
-    setEditingComment(comment.id);
-    setEditedComment(comment.text);
+    if (comment.author === user.name) {
+      setEditingComment(comment.commentId);
+      setEditedComment(comment.body);
+    } else {
+      alert("You can only edit your own comments.");
+    }
   };
 
   const handleUpdate = (e) => {
     e.preventDefault();
     dispatch(
-      updateComment({
-        id: editingComment,
-        text: editedComment,
-        author: user.username,
-        timestamp: Date.now(),
+      updateCommentAsync({
+        commentId: editingComment,
+        body: editedComment,
       })
     );
     setEditingComment(null);
     setEditedComment('');
   };
 
-  const handleDelete = (id) => {
-    dispatch(deleteComment(id));
+  const handleDelete = (commentId, commentAuthor) => {
+    if (commentAuthor === user.name) {
+      dispatch(deleteCommentAsync(commentId));
+    } else {
+      alert("You can only delete your own comments.");
+    }
   };
+
+  return (
+    <StyledComments>
+      <h2>Comments</h2>
+      <CommentsList>
+        {status === 'loading' && <p>Loading...</p>}
+        {status === 'success' &&
+          comments.map((comment) => (
+            <CommentItem key={comment.commentId}>
+              {editingComment === comment.commentId ? (
+                <CommentForm onSubmit={handleUpdate}>
+                  <CommentFormInput
+                    type="text"
+                    value={editedComment}
+                    onChange={(e) => setEditedComment(e.target.value)}
+                  />
+                  <CommentFormButton type="submit">Update</CommentFormButton>
+                </CommentForm>
+              ) : (
+                <>
+                  <p>{comment.body}</p>
+                  <CommentFooter>
+                    <CommentFooterLink href="#">{comment.author}</CommentFooterLink>
+                    <CommentTimestamp>
+                      {new Date(comment.timestamp).toLocaleString()}
+                    </CommentTimestamp>
+                    <CommentFooterButton onClick={() => handleEdit(comment)}>
+                      Edit
+                    </CommentFooterButton>
+                    <CommentFooterButton onClick={() => handleDelete(comment.commentId, comment.author)}>
+                      Delete
+                    </CommentFooterButton>
+                  </CommentFooter>
+                </>
+              )}
+            </CommentItem>
+          ))}
+        {status === 'failed' && <p>Error: {error}</p>}
+      </CommentsList>
+      <CommentForm onSubmit={handleSubmit}>
+        <CommentFormInput
+          type="text"
+          value={newComment}
+          onChange={(e) => setNewComment(e.target.value)}
+          placeholder="Write a comment..."
+        />
+        <CommentFormButton type="submit">Submit</CommentFormButton>
+</CommentForm>
+</StyledComments>
+);
+};
+
+export default Comments;
