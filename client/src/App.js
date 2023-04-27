@@ -5,14 +5,12 @@ import styled from "styled-components"
 import Header from "./Components/Header/Header";
 import LoginHeader from "./Components/Header/LoginHeader";
 import HomePage from "./Components/HomePage";
-import LoginForm from "./Components/Login/LoginForm";
 import Join from './Components/Join/Join';
 import Result from './Components/Join/Result';
 import Question from './Components/Question/Questions';
 import Comments from "./Components/Question/Comments";
 import Write from './Components/Question/Write'
 import Modify from './Components/Question/Modify'
-import EditProfile from "./Components/EditProfile";
 import PrivateRoute from "./Components/PrivateRoute";
 import Answer from "./Components/Answer";
 import SubmittedAnswer from "./Components/SubmittedAnswer";
@@ -33,29 +31,16 @@ function App() {
       {isAuthenticated ? <Header /> : <LoginHeader />}
       <MainContent>
         <Routes>
-          {/* <Route path="/" element={<LoginForm />} />
-          <Route path="/write" element={<PrivateRoute />} />
-          <Route index element={<Write />} />
+          <Route path="/" element={<HomePage />} />
+          <Route path="/join" element={<Join />} />
           <Route path="/question" element={<PrivateRoute />} />
-          <Route index element={<Question />} />
           <Route path="/write" element={<Write />} />
           <Route path="/modify/:id" element={<Modify />} />
           <Route path="/question" element={<HomePage />} />
           <Route path="/question/:id" element={<Question />} />
           <Route path="/comments" element={<Comments />} />
-
-          <Route path="/join" element={<Join />} />
           <Route path="/result" element={<Result />} />
           <Route path="/editProfile" element={<PrivateRoute />} />
-          <Route index element={<EditProfile />} />
-          {/* 추후 메인 페이지가 작성되면 LoginForm을 /login으로 바꾸고 매안페이지를 /로 설정하기 */}
-          {/* <Route path="/" element={<PrivateRoute />} /> */}
-          {/* <Route index element={<HomePage />} />
-          <Route index element={<Answer />} />  */}
-          {/* <Route index element={<SubmittedAnswer />} /> */}
-          <Route path="/login" element={<LoginForm />} />
-          <Route path="/" element={<HomePage />} />
-          <Route path="/editprofile" element={<EditProfile />} />
         </Routes>
       </MainContent>
     </>

@@ -181,9 +181,9 @@ const Comments = ({ parentId, parentType }) => {
           placeholder="Write a comment..."
         />
         <CommentFormButton type="submit">Submit</CommentFormButton>
-</CommentForm>
-</StyledComments>
-);
+      </CommentForm>
+    </StyledComments>
+  );
 };
 
 export default Comments;
