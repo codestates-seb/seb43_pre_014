@@ -78,8 +78,6 @@ public class CommentService {
             throw new BusinessLogicException(ExceptionCode.MEMBER_FORBIDDEN);
         }
         comment.setCommentStatus(Comment.CommentStatus.COMMENT_DELETED);
-
-        commentRepository.delete(findComment);
     }
 
     public Comment findComment(long commentId){
