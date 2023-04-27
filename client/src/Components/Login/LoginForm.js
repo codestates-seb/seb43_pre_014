@@ -160,7 +160,6 @@ const loginUser = async(email, password) => {
     const response = await axiosInstance.post('/login', {
       email,
       password,
-      //... 기타 쪼무래기들 추가할 거 있으면 추가
     });
     if (response.data.token) {
       localStorage.setItem("jwt", response.data.token);

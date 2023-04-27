@@ -205,8 +205,6 @@ const Login = () => {
     const [password, setPassword] = useState("");
     const [news, setNews] = useState(false);
 
-    let number = getRandomNumber();
-
     function getRandomNumber() {
       return Math.floor(Math.random() * 10) + 1;
     }
@@ -216,30 +214,26 @@ const Login = () => {
         const number = getRandomNumber();
         const imgPath = `/profile/${number}.png`;
 
-        axios.post("/members", {
+        axiosInstance.post("/members", {
             name,
             email,
             password,
             news,
             img : imgPath
-          }, {headers: {
-            'Content-Type': `application/json`,
-            'ngrok-skip-browser-warning': '69420',
-          }
-        })
-          .then((response) => {
+            })
+            .then((response) => {
             console.log(response);
             reset();
-            window.location.href = `http://localhost:3001/members/join/result/${response.data.id}`;
-          })
-          .catch((error) => {
+            window.location.href = `http://localhost:3000/members/join/result/${response.data.id}`;
+            })
+            .catch((error) => {
             console.log(error);
-          });
+            });
     };
 
     function handleChange(e) {
         setUser(e.target.value)
-      }    
+    }
 
     return (
     <DisplayFlex>

@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState, useEffect, useParams } from 'react';
 import styled from 'styled-components';
 import TextEdit from '../TextEdit';
 import SubmittedAnswer from '../Answer/SubmittedAnswer';
+import axiosInstance from '../../axiosConfig';
 
 const AnswerWrapper = styled.div`
   display: flex;
@@ -84,7 +85,18 @@ const ClearButton = styled.button`
 
 const Answer = () => {
   const [answer, setAnswer] = useState('');
-  const [submittedAnswer, setSubmittedAnswer] = useState('');
+  const [submittedAnswers, setSubmittedAnswers] = useState([]);
+  const {questionId} = useParams();
+
+  useEffect(() => {
+    axiosInstance.get(`/answers/question/${questionId}`)
+      .then((response) => {
+        setSubmittedAnswers(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [questionId]);
 
   const handleAnswerChange = (value) => {
     setAnswer(value);
@@ -97,26 +109,34 @@ const Answer = () => {
 
 
   const handleSubmit = () => {
-    // 답변 작성을 완료하고, 작성된 답변을 저장하거나 다른 작업을 수행하는 함수
-    setSubmittedAnswer(answer);
-    setAnswer('');
-
-    console.log(answer);
+    // 서버에 답변 작성 요청을 보내고, 작성된 답변을 저장하거나 다른 작업을 수행하는 함수
+    axiosInstance.post("board/answers", {
+        answer,
+      })
+      .then((response) => {
+        console.log(response);
+        setSubmittedAnswers(answer);
+        setAnswer('');
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
+    console.log(answer);
 
   const handleDelete = () => {
-    setSubmittedAnswer('');
+    setSubmittedAnswers('');
   };
 
   const handleEdit = () => {
-    setAnswer(submittedAnswer);
-    setSubmittedAnswer('');
+    setAnswer(submittedAnswers);
+    setSubmittedAnswers('');
   }
 
   return (
     <AnswerWrapper>
       <AnswerListWrapper>
-        {submittedAnswer && <SubmittedAnswer answer={submittedAnswer} handleDelete={handleDelete} />}
+        {submittedAnswers && <SubmittedAnswer answer={submittedAnswers} handleDelete={handleDelete} />}
         <EditButton onClick={handleEdit}> Edit </EditButton>
       </AnswerListWrapper>
       <div><p> Your Answer</p></div>

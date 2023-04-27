@@ -436,7 +436,7 @@ const Header = () => {
             setGuide(3);
         }
     };
-      
+
     const handleBlur = () => {
     setIsOutlineActive(false);
     };    
@@ -572,7 +572,7 @@ const Header = () => {
                         <div>
                             <label>What are the details of your problem?</label>
                             <p>Introduce the problem and expand on what you put in the title. Minimum 20 characters.</p>
-                             <div onClick={()=>{if (guide !== 1) setGuide(1);}}><StackEditor text={text} setText={setText} /></div>
+                            <div onClick={()=>{if (guide !== 1) setGuide(1);}}><StackEditor text={text} setText={setText} /></div>
                         </div>
 
                         <div className={guide === 1 ? "" : "hide"}>
@@ -627,7 +627,7 @@ const Header = () => {
                                         e.preventDefault();
                                         addTags(e);
                                     }
-                                  }}/>
+                                }}/>
                                 </div>
                                 {errors.tag?.type === "required" && tags.length === 0 && <p className='text-red'>Please enter at least one tag;</p>}
                             </div>
